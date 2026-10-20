@@ -85,5 +85,5 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&ui.modal){ui.modal=
 if(db.focus.running){if(db.focus.endsAt>Date.now())db.focus.remaining=Math.ceil((db.focus.endsAt-Date.now())/1000);else {db.sessions.push({id:uid(),minutes:Math.round(db.focus.duration/60),title:findTask(db.focus.taskId)?.title||'',at:Date.now()});db.focus.running=false;db.focus.remaining=db.focus.duration;db.focus.endsAt=null;persist()}}
 setInterval(()=>{tickFocus();if(ui.tab==='today'&&ui.date===today()){const now=$('.nowline');if(now){const agenda=$('.agenda');if(agenda){const first=Number(agenda.querySelector('.hour span')?.textContent?.slice(0,2))||7;now.style.top=`${(minNow()-first*60)/60*61}px`}}}},500);
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{if(db.settings.theme==='system')render()});
-if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(e=>console.warn('Offline installation unavailable',e));
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).catch(e=>console.warn('Offline installation unavailable',e));
 render();
