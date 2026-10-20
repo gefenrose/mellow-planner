@@ -72,7 +72,7 @@ document.addEventListener('submit',e=>{
  e.preventDefault();e.stopImmediatePropagation();
  const title=$('#taskTitle')?.value.trim();if(!title)return;
  const before=findTask(ui.editId),date=$('#taskDate').value||null,start=convertStart($('#taskStart').value);
- const steps=$('#taskSteps').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean).slice(0,20).map(title=>({id:before?.steps?.find(s=>s.title===title)?.id||uid(),title,done:!!before?.steps?.find(s=>s.title===title)?.done}));
+ const steps=Array.isArray(ui.stepDraft) ? ui.stepDraft.map(x=>({id:x.id||uid(),title:String(x.title||'').trim().slice(0,160),done:!!x.done})).filter(x=>x.title).slice(0,20) : $('#taskSteps').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean).slice(0,20).map(title=>({id:before?.steps?.find(s=>s.title===title)?.id||uid(),title,done:!!before?.steps?.find(s=>s.title===title)?.done}));
  const task=normalizeTask({...before,id:before?.id||uid(),title,emoji:$('#taskEmoji').value||'🌿',category:$('#taskCat').value,priority:$('#taskPriority').value,minutes:Number($('#taskMin').value),date,start:date?start:null,daypart:$('#taskPart').value,notes:$('#taskNotes').value,steps});
  if(before)db.tasks=db.tasks.map(t=>t.id===before.id?task:t);else db.tasks.push(task);
  ui.modal=null;ui.newPart='other';save();toast(T('saved'));
