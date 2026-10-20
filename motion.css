@@ -1,0 +1,160 @@
+/* Mellow motion & iOS touch accessibility • v6
+   Gentle movement, no scroll-jacking, no pinch-zoom restrictions. */
+:root{
+  --ease-out-calm:cubic-bezier(.22,1,.36,1);
+  --ease-soft:cubic-bezier(.25,.8,.25,1);
+  --motion-quick:150ms;
+  --motion-gentle:260ms;
+  --motion-settle:340ms;
+}
+@keyframes mellow-rise{
+  from{opacity:0;transform:translate3d(0,9px,0)}
+  to{opacity:1;transform:translate3d(0,0,0)}
+}
+@keyframes mellow-soft-fade{
+  from{opacity:0}
+  to{opacity:1}
+}
+@keyframes mellow-modal-in{
+  from{opacity:0;transform:translate3d(0,15px,0) scale(.985)}
+  to{opacity:1;transform:translate3d(0,0,0) scale(1)}
+}
+@keyframes mellow-pop{
+  0%{transform:scale(.88)}
+  65%{transform:scale(1.055)}
+  100%{transform:scale(1)}
+}
+
+/* Entry motion is short and never blocks taps. */
+.main > :is(.tiimo-day-view,.topbar,.greeting,.statrow,.twocol,.toolbar,.routinegrid,.focusbox,.settingsgrid,.ai-intro),
+.main > .card,
+.day-sections,.hour-section{
+  animation:mellow-rise var(--motion-gentle) var(--ease-out-calm) both;
+}
+.part-section{animation:mellow-rise 290ms var(--ease-out-calm) both}
+.part-section:nth-child(2){animation-delay:32ms}
+.part-section:nth-child(3){animation-delay:64ms}
+.part-section:nth-child(4){animation-delay:96ms}
+.part-section:nth-child(5){animation-delay:128ms}
+.daytask,.task,.routine,.ai-result,.step-manual-row,.step-candidate{
+  animation:mellow-soft-fade 250ms ease-out both;
+}
+
+/* Tap feedback; hover shifts only apply where a real cursor exists. */
+button,a,
+.check,.chip,.day,.daytask,.tiimo-hour-block,.navbtn,
+.step-iconbtn,.part-pill,.card,.routine,.pill,.step-select{
+  -webkit-tap-highlight-color:transparent;
+}
+button,a,[role="button"],input,textarea,select{touch-action:manipulation}
+.btn,.navbtn,.bottomnav button,.iconbtn,.floatadd,
+.chip,.day,.part-title,.part-add,.hour-add,
+.planner-view-toggle button,.check,.step-iconbtn,.step-select,
+.step-entry button,.daytask-icon,.daytask-body,.hour-info{
+  transition:
+    background-color var(--motion-quick) ease,
+    color var(--motion-quick) ease,
+    border-color var(--motion-quick) ease,
+    box-shadow var(--motion-quick) ease,
+    transform var(--motion-quick) var(--ease-out-calm),
+    opacity var(--motion-quick) ease;
+}
+.daytask,.tiimo-hour-block,.routine,.ai-result,.card{
+  transition:border-color 190ms ease,box-shadow 190ms ease,background-color 190ms ease,opacity 190ms ease;
+}
+button:not(:disabled):active{transform:scale(.97)}
+.part-add:not(:disabled):active,.floatadd:not(:disabled):active,.iconbtn:not(:disabled):active{transform:scale(.91)}
+.check:active{transform:scale(.88)}
+.day.active,.planner-view-toggle button.selected,.bottomnav button.active{transition:background-color 160ms ease,color 160ms ease,box-shadow 200ms ease,transform 160ms ease}
+@media (hover:hover) and (pointer:fine){
+  .daytask:hover,.tiimo-hour-block:hover,.routine:hover,.ai-result:hover{box-shadow:0 7px 20px #24392912;border-color:var(--green)}
+  .part-add:hover,.iconbtn:hover{transform:translateY(-1px)}
+  .daytask:hover .daytask-icon{transform:scale(1.04)}
+}
+.check.checked{animation:mellow-pop 230ms var(--ease-out-calm) both}
+.day-progress span,.progress>div,.steps-track span{
+  transition:width 340ms var(--ease-out-calm);
+}
+
+/* Smoothly expand and collapse part-of-day sections. Content remains keyboard-inert while collapsed. */
+.part-list-wrap{
+  display:grid;
+  grid-template-rows:1fr;
+  opacity:1;
+  visibility:visible;
+  transition:
+    grid-template-rows var(--motion-settle) var(--ease-out-calm),
+    opacity 230ms ease,
+    visibility 0s linear 0s;
+}
+.part-list-wrap.is-collapsed{
+  grid-template-rows:0fr;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:
+    grid-template-rows var(--motion-settle) var(--ease-out-calm),
+    opacity 185ms ease,
+    visibility 0s linear var(--motion-settle);
+}
+.part-list-wrap>.part-list{
+  min-height:0;
+  overflow:hidden;
+  padding-block:1px;
+}
+.part-caret .m-icon{transition:transform var(--motion-gentle) var(--ease-out-calm)}
+.part-title[aria-expanded="false"] .part-caret .m-icon{transform:rotate(-90deg)}
+
+/* Modal and in-editor AI preview feel like one continuous experience. */
+.modal-bg{
+  animation:mellow-soft-fade 160ms ease-out both;
+  -webkit-overflow-scrolling:touch;
+}
+.modal{
+  animation:mellow-modal-in 270ms var(--ease-out-calm) both;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+.step-preview,.step-manual-row,.step-candidate{animation:mellow-rise 230ms var(--ease-out-calm) both}
+.step-candidate:nth-child(2),.step-manual-row:nth-child(2){animation-delay:25ms}
+.step-candidate:nth-child(3),.step-manual-row:nth-child(3){animation-delay:45ms}
+.step-candidate:nth-child(n+4),.step-manual-row:nth-child(n+4){animation-delay:60ms}
+
+/* Better tactile navigation and focus, without disabling accessibility zoom. */
+input:focus-visible,select:focus-visible,textarea:focus-visible{
+  border-color:var(--green);
+  outline:2px solid transparent;
+  box-shadow:0 0 0 3px #5a8b7433;
+  transition:border-color 140ms ease,box-shadow 140ms ease;
+}
+button:focus-visible,a:focus-visible{outline:3px solid var(--green);outline-offset:3px}
+.hourly-shell{-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+
+/* iOS Safari auto-zooms when a focused control has text below 16 CSS pixels.
+   Keep the editable controls 16px while leaving captions and labels compact. */
+@media screen and (max-width:1024px){
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+  textarea,
+  select,
+  .step-manual-title,
+  .step-candidate input[type="text"],
+  .steps-editor .step-manual-title,
+  .steps-editor .step-candidate input[type="text"],
+  .ai-result .taskedit input,
+  .ai-result .taskedit select{
+    font-size:16px!important;
+    line-height:1.35;
+  }
+  input,textarea,select{min-height:44px}
+  .step-manual-row input[type="text"],.step-candidate input[type="text"]{min-height:42px}
+}
+/* Respect Reduce Motion everywhere, including iOS Accessibility settings. */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    animation-delay:0ms!important;
+    transition-duration:.01ms!important;
+    transition-delay:0ms!important;
+    scroll-behavior:auto!important;
+  }
+}
