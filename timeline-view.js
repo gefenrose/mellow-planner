@@ -30,7 +30,7 @@ function group(part,items){
 }
 function timeline(tasks){
  const timed=tasks.filter(t=>t.start!=null).sort((a,b)=>a.start-b.start),loose=tasks.filter(t=>t.start==null);
- const first=0;
+ const first=timed.length?Math.max(0,Math.min(6,Math.floor(timed[0].start/60))):6;
  const last=24;
  const hourPx=61;let grid='';
  for(let h=first;h<last;h++)grid+='<div class="hour" style="height:'+hourPx+'px"><span>'+fmt(h*60)+'</span><button class="hour-add" data-action="addhour" data-start="'+h*60+'" aria-label="'+L('addTo')+' '+fmt(h*60)+'">'+icon('plus',16)+'</button></div>';
