@@ -1,0 +1,61 @@
+
+/* Mellow task breakdown: accessible, touch-friendly subtask editor */
+.steps-editor {
+  display: block;
+  min-width: 0;
+  margin: 7px 0 14px;
+  padding: 17px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface2);
+  font-weight: 500;
+}
+.steps-editor .step-head {display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+.steps-editor .step-head strong {display:inline-flex;align-items:center;gap:8px;font-size:17px;font-weight:700;color:var(--ink)}
+.steps-editor .step-count {display:block;color:var(--muted);font-size:12px;letter-spacing:0;margin-top:5px}
+.steps-track {height:6px;width:100%;border-radius:8px;overflow:hidden;background:var(--border);margin-bottom:12px}
+.steps-track span {display:block;height:100%;background:var(--green);border-radius:8px;transition:width .2s}
+.step-manual-list {display:grid;gap:7px}
+.step-manual-row,.step-candidate {display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:6px 8px}
+.step-candidate {grid-template-columns:28px minmax(0,1fr)}
+.steps-editor .step-select {display:grid;place-items:center;width:25px;height:36px;cursor:pointer}
+.steps-editor .step-select input {min-height:21px;height:21px;width:21px;margin:0;accent-color:var(--green);cursor:pointer}
+.steps-editor .step-manual-title,.steps-editor .step-candidate input[type=text] {min-height:38px;width:100%;padding:6px 9px;border-color:transparent;background:transparent;font-size:14px;font-weight:500;box-shadow:none}
+.steps-editor .step-manual-title:focus,.steps-editor .step-candidate input[type=text]:focus {border-color:var(--green);background:var(--surface)}
+.step-row-controls {display:flex;gap:1px;align-items:center}
+.step-iconbtn {display:grid;place-items:center;flex-shrink:0;width:31px;height:34px;border-radius:9px;background:transparent;color:var(--muted)}
+.step-iconbtn:hover {background:var(--surface2);color:var(--ink)}
+.step-iconbtn:disabled {opacity:.26;cursor:default}
+.step-iconbtn[data-step-action=up] svg {transform:rotate(90deg)}
+.step-iconbtn[data-step-action=down] svg {transform:rotate(90deg)}
+.step-iconbtn.step-delete svg {transform:rotate(45deg)}
+.step-iconbtn.step-delete:hover {color:#c04f48}
+.step-empty {text-align:center;padding:10px 5px;margin:2px 0 7px}
+.step-entry {display:flex;gap:8px;align-items:center;margin:12px 0}
+.step-entry input {flex:1;min-width:0;background:var(--surface)}
+.step-entry button {white-space:nowrap;flex-shrink:0}
+.step-suggest-row {display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.step-source {font-weight:700;color:var(--green);background:var(--lightgreen);border-radius:99px;padding:5px 9px;font-size:11px;white-space:nowrap}
+.steps-editor .hint {font-weight:400;margin:9px 0 0;font-size:12px}
+.step-preview {background:var(--surface);border:1px solid var(--border);border-radius:15px;margin:16px 0 7px;padding:14px}
+.step-preview-heading {display:flex;align-items:center;justify-content:space-between;gap:10px}
+.step-preview-heading strong {display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:700}
+.step-candidates {display:grid;gap:7px;margin:12px 0}
+.step-preview-actions {display:flex;gap:8px;flex-wrap:wrap}
+.step-preview-actions button {gap:6px}
+.steps-editor .hidden {display:none!important}
+.m-icon {display:inline-block;vertical-align:middle;flex-shrink:0}
+.daytask-body small, .tasktext small {font-variant-numeric:tabular-nums}
+@media (max-width:520px){
+ .steps-editor {padding:12px;border-radius:15px}
+ .step-manual-row {gap:3px;padding:4px 3px;grid-template-columns:27px minmax(0,1fr) auto}
+ .step-row-controls {gap:0}
+ .step-iconbtn {width:26px;height:34px}
+ .step-iconbtn svg {width:14px;height:14px}
+ .steps-editor .step-manual-title {font-size:14px;padding:6px 3px}
+ .step-entry {flex-wrap:wrap}
+ .step-entry input {flex-basis:140px}
+ .step-entry button {flex:1}
+ .step-candidate {gap:4px}
+}
+@media (prefers-reduced-motion:reduce) {.steps-track span {transition:none}}
