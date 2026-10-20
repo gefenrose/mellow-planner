@@ -70,3 +70,15 @@
 @media(max-width:720px){.tiimo-day-view{max-width:550px}.tiimo-title-line h1{font-size:35px}.planner-view-toggle button{font-size:12px;padding:6px 9px}.daytask{padding:10px;min-height:70px}.hourly-shell{padding:14px 8px}.hourly-agenda{padding-left:51px!important}.hourly-agenda .hour span{left:-50px}.tiimo-hour-block{left:51px;right:1px}.hourly-agenda .nowline{left:41px}.hour-emoji{width:25px;height:25px;font-size:16px}}
 @media(max-width:390px){.day-progress{width:66px}.daytask-body strong{font-size:14px}.daytask-icon{height:34px;width:34px}}
 [dir=rtl] .hourly-agenda{direction:ltr}[dir=rtl] .hourly-agenda .hour span{left:-50px;right:auto}[dir=rtl] .tiimo-hour-block{direction:rtl;padding:4px 0 4px 10px}[dir=rtl] .hour-info{text-align:right}
+
+/* v4 icon and visible date ticker fixes */
+.m-icon{display:inline-block;vertical-align:middle;flex-shrink:0;stroke:currentColor;pointer-events:none}
+.day-nav-card .dayticker{display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr))!important;visibility:visible!important;opacity:1!important;min-height:65px}
+.part-pill>.m-icon:first-child{margin-inline-end:1px}
+.part-pill .part-caret .m-icon{transition:transform .2s}
+.part-add,.hour-add{display:grid;place-items:center}
+.hourly-shell{max-height:75dvh;overflow-y:auto;scrollbar-color:var(--border) transparent;overscroll-behavior:contain}
+.hourly-agenda{overflow:visible!important}
+.tiimo-hour-block{z-index:2;min-width:80px}
+.day-planner-controls .planner-view-toggle{flex-shrink:0}
+@media(max-width:400px){.day-planner-controls{flex-wrap:wrap}.day-planner-controls .planner-view-toggle{margin-inline-start:auto}}
