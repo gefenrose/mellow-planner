@@ -26,7 +26,7 @@ function group(part,items){
  return '<section class="part-section" data-part="'+part+'"><div class="part-heading">'+
  '<button class="part-title" data-action="togglepart" data-part="'+part+'" aria-expanded="'+!closed+'"><span class="part-pill '+part+'">'+icon(partsIcons[part],16)+' '+L(part)+' <b>'+items.length+'</b> <span class="part-caret">'+icon('chevronDown',14)+'</span></span></button>'+
  '<button class="part-add" data-action="newpart" data-part="'+part+'" title="'+esc(L('addTo')+' '+L(part))+'">'+icon('plus',18)+'</button></div>'+
- (closed?'':'<div class="part-list">'+(items.length?items.map(t=>taskLine(t,t.date?'':L('toInbox'))).join(''):'<button class="part-empty" data-action="newpart" data-part="'+part+'">'+icon('plus',16)+' '+L('emptyPart')+'</button>')+'</div>')+'</section>';
+ '<div class="part-list-wrap '+(closed?'is-collapsed':'')+'" aria-hidden="'+closed+'" '+(closed?'inert':'')+'><div class="part-list">'+(items.length?items.map(t=>taskLine(t,t.date?'':L('toInbox'))).join(''):'<button class="part-empty" data-action="newpart" data-part="'+part+'">'+icon('plus',16)+' '+L('emptyPart')+'</button>')+'</div></div></section>';
 }
 function timeline(tasks){
  const timed=tasks.filter(t=>t.start!=null).sort((a,b)=>a.start-b.start),loose=tasks.filter(t=>t.start==null);
@@ -81,8 +81,8 @@ document.addEventListener('click',e=>{
  const el=e.target.closest('[data-action]');if(!el)return;
  const a=el.dataset.action;
  if(a==='newtask'){ui.newPart='other';return}
- if(a==='dayview'){e.preventDefault();e.stopImmediatePropagation();db.settings.todayView=el.dataset.view==='hours'?'hours':'parts';save()}
- if(a==='togglepart'){e.preventDefault();e.stopImmediatePropagation();const p=el.dataset.part;ui.groupCollapsed[p]=!ui.groupCollapsed[p];render()}
+ if(a==='dayview'){e.preventDefault();e.stopImmediatePropagation();const view=el.dataset.view==='hours'?'hours':'parts';if(db.settings.todayView===view)return;const swap=()=>{db.settings.todayView=view;save()};if(typeof document.startViewTransition==='function'&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.startViewTransition(swap);else swap()}
+ if(a==='togglepart'){e.preventDefault();e.stopImmediatePropagation();const p=el.dataset.part;const closed=ui.groupCollapsed[p]=!ui.groupCollapsed[p];const section=el.closest('.part-section'),wrap=section?.querySelector('.part-list-wrap');el.setAttribute('aria-expanded',String(!closed));if(wrap){wrap.classList.toggle('is-collapsed',closed);wrap.setAttribute('aria-hidden',String(closed));wrap.inert=closed}}
  if(a==='newpart'){e.preventDefault();e.stopImmediatePropagation();ui.newPart=el.dataset.part;ui.editId=null;ui.modal='task';render();$('#taskTitle')?.focus()}
  if(a==='addhour'){e.preventDefault();e.stopImmediatePropagation();const start=Number(el.dataset.start);ui.newPart=at(start);ui.editId=null;ui.modal='task';render();$('#taskStart').value=fmt(start);$('#taskTitle')?.focus()}
 },true);
