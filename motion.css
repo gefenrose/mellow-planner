@@ -158,3 +158,21 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--green);outline-offs
     scroll-behavior:auto!important;
   }
 }
+
+/* Progressive enhancement for Safari / Chromium with the View Transitions API.
+   Other browsers use the regular fade / tap transitions above. */
+@keyframes mellow-view-old {
+  from {opacity:1}
+  to {opacity:0}
+}
+::view-transition-old(root) {
+  animation:140ms ease-in both mellow-view-old;
+}
+::view-transition-new(root) {
+  animation:230ms var(--ease-out-calm) both mellow-soft-fade;
+}
+@media (prefers-reduced-motion:reduce) {
+  ::view-transition-old(root),::view-transition-new(root) {
+    animation-duration:.01ms!important;
+  }
+}
