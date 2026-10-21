@@ -441,6 +441,38 @@
   },true);
   E.calendar='Calendar';H.calendar='יומן';
   icons.calendar=mellowIcon('calendar',20);
-  window.MellowCalendar={renderPage,refresh:()=>refreshEvents(ui.date,true),state:g,disconnect,dayItems,isConnected:readable};
+
+  // Move a timed event or recurring instance without altering its other details.
+  let rescheduling=false;
+  async function moveEvent(calendarId,eventId,date,minute){
+    if(rescheduling||g.busy)throw Error('Another calendar change is in progress.');
+    if(!readable())throw Error(W('expired'));
+    if(!writable().some(c=>c.id===calendarId))throw Error(db.settings.lang==='he'?'אין הרשאת עריכה ליומן הזה.':'This calendar is read-only.');
+    const ev=g.events.find(e=>e._calendarId===calendarId&&e.id===eventId);
+    if(!ev||ev.start?.date||!ev.start?.dateTime||!ev.end?.dateTime)throw Error(db.settings.lang==='he'?'אפשר להזיז רק אירועים עם שעה.':'Only timed events can be rescheduled.');
+    if(ev.eventType&&ev.eventType!=='default')throw Error(db.settings.lang==='he'?'אי אפשר להזיז אירוע מיוחד מסוג זה.':'This special event type cannot be moved.');
+    const oldStart=new Date(ev.start.dateTime),oldEnd=new Date(ev.end.dateTime);
+    const duration=oldEnd.getTime()-oldStart.getTime();
+    if(!Number.isFinite(duration)||duration<=0)throw Error('Invalid event duration');
+    const bits=dateParts(date);
+    if(!bits||!Number.isInteger(minute)||minute<0||minute>=1440)throw Error(W('timeInvalid'));
+    const start=new Date(bits[0],bits[1]-1,bits[2],Math.floor(minute/60),minute%60);
+    if(!Number.isFinite(start.getTime()))throw Error(W('timeInvalid'));
+    if(start.getTime()===oldStart.getTime())return ev;
+    const end=new Date(start.getTime()+duration);
+    rescheduling=true;
+    try{
+      const updated=await request('/calendars/'+encodeURIComponent(calendarId)+'/events/'+encodeURIComponent(eventId)+'?sendUpdates=all','PATCH',{
+        start:{dateTime:start.toISOString(),...(ev.start.timeZone?{timeZone:ev.start.timeZone}:{})},
+        end:{dateTime:end.toISOString(),...(ev.end.timeZone?{timeZone:ev.end.timeZone}:{})}
+      });
+      const index=g.events.findIndex(e=>e._calendarId===calendarId&&e.id===eventId);
+      if(index>=0)g.events[index]={...updated,_calendarId:calendarId};
+      g.error='';
+      if(!ui.modal)render();
+      return updated;
+    } finally {rescheduling=false}
+  }
+  window.MellowCalendar={renderPage,refresh:()=>refreshEvents(ui.date,true),state:g,disconnect,dayItems,isConnected:readable,moveEvent,canMove:(calendarId,eventId)=>readable()&&writable().some(c=>c.id===calendarId)&&!!g.events.find(e=>e._calendarId===calendarId&&e.id===eventId&&!e.start?.date&&e.start?.dateTime&&e.end?.dateTime&&(!e.eventType||e.eventType==='default'))};
   render();
 })();
