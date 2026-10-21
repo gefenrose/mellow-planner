@@ -110,7 +110,7 @@
   function isAllDay(ev){return !!ev.start?.date}
   function dayEvents(d){if(g.loadedDate!==d)return [];return g.events.slice().sort((a,b)=>{
       const sa=isAllDay(a)?'':(a.start?.dateTime||''),sb=isAllDay(b)?'':(b.start?.dateTime||'');
-      return Number(!!sb)-Number(!!sa)||sa.localeCompare(sb);
+      return Number(!!sa)-Number(!!sb)||sa.localeCompare(sb);
     });
   }
   function eventTime(e){
@@ -195,7 +195,7 @@
     const canWrite=writable().length>0;
     const start=Math.ceil((minNow()+15)/15)*15 % (24*60);
     const time=ui.date===today()?fmt(start):'09:00';
-    return '<div class="modal-bg"><div class="modal" role="dialog" aria-modal="true" aria-label="'+W('newEvent')+'"><div class="modalheader"><h2>'+ico('calendar',21)+' '+W('newEvent')+'</h2><button type="button" class="iconbtn" data-action="close">'+ico('plus',18)+'</button></div>'+
+    return '<div class="modal-bg"><div class="modal" role="dialog" aria-modal="true" aria-label="'+W('newEvent')+'"><div class="modalheader"><h2>'+ico('calendar',21)+' '+W('newEvent')+'</h2><button type="button" class="iconbtn gcal-close-button" data-action="close">'+ico('plus',18)+'</button></div>'+
     '<form id="gcalEventForm" class="gcal-event-form"><div class="field full"><label for="gcalTitle">'+W('title')+'</label><input id="gcalTitle" required maxlength="160"></div>'+
     '<div class="formgrid"><div class="field"><label for="gcalDate">'+W('when')+'</label><input id="gcalDate" type="date" required value="'+esc(ui.date)+'"></div>'+
     '<div class="field"><label for="gcalTime">'+W('at')+'</label><input id="gcalTime" type="time" required value="'+time+'"></div>'+
