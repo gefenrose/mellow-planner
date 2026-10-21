@@ -3,13 +3,13 @@
   --bg:#faf8fc;--surface:#fff;--surface2:#f5f1f8;--ink:#302b36;--muted:#827b89;
   --border:#ece7f1;--green:#755892;--lightgreen:#f0eaf5;--purple:#80639b;--lav:#f1ebf7;
   --blue:#788aa3;--sky:#eff2f7;--peach:#ad8285;--pink:#f7eff1;
-  --shadow:0 7px 24px rgba(54,39,69,.045);--radius:21px;
+  --shadow:0 7px 24px rgba(54,39,69,.045);--card-shadow:0 5px 18px rgba(46,37,54,.055);--radius:20px;
 }
 body.dark{
   --bg:#1e1b23;--surface:#28242e;--surface2:#332e3a;--ink:#f3eef6;--muted:#b8aebb;
   --border:#453d4d;--green:#d3b9e5;--lightgreen:#40364b;--purple:#d7c0e8;--lav:#43374d;
   --blue:#c2cde0;--sky:#343947;--peach:#e2b9ba;--pink:#493a43;
-  --shadow:0 8px 24px rgba(0,0,0,.16);
+  --shadow:0 8px 24px rgba(0,0,0,.16);--card-shadow:0 5px 18px rgba(0,0,0,.14);
   color-scheme:dark;
 }
 body{background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5}
@@ -513,3 +513,51 @@ body:has(.merged-day-view) .floatadd{display:none!important}
 .task-page{display:flex;flex-direction:column}
 .task-page .task-filter-menu{order:6;margin:12px 0 27px}
 body:has(.task-page) .floatadd{display:none!important}
+
+/* Shared task-card language: quiet white surfaces, soft lift, and pill controls. */
+.card,.stat,.ai-result,.routine,.gcal-event,.gcal-settings-card,
+.gcal-page .card,.gcal-today-prompt,.gcal-today-panel.card,.gcal-day-events{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  box-shadow:var(--card-shadow);
+}
+.tasks-list.card,.task-list-empty,.daytask-list.card{box-shadow:none}
+.topbar h1{font-size:clamp(34px,3vw,40px)}
+.page-heading-title{display:flex;align-items:center;gap:12px}
+.btn{min-height:42px;border-radius:999px}
+.btn.ghost{background:var(--surface);border:1px solid var(--border)}
+.btn.secondary{background:var(--lightgreen);border-color:transparent}
+.btn.danger{border-color:transparent}
+.btn.small{min-height:36px}
+.iconbtn{border-radius:50%;background:var(--surface2);color:var(--muted)}
+.iconbtn:hover{background:var(--lightgreen);color:var(--green)}
+.page-title-add{
+  display:grid;place-items:center;flex:0 0 auto;width:40px;height:40px;
+  border:0;border-radius:50%;background:var(--surface2);color:var(--purple);cursor:pointer;
+  transition:background-color .16s,color .16s,transform .16s
+}
+.page-title-add:hover{background:var(--lightgreen);color:var(--green)}
+.page-title-add:active{transform:scale(.94)}
+.routine-icon{width:42px;height:42px;border-radius:50%}
+.routinegrid{gap:14px}
+.routine{min-height:220px}
+.settingsgrid{gap:14px}
+.settingsgrid>.card{padding:21px}
+.settingsgrid h3{font-size:19px}
+.gcal-guide,.notice{border:1px solid var(--border);border-radius:16px}
+.gcal-page{position:relative}
+.jump-calendar-search-header{position:absolute;inset-block-start:26px;inset-inline-end:0;margin:0}
+.jump-calendar-search-header .jump-search-icon{border-radius:50%}
+.greeting,.ai-intro{background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--card-shadow)}
+input,textarea,select{border-radius:15px}
+.modal,.create-choice-modal,.jump-month-modal,.jump-search-modal{border-radius:22px}
+@media(max-width:700px){
+  .topbar h1{font-size:34px}
+  .settingsgrid>.card{padding:17px}
+}
+
+.tasks-list .task.task-card{border-radius:20px}
+.merged-day-view .day-sections .part-list .daytask,
+.merged-day-view .daytask-list .daytask,
+.merged-day-view .mellow-day-block{border-radius:20px}

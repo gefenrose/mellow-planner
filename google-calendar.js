@@ -206,7 +206,7 @@
   };
   function renderPage(){
     const events=dayEvents(ui.date);
-    const header='<div class="topbar"><div><div class="overline">MELLOW / '+W('calendar')+'</div><h1>'+ico('calendar',27)+' '+W('calendar')+'</h1><p class="subtle">'+W('explain')+'</p></div></div>';
+    const header='<div class="topbar"><div><div class="overline">MELLOW / '+W('calendar')+'</div><h1>'+W('calendar')+'</h1><p class="subtle">'+W('explain')+'</p></div></div>';
     if(!readable())return '<div class="gcal-page">'+header+connectionPanel()+'</div>';
     return '<div class="gcal-page">'+header+
       '<div class="gcal-toolbar"><button type="button" class="btn secondary small" data-action="gotoday">'+T('today')+'</button>'+

@@ -159,9 +159,9 @@
 .task-page{max-width:940px;margin:0 auto}
 .task-page-title{display:flex;align-items:center;gap:12px;margin:5px 0 31px}
 .task-page-title h1{margin:0;font:400 36px/1.15 var(--head);letter-spacing:-.04em;color:var(--ink)}
-.task-title-add,.task-priority-add,.task-group-add,.task-suggestions-refresh,.task-suggestion-add{display:grid;place-items:center;flex:0 0 auto;border:0;cursor:pointer}
-.task-title-add{width:40px;height:40px;border-radius:50%;background:var(--surface2);color:var(--purple)}
-.task-title-add:hover,.task-priority-add:hover,.task-group-add:hover,.task-suggestions-refresh:hover,.task-suggestion-add:hover{background:var(--lightgreen);color:var(--green)}
+.page-title-add,.task-priority-add,.task-group-add,.task-suggestions-refresh,.task-suggestion-add{display:grid;place-items:center;flex:0 0 auto;border:0;cursor:pointer}
+.page-title-add{width:40px;height:40px;border-radius:50%;background:var(--surface2);color:var(--purple)}
+.page-title-add:hover,.task-priority-add:hover,.task-group-add:hover,.task-suggestions-refresh:hover,.task-suggestion-add:hover{background:var(--lightgreen);color:var(--green)}
 .task-priority-list{display:flex;flex-direction:column;gap:18px;margin:0 0 29px}
 .task-priority-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .task-priority-pill{display:inline-flex;align-items:center;gap:10px;min-width:104px;min-height:42px;padding:8px 13px;border:1px solid transparent;border-radius:999px;color:var(--ink);font-size:13px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;cursor:pointer;transition:filter .15s,box-shadow .15s}
