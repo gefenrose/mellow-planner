@@ -139,12 +139,38 @@
       '<div class="gcal-events">'+(content||(!g.loading?'<p class="subtle">'+W('none')+'</p>':''))+'</div></section>';
   }
   const origToday=renderToday;
+  // Combined day planner now renders Google events inside the task sections and hourly view.
+  // Retain only a compact connect prompt when authorization is needed.
   renderToday=function(){
-    let html=origToday();
+    const html=origToday();
     const marker='<div class="day-planner-controls">';
-    if(html.includes(marker))html=html.replace(marker,todayPanel(ui.date)+marker);
-    return html;
+    return html.includes(marker)&&!readable()?html.replace(marker,todayPanel(ui.date)+marker):html;
   };
+  function dayItems(date){
+    if(!readable()||g.loadedDate!==date)return [];
+    const day=localMidnight(date),min=day.getTime(),max=new Date(day.getFullYear(),day.getMonth(),day.getDate()+1).getTime();
+    const ids=new Set(db.tasks.map(t=>t.googleCalendar?.eventId&&t.googleCalendar?.calendarId?
+      t.googleCalendar.calendarId+':'+t.googleCalendar.eventId:null).filter(Boolean));
+    return dayEvents(date).filter(ev=>!ids.has(ev._calendarId+':'+ev.id)).map(ev=>{
+      const cal=g.calendars.find(c=>c.id===ev._calendarId);
+      const allDay=isAllDay(ev);
+      const startDate=allDay?null:new Date(ev.start?.dateTime||ev.start?.date||'');
+      const endDate=allDay?null:new Date(ev.end?.dateTime||ev.end?.date||'');
+      const valid=!allDay&&Number.isFinite(startDate?.getTime())&&Number.isFinite(endDate?.getTime());
+      const startMs=valid?Math.max(min,startDate.getTime()):min;
+      const endMs=valid?Math.min(max,endDate.getTime()):max;
+      if(valid&&endMs<=startMs)return null;
+      const start=valid?Math.max(0,Math.floor((startMs-min)/60000)):null;
+      return {
+        kind:'event',id:String(ev.id||''),calendarId:String(ev._calendarId||''),
+        title:String(ev.summary||W('nothing')),calendarName:String(cal?.summary||W('calendar')),
+        color:colorOf(cal),allDay, start,
+        minutes:valid?Math.max(1,Math.ceil((endMs-startMs)/60000)):null,
+        timeLabel:eventTime(ev),
+        href:safeUrl(ev.htmlLink),location:String(ev.location||'')
+      };
+    }).filter(Boolean);
+  }
   function calendarSwitcher(){
     if(!readable())return '';
     return '<div class="gcal-calendar-picker"><label for="gcalWriteCalendar">'+W('chooseCalendar')+'</label><select id="gcalWriteCalendar">'+writable().map(c=>'<option value="'+esc(c.id)+'" '+(writeId()===c.id?'selected':'')+'>'+esc(c.summary||'Calendar')+'</option>').join('')+'</select></div>';
@@ -194,10 +220,11 @@
   function eventModal(){
     const canWrite=writable().length>0;
     const start=Math.ceil((minNow()+15)/15)*15 % (24*60);
-    const time=ui.date===today()?fmt(start):'09:00';
+    const context=ui.createContext||{};
+    const time=Number.isFinite(context.start)?fmt(context.start):(ui.date===today()?fmt(start):'09:00');
     return '<div class="modal-bg"><div class="modal" role="dialog" aria-modal="true" aria-label="'+W('newEvent')+'"><div class="modalheader"><h2>'+ico('calendar',21)+' '+W('newEvent')+'</h2><button type="button" class="iconbtn gcal-close-button" data-action="close">'+ico('plus',18)+'</button></div>'+
     '<form id="gcalEventForm" class="gcal-event-form"><div class="field full"><label for="gcalTitle">'+W('title')+'</label><input id="gcalTitle" required maxlength="160"></div>'+
-    '<div class="formgrid"><div class="field"><label for="gcalDate">'+W('when')+'</label><input id="gcalDate" type="date" required value="'+esc(ui.date)+'"></div>'+
+    '<div class="formgrid"><div class="field"><label for="gcalDate">'+W('when')+'</label><input id="gcalDate" type="date" required value="'+esc(ui.createContext?.date||ui.date)+'"></div>'+
     '<div class="field"><label for="gcalTime">'+W('at')+'</label><input id="gcalTime" type="time" required value="'+time+'"></div>'+
     '<div class="field"><label for="gcalDuration">'+W('duration')+'</label><input id="gcalDuration" type="number" min="5" max="1440" step="5" required value="30"></div>'+
     '<div class="field"><label for="gcalEventCalendar">'+W('chooseCalendar')+'</label><select id="gcalEventCalendar">'+writable().map(c=>'<option value="'+esc(c.id)+'" '+(c.id===writeId()?'selected':'')+'>'+esc(c.summary||W('calendar'))+'</option>').join('')+'</select></div></div>'+
@@ -408,6 +435,6 @@
   },true);
   E.calendar='Calendar';H.calendar='יומן';
   icons.calendar=mellowIcon('calendar',20);
-  window.MellowCalendar={renderPage,refresh:()=>refreshEvents(ui.date,true),state:g,disconnect};
+  window.MellowCalendar={renderPage,refresh:()=>refreshEvents(ui.date,true),state:g,disconnect,dayItems,isConnected:readable};
   render();
 })();
