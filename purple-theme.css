@@ -1,0 +1,136 @@
+/* Mellow v10 — white, light gray and soft purple visual system.
+   This is loaded last so earlier legacy sage/peach styles cannot take precedence. */
+:root{
+  color-scheme:light;
+  --bg:#f7f7fa;
+  --surface:#ffffff;
+  --surface2:#f0eff4;
+  --ink:#2d2938;
+  --muted:#746f80;
+  --border:#e7e5ec;
+  --green:#7354a5;         /* shared primary accent; legacy token name */
+  --lightgreen:#f0eafa;    /* shared accent surface */
+  --purple:#8467b1;
+  --lav:#f0eafa;
+  --blue:#8b73b5;
+  --sky:#f6f2fb;
+  --peach:#a58ac4;
+  --pink:#faf7fd;
+  --shadow:0 8px 28px #30253d0a;
+}
+body{background:var(--bg);color:var(--ink)}
+/* Preserve the user's existing dark-mode preference, but make that scheme purple/gray as well. */
+body.dark{
+  color-scheme:dark;
+  --bg:#201e27;
+  --surface:#2b2833;
+  --surface2:#35313f;
+  --ink:#f7f5fc;
+  --muted:#b7afc6;
+  --border:#484254;
+  --green:#c9aff1;
+  --lightgreen:#463954;
+  --purple:#d1baf4;
+  --lav:#44374f;
+  --blue:#c5abe6;
+  --sky:#393146;
+  --peach:#d0b2ed;
+  --pink:#3b3344;
+  --shadow:0 8px 28px #00000023;
+}
+/* Surfaces and main controls */
+.sidebar,.bottomnav,.card,.daytask,.gcal-event,.task,.step-manual-row,
+.step-candidate,.choice-card{background-color:var(--surface)}
+.greeting{background:linear-gradient(125deg,#f3eefb 0%,#faf9fc 74%,#ede6f8 100%)}
+body.dark .greeting{background:linear-gradient(125deg,#403448 0%,#2c2935 72%,#473651 100%)}
+.navbtn.active,.bottomnav button.active .icon,.planner-view-toggle button.selected,
+.btn.secondary,.part-add:hover,.iconbtn:hover{color:var(--green)}
+.btn{background:var(--green);color:#fff}
+body.dark .btn{color:#251b37}
+.btn.secondary{background:var(--lightgreen);color:var(--green)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.day.active{background:#7354a5!important;color:#fff!important;box-shadow:0 2px 10px #7354a51d}
+.day.active span{color:inherit}
+.day.today:not(.active){border-color:var(--purple)}
+.day-progress span,.progress>div,.steps-track span{background:var(--green)}
+input:focus,textarea:focus,select:focus,
+input:focus-visible,textarea:focus-visible,select:focus-visible{
+  border-color:var(--green);
+  box-shadow:0 0 0 3px #8c6dc431;
+}
+button:focus-visible{outline-color:#8467b1}
+.check.checked{background:var(--green);border-color:var(--green);color:#fff}
+.merged-legend>span:first-child,.kind-task,.merged-task-block .hour-info .kind-label,
+.gcal-connected,.gcal-event-link,.gcal-task-send>a{color:var(--green)}
+.merged-legend>span:nth-child(2),.kind-event,.merged-calendar-block .hour-info .kind-label{color:var(--purple)}
+/* All five time-of-day badges: subtle variations of gray and lavender. */
+.part-pill.morning{background:#eee8fa;color:#654990}
+.part-pill.afternoon{background:#f0edf7;color:#756392}
+.part-pill.evening{background:#e9e0f6;color:#654b8b}
+.part-pill.night{background:#eceaf3;color:#67617d}
+.part-pill.other{background:#f0eff4;color:#625c73}
+body.dark .part-pill.morning{background:#473850;color:#e5d5fc}
+body.dark .part-pill.afternoon{background:#41394d;color:#e2d6f4}
+body.dark .part-pill.evening{background:#4a3759;color:#eddcfb}
+body.dark .part-pill.night{background:#373545;color:#d6cfe9}
+body.dark .part-pill.other{background:#35313f;color:#d0c9df}
+/* Categories remain distinguishable but stay monochromatic. */
+.daytask-accent{background:#8870b8}
+.daytask-accent.work,.work .hour-color{background:#8063ad}
+.daytask-accent.home,.home .hour-color{background:#a08abb}
+.daytask-accent.self,.self .hour-color{background:#9271c2}
+.daytask-accent.health,.health .hour-color{background:#7555a8}
+.daytask-accent.social,.social .hour-color{background:#b09bc9}
+.daytask-accent.errands,.errands .hour-color{background:#9982be}
+.daytask-icon,.hour-emoji{color:#74569e;background:var(--lightgreen)}
+.daytask-icon.work,.daytask-icon.home,.daytask-icon.self,
+.daytask-icon.health,.daytask-icon.social,.daytask-icon.errands{color:#74569e;background:var(--lightgreen)}
+/* Task blocks: white/gray with a faint lavender tint and purposeful accent stripe. */
+.slot.work,.pill.work,.mellow-day-block.work{background:#f3effa;color:var(--ink);border-color:#8565b8}
+.slot.home,.pill.home,.mellow-day-block.home{background:#f8f6fc;color:var(--ink);border-color:#a18aba}
+.slot.self,.pill.self,.mellow-day-block.self{background:#f5effc;color:var(--ink);border-color:#9470c3}
+.slot.health,.pill.health,.mellow-day-block.health{background:#f1ecfa;color:var(--ink);border-color:#7756a8}
+.slot.social,.pill.social,.mellow-day-block.social{background:#faf8fd;color:var(--ink);border-color:#b19bcb}
+.slot.errands,.pill.errands,.mellow-day-block.errands{background:#f6f3fb;color:var(--ink);border-color:#9c85bc}
+body.dark .slot.work,body.dark .pill.work,body.dark .mellow-day-block.work{background:#3b3148;color:var(--ink);border-color:#ac91d3}
+body.dark .slot.home,body.dark .pill.home,body.dark .mellow-day-block.home{background:#35303f;color:var(--ink);border-color:#a790c1}
+body.dark .slot.self,body.dark .pill.self,body.dark .mellow-day-block.self{background:#413249;color:var(--ink);border-color:#b393dc}
+body.dark .slot.health,body.dark .pill.health,body.dark .mellow-day-block.health{background:#393047;color:var(--ink);border-color:#c0a2e6}
+body.dark .slot.social,body.dark .pill.social,body.dark .mellow-day-block.social{background:#35303d;color:var(--ink);border-color:#ad98c8}
+body.dark .slot.errands,body.dark .pill.errands,body.dark .mellow-day-block.errands{background:#3a3345;color:var(--ink);border-color:#ad96d0}
+/* Google Calendar stays recognizable but within Mellow's lavender palette.
+   Keep each Google calendar's tiny original-colored dot in the calendar picker. */
+.unified-event,.merged-calendar-block{
+  --calendar-accent:#9677c2!important;
+  border-color:#a38ac9!important;
+  background:var(--surface);
+}
+body.dark .unified-event,body.dark .merged-calendar-block{
+  --calendar-accent:#bb9ce7!important;
+  border-color:#a990cd!important;
+  background:var(--surface);
+}
+.unified-event .daytask-icon,.merged-calendar-block .hour-emoji,
+.choice-calendar .choice-symbol{background:var(--lav);color:var(--purple)}
+.choice-task .choice-symbol{background:var(--lightgreen);color:var(--green)}
+.merged-calendar-block .hour-info strong,.merged-task-block .hour-info strong{color:var(--ink)}
+.hourly-agenda .nowline,.merged-day-view .hourly-agenda .nowline{background:#9975c8}
+.hourly-agenda .nowline:before,.merged-day-view .hourly-agenda .nowline:before{background:#9975c8}
+.hourly-agenda .nowline em{background:#9975c8;color:#fff}
+.gcal-today-prompt,.gcal-today-panel,.gcal-day-events{border-color:var(--border)}
+.gcal-event-link:hover,.choice-card:hover{background:var(--lightgreen)}
+.step-source{background:var(--lightgreen);color:var(--green)}
+.gcal-client-row input,.steps-editor input,.step-preview{background:var(--surface)}
+.gcal-calendar-choice,.steps-editor,.gcal-guide,.gcal-task-send{background:var(--surface2)}
+/* Keep utility danger states identifiable rather than disguising errors as purple. */
+.btn.danger{background:#b35067;color:#fff}
+.gcal-error,.step-delete:hover{color:#ba5977}
+@media (hover:hover) and (pointer:fine){
+  .daytask:hover,.tiimo-hour-block:hover,.mellow-day-block:hover,
+  .routine:hover,.ai-result:hover{border-color:#a68bcf;box-shadow:0 7px 20px #6e538519}
+}
+@media (max-width:700px){
+  .bottomnav{border-top-color:var(--border);box-shadow:0 -3px 18px #4a355a0c}
+  .floatadd{background:var(--green);color:#fff;box-shadow:0 6px 22px #6b4c9934}
+  body.dark .floatadd{color:#251b37}
+}
