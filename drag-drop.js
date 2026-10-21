@@ -5,7 +5,7 @@
     en:{drag:'Drag to move',task:'task',event:'calendar event',drop:'Drop to move',category:'Change task category',
       moved:'Moved',other:'Other / Anytime',locked:'This calendar event cannot be edited.',allDay:'All-day events are not draggable.',
       noOther:'Calendar events need an exact time. Drag to Morning, Afternoon, Evening, Night, or the hourly view.',
-      failed:'Could not move this event in Google Calendar.',noTime:'Move to',linked:'Mellow updated, but Google Calendar needs to be reconnected to sync this linked task.',
+      failed:'Could not move this event in Google Calendar.',noTime:'Move to',linked:'Mellow saved the task. Reconnect Google Calendar to sync its time.',unscheduledLinked:'Task set to Anytime; the linked Google event kept its original time.',syncFailed:'Task saved in Mellow, but the linked Google event could not be updated.',
       keyboard:'Use the arrow keys to choose a time or section. Press C for task categories, Enter to save, or Escape to cancel.',
       categoryDock:'Drop here to change task category',cancel:'Move canceled',
       morning:'Morning',afternoon:'Afternoon',evening:'Evening',night:'Night',otherPart:'Other / Anytime',
@@ -14,7 +14,7 @@
     he:{drag:'גרירה לשינוי מקום',task:'משימה',event:'אירוע ביומן',drop:'שחרור כדי להעביר',category:'שינוי קטגוריית המשימה',
       moved:'הועבר',other:'אחר / בכל שעה',locked:'אין הרשאת עריכה לאירוע זה.',allDay:'לא ניתן לגרור אירועים של יום שלם.',
       noOther:'אירוע ביומן צריך שעה מדויקת. גררי לחלק ביום או לציר השעות.',
-      failed:'אי אפשר לעדכן את האירוע ב-Google Calendar.',noTime:'העברה אל',linked:'המשימה עודכנה ב-Mellow, אך צריך להתחבר ל-Google מחדש כדי לסנכרן את האירוע.',
+      failed:'אי אפשר לעדכן את האירוע ב-Google Calendar.',noTime:'העברה אל',linked:'המשימה נשמרה ב-Mellow. יש להתחבר ל-Google כדי לסנכרן את השעה.',unscheduledLinked:'המשימה הועברה ל״בכל שעה״. האירוע המקושר ב-Google נשאר בשעה המקורית.',syncFailed:'המשימה נשמרה ב-Mellow, אך לא ניתן לעדכן את האירוע המקושר ב-Google.',
       keyboard:'השתמשי בחצים לבחירת שעה או חלק ביום. C לשינוי קטגוריה, Enter לשמירה, Escape לביטול.',
       categoryDock:'שחררי כאן כדי לשנות קטגוריית משימה',cancel:'ההעברה בוטלה',
       morning:'בוקר',afternoon:'צהריים',evening:'ערב',night:'לילה',otherPart:'אחר / בכל שעה',
@@ -213,9 +213,9 @@
             busy=true;
             await window.MellowCalendar.moveEvent(task.googleCalendar.calendarId,task.googleCalendar.eventId,date,minute);
             toast(L('savedGoogle'));
-          }catch(err){toast(L('linked')+' '+(err.message||''))}
+          }catch(err){toast(L('syncFailed')+' '+(err.message||''))}
           finally{busy=false}
-        }else toast(L('linked'));
+        }else toast(minute==null?L('unscheduledLinked'):L('linked'));
       }else toast(L('moved')+' · '+(minute==null?L('other'):timeLabel(minute)));
       return;
     }
