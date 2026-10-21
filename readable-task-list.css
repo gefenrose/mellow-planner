@@ -1,0 +1,153 @@
+/* Mellow v15 — unclipped task titles, spacious iPhone task rows.
+   Scoped to the Tasks tab: Today and the hourly drag layout keep their own styles. */
+.tasks-list{
+  min-width:0;
+  overflow:visible;
+}
+.tasks-list .task{
+  display:grid;
+  grid-template-columns:29px 43px minmax(0,1fr) 39px;
+  column-gap:11px;
+  row-gap:4px;
+  align-items:center;
+  min-width:0;
+  min-height:80px;
+  padding:17px 0;
+  overflow:visible;
+}
+.tasks-list .task > .check{
+  grid-column:1;
+  grid-row:1;
+  justify-self:center;
+  width:28px;
+  height:28px;
+  flex-shrink:0;
+}
+.tasks-list .task > .task-emoji{
+  grid-column:2;
+  grid-row:1;
+  flex-shrink:0;
+  width:43px;
+  height:43px;
+}
+.tasks-list .task > .tasktext{
+  grid-column:3;
+  grid-row:1;
+  min-width:0;
+  max-width:100%;
+  overflow:visible;
+}
+.tasks-list .task > .iconbtn{
+  grid-column:4;
+  grid-row:1;
+  justify-self:center;
+  align-self:center;
+  width:39px;
+  height:42px;
+  flex-shrink:0;
+  font-size:20px;
+}
+.tasks-list .tasktext strong,
+.tasks-list .tasktext .task-title{
+  display:block;
+  margin:0;
+  max-width:100%;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  overflow-wrap:anywhere;
+  word-break:normal;
+  line-height:1.32;
+  font-size:16px;
+  font-weight:700;
+}
+.tasks-list .tasktext small{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+  font-size:12.5px;
+  line-height:1.45;
+  white-space:normal;
+  overflow:visible;
+  overflow-wrap:anywhere;
+  font-variant-numeric:tabular-nums;
+}
+.tasks-list .task-sample-tag{
+  display:inline-flex;
+  align-items:center;
+  margin-top:5px;
+  padding:2px 7px;
+  border-radius:7px;
+  background:var(--surface2);
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.3;
+  font-weight:600;
+  vertical-align:middle;
+  max-width:100%;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+/* Keep completed titles fully readable too. */
+.tasks-list .task.done .task-title{
+  text-decoration:line-through;
+  text-decoration-thickness:1px;
+  opacity:.65;
+}
+@media(max-width:520px){
+  /* Stack check and category icon vertically: more width for the complete task name. */
+  .tasks-list .task{
+    grid-template-columns:32px minmax(0,1fr) 38px;
+    grid-template-rows:auto auto;
+    column-gap:11px;
+    row-gap:6px;
+    min-height:90px;
+    padding:15px 0;
+  }
+  .tasks-list .task > .check{
+    grid-column:1;
+    grid-row:1;
+    justify-self:center;
+    align-self:end;
+    width:27px;
+    height:27px;
+  }
+  .tasks-list .task > .task-emoji{
+    grid-column:1;
+    grid-row:2;
+    justify-self:center;
+    align-self:start;
+    width:32px;
+    height:32px;
+    border-radius:10px;
+  }
+  .tasks-list .task > .task-emoji .m-icon{
+    width:19px;
+    height:19px;
+  }
+  .tasks-list .task > .tasktext{
+    grid-column:2;
+    grid-row:1 / span 2;
+    align-self:center;
+  }
+  .tasks-list .task > .iconbtn{
+    grid-column:3;
+    grid-row:1 / span 2;
+    align-self:center;
+    width:38px;
+    height:42px;
+  }
+  .tasks-list .tasktext .task-title{
+    font-size:16px;
+    line-height:1.34;
+  }
+  .tasks-list .tasktext small{
+    font-size:12.5px;
+    line-height:1.42;
+  }
+}
+@media(max-width:360px){
+  .tasks-list .task{grid-template-columns:29px minmax(0,1fr) 35px;column-gap:8px}
+  .tasks-list .task > .iconbtn{width:35px;height:40px}
+  .tasks-list .tasktext .task-title{font-size:15px}
+}
