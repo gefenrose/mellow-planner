@@ -485,3 +485,31 @@ body:has(.merged-day-view) .floatadd{display:none!important}
 }
 
 .dnd-ghost.dnd-ghost-card.dnd-ghost-visible{display:flex!important}
+
+/* Final task-card grid override: keep each card on one clean row at every width. */
+.main:has(.task-page) .tasks-list .task.task-card{
+  grid-template-columns:44px minmax(0,1fr) 31px;
+  grid-template-rows:minmax(0,auto);
+}
+.main:has(.task-page) .tasks-list .task.task-card>.task-emoji{
+  grid-column:1;grid-row:1;align-self:center
+}
+.main:has(.task-page) .tasks-list .task.task-card>.tasktext{
+  grid-column:2;grid-row:1;align-self:center;min-width:0
+}
+.main:has(.task-page) .tasks-list .task.task-card>.check,
+.main:has(.task-page) .tasks-list .task.task-card>.task-suggestion-add{
+  grid-column:3;grid-row:1;align-self:center;justify-self:end
+}
+.main:has(.task-page) .tasks-list .task.task-card .task-title-button{width:100%}
+@media(max-width:700px){
+  .main:has(.task-page) .tasks-list .task.task-card{grid-template-columns:43px minmax(0,1fr) 29px}
+}
+@media(max-width:390px){
+  .main:has(.task-page) .tasks-list .task.task-card{grid-template-columns:39px minmax(0,1fr) 27px}
+}
+
+/* Keep secondary task filters available after the main list, so the first view stays open. */
+.task-page{display:flex;flex-direction:column}
+.task-page .task-filter-menu{order:6;margin:12px 0 27px}
+body:has(.task-page) .floatadd{display:none!important}
