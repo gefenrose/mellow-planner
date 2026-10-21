@@ -86,7 +86,7 @@
       else{lines++;lines+=Math.max(0,Math.ceil(word.length/charsPerLine)-1);position=word.length%charsPerLine||charsPerLine}
     }
     const contentHeight=lines*(phone?17:18)+31;
-    return Math.ceil(Math.max(phone?70:66,contentHeight));
+    return Math.ceil(Math.max(phone?65:62,contentHeight));
   }
   function allocateMobile(entries,px){
     // Phone screens cannot display readable titles in three or four skinny lanes.
