@@ -26,9 +26,12 @@ const H={
 const T=k=>(db.settings.lang==='he'?H:E)[k]||k;
 const locale=()=>db.settings.lang==='he'?'he-IL':'en-US';
 const dt=(date,opt={weekday:'long',month:'long',day:'numeric'})=>new Intl.DateTimeFormat(locale(),opt).format(fromKey(date));
-const defaults=()=>({version:1,tasks:[],routines:[],sessions:[],settings:{lang:'en',theme:'system',aiMode:'offline'},focus:{taskId:'',duration:25*60,remaining:25*60,running:false,endsAt:null},seeded:false});
+const defaults=()=>({version:1,tasks:[],routines:[],sessions:[],settings:{lang:'en',theme:'light',aiMode:'offline'},focus:{taskId:'',duration:25*60,remaining:25*60,running:false,endsAt:null},seeded:false});
 let db;try{db=Object.assign(defaults(),JSON.parse(localStorage.getItem('mellow-app-v1')||'{}'));if(!Array.isArray(db.tasks)||!Array.isArray(db.routines))throw Error()}catch{db=defaults()}
 if(!db.settings)db.settings=defaults().settings;
+// Apply the new light purple theme once for previous automatic-theme users.
+// Never override an explicit Dark or Light selection, nor any later user choice.
+if(db.settings.theme==='system'&&!localStorage.getItem('mellow-theme-v10')){db.settings.theme='light';localStorage.setItem('mellow-theme-v10','1');try{localStorage.setItem('mellow-app-v1',JSON.stringify(db))}catch{}}
 let ui={tab:'today',date:today(),filter:'all',query:'',modal:null,editId:null,toastTimer:null};
 const persist=()=>{try{localStorage.setItem('mellow-app-v1',JSON.stringify(db))}catch(e){console.warn('Storage failed',e);toast('Storage full — export a backup.')}};
 function samples(){const d=today();return [{title:'Slow morning & coffee',category:'self',emoji:'☕',minutes:20,start:9*60},{title:'A little reading time',category:'self',emoji:'📖',minutes:30,start:10*60},{title:'Take a mindful break',category:'health',emoji:'🌱',minutes:15,start:12*60+30},{title:'Tidy one small corner',category:'home',emoji:'🧺',minutes:20,start:15*60},{title:'Something worth remembering',category:'work',emoji:'✨',minutes:25,start:null}].map((t,i)=>({id:uid(),title:t.title,category:t.category,emoji:t.emoji,minutes:t.minutes,start:t.start??null,date:t.start!==null?d:null,done:false,priority:'med',notes:'',steps:[],createdAt:Date.now()+i,demo:true}))}
