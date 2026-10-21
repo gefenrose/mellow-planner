@@ -1,0 +1,159 @@
+/* Mellow v18: fully readable day-section tasks and Google events.
+   The older day-layout.css intentionally forced one-line ellipsis; remove that
+   only inside Day Sections, leaving hourly block layout independent. */
+.merged-day-view .day-sections .part-section,
+.merged-day-view .day-sections .part-list-wrap,
+.merged-day-view .day-sections .part-list{
+  min-width:0;
+}
+.merged-day-view .day-sections .part-list .daytask{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  width:100%;
+  min-width:0;
+  min-height:82px;
+  height:auto;
+  padding:12px 11px;
+  overflow:visible;
+  border-radius:15px;
+}
+.merged-day-view .day-sections .part-list .daytask-accent{
+  min-height:48px;
+  flex-shrink:0;
+}
+.merged-day-view .day-sections .part-list .daytask-icon{
+  flex:0 0 36px;
+  width:36px;
+  height:36px;
+  border-radius:12px;
+}
+.merged-day-view .day-sections .part-list .daytask-body{
+  display:flex;
+  flex:1 1 0;
+  flex-direction:column;
+  align-items:stretch;
+  justify-content:center;
+  min-width:0;
+  max-width:100%;
+  width:0;
+  height:auto;
+  overflow:visible;
+  text-align:start;
+  padding:4px 0;
+  margin:0;
+  gap:3px;
+  line-height:normal;
+}
+.merged-day-view .day-sections .part-list .daytask-body strong{
+  display:block;
+  flex:0 0 auto;
+  width:100%;
+  max-width:100%;
+  color:var(--ink);
+  font-size:15px;
+  font-weight:700;
+  line-height:1.32;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  overflow-wrap:anywhere;
+  word-break:normal;
+  -webkit-line-clamp:unset;
+}
+.merged-day-view .day-sections .part-list .daytask-body small{
+  display:block;
+  flex:0 0 auto;
+  margin-top:2px;
+  width:100%;
+  max-width:100%;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.4;
+  font-weight:500;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  overflow-wrap:anywhere;
+  font-variant-numeric:tabular-nums;
+}
+.merged-day-view .day-sections .part-list .kind-label{
+  align-self:flex-start;
+  max-width:100%;
+  white-space:normal;
+  font-size:10px;
+  line-height:1.2;
+  margin-bottom:2px;
+}
+.merged-day-view .day-sections .part-list .daypart-sample-tag{
+  display:inline-block;
+  align-self:flex-start;
+  max-width:100%;
+  padding:2px 7px;
+  margin:2px 0;
+  border-radius:7px;
+  background:var(--surface2);
+  color:var(--muted);
+  font-size:11px;
+  font-weight:600;
+  line-height:1.3;
+}
+.merged-day-view .day-sections .part-list .daytask-check{
+  flex:0 0 25px;
+  width:25px;
+  height:25px;
+  margin-inline-start:0;
+  align-self:center;
+}
+.merged-day-view .day-sections .part-list .event-open{
+  flex:0 0 25px;
+  width:25px;
+  height:36px;
+  margin:0;
+}
+.merged-day-view .day-sections .part-list .dnd-grip{
+  flex:0 0 27px;
+  width:27px;
+  min-width:27px;
+  margin-inline:0;
+}
+/* On narrow iPhones, reclaim space from decorative icons—not title text. */
+@media(max-width:420px){
+  .merged-day-view .day-sections .part-list .daytask{
+    padding:12px 8px;
+    gap:6px;
+  }
+  .merged-day-view .day-sections .part-list .daytask-icon{
+    flex-basis:30px;
+    width:30px;
+    height:30px;
+    border-radius:10px;
+  }
+  .merged-day-view .day-sections .part-list .daytask-icon .m-icon{
+    width:17px;
+    height:17px;
+  }
+  .merged-day-view .day-sections .part-list .dnd-grip{
+    flex-basis:24px;
+    min-width:24px;
+    width:24px;
+  }
+  .merged-day-view .day-sections .part-list .daytask-check,
+  .merged-day-view .day-sections .part-list .event-open{
+    flex-basis:24px;
+    width:24px;
+  }
+}
+@media(max-width:350px){
+  .merged-day-view .day-sections .part-list .daytask{
+    gap:5px;
+  }
+  .merged-day-view .day-sections .part-list .daytask-icon{
+    flex-basis:27px;
+    width:27px;
+    height:27px;
+  }
+  .merged-day-view .day-sections .part-list .daytask-body strong{
+    font-size:14px;
+  }
+}
