@@ -126,6 +126,7 @@
     active.el.classList.add('dnd-origin');
     paintGhost();
     ghost.classList.add('dnd-ghost-visible');
+    positionGhost(active.x,active.y);
     announce(L('drag')+' '+active.title+'. '+L('keyboard'));
   }
   function hideTimePreview(){
@@ -225,6 +226,7 @@
     }
     if(!active||active.pointerId!==e.pointerId)return;
     active.x=e.clientX;active.y=e.clientY;
+    document.body.classList.toggle('dnd-dock-visible',active.kind==='task'&&active.y>=window.innerHeight-230);
     if(!active.moved&&Math.hypot(active.x-active.startX,active.y-active.startY)<5)return;
     if(!active.moved){
       begin();
@@ -238,7 +240,7 @@
   function removeVisual(){
     if(scrollFrame!=null){cancelAnimationFrame(scrollFrame);scrollFrame=null}
     active?.el?.classList.remove('dnd-origin');
-    document.body.classList.remove('dnd-active','dnd-task-active');
+    document.body.classList.remove('dnd-active','dnd-task-active','dnd-dock-visible');
     document.querySelectorAll('.dnd-target').forEach(x=>x.classList.remove('dnd-target'));
     if(ghost)ghost.classList.remove('dnd-ghost-visible');
     hideTimePreview();
@@ -343,6 +345,7 @@
   }
   function keyboardUpdate(){
     if(!active||!keyboard)return;
+    document.body.classList.toggle('dnd-dock-visible',keyboard.mode==='category');
     let t=null;
     if(keyboard.mode==='part'){
       let part=PARTS[keyboard.index];

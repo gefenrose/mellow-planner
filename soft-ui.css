@@ -470,3 +470,16 @@ body.dark .merged-day-view .hour-check{border-color:var(--ink)}
 .merged-day-view .mellow-day-heading .overline,
 .merged-day-view .mellow-title-line p{display:none!important}
 body:has(.merged-day-view) .floatadd{display:none!important}
+
+.dnd-active [data-drop-hours],
+.dnd-active [data-drop-hours].dnd-target{
+  outline:0!important;background:transparent!important
+}
+.dnd-time-guide{
+  height:3px;background:repeating-linear-gradient(90deg,#8764bd 0 8px,transparent 8px 17px);
+  box-shadow:none
+}
+.dnd-active.dnd-task-active .dnd-category-dock{display:none!important;pointer-events:none}
+.dnd-active.dnd-task-active.dnd-dock-visible .dnd-category-dock{
+  display:block!important;pointer-events:auto
+}
