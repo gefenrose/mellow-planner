@@ -87,7 +87,7 @@
     const title=String(item.title||'');
     // Estimate word wrapping to reserve enough space before the browser lays out.
     let lines=1,position=0;
-    for(const word of title.split(/\\s+/)){
+    for(const word of title.split(/\s+/)){
       if(!word)continue;
       if(position===0){lines+=Math.max(0,Math.ceil(word.length/charsPerLine)-1);position=word.length%charsPerLine||charsPerLine;continue}
       if(position+1+word.length<=charsPerLine)position+=1+word.length;
