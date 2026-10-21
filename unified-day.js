@@ -39,12 +39,11 @@
   }
   function taskVisual(t){
     const steps=t.steps?.length?t.steps.filter(x=>x.done).length+'/'+t.steps.length+' · ':'';
-    const category=mellowCategoryIcons[t.category]||'tasks';
     const time=t.start!=null?fmt(t.start)+' · ':'';
     const sync=t.googleCalendar?.eventId?' · '+L('synced'):'';
     return '<div class="daytask unified-item unified-task '+(t.done?'completed':'')+'" data-drag-item="task" data-drag-id="'+esc(t.id)+'">'+
       '<span class="daytask-accent '+esc(t.category)+'"></span>'+
-      '<button class="daytask-icon '+esc(t.category)+'" data-action="edit" data-id="'+esc(t.id)+'" aria-label="'+esc(L('task')+' '+t.title)+'">'+icon(category,20)+'</button>'+
+      '<button class="daytask-icon '+esc(t.category)+'" data-action="edit" data-id="'+esc(t.id)+'" aria-label="'+esc(L('task')+' '+t.title)+'">'+esc(t.emoji||'🌿')+'</button>'+
       '<button class="daytask-body" data-action="edit" data-id="'+esc(t.id)+'"><span class="kind-label kind-task">'+icon('tasks',12)+' '+L('task')+'</span><strong>'+esc(t.title)+'</strong>'+
       (t.demo?'<span class="daypart-sample-tag">'+T('sample')+'</span>':'')+
       '<small>'+esc(time+steps+fmtLength(t.minutes)+(t.inboxItem?' · '+L('inbox'):'')+sync)+'</small></button>'+
@@ -182,7 +181,7 @@
     const body=isEvent?(t.href?'<a href="'+esc(t.href)+'" target="_blank" rel="noopener noreferrer" class="hour-info" aria-label="'+esc(role+': '+t.title)+'">'+content+'</a>':'<div class="hour-info">'+content+'</div>'):
       '<button data-action="edit" data-id="'+esc(t.id)+'" class="hour-info" aria-label="'+esc(role+': '+t.title)+'">'+content+'</button>';
     return '<div class="mellow-day-block '+(isEvent?'merged-calendar-block':'merged-task-block '+esc(t.category))+' '+(t.done?'completed':'')+
-      '" data-lanes="'+lanes+'" data-drag-item="'+(isEvent?'event':'task')+'" data-drag-id="'+esc(t.id)+'" '+(isEvent?'data-calendar-id="'+esc(t.calendarId)+'"':'')+' '+props+'><span class="hour-color"></span><span class="hour-emoji">'+icon(isEvent?'calendar':mellowCategoryIcons[t.category]||'tasks',18)+'</span>'+body+
+      '" data-lanes="'+lanes+'" data-drag-item="'+(isEvent?'event':'task')+'" data-drag-id="'+esc(t.id)+'" '+(isEvent?'data-calendar-id="'+esc(t.calendarId)+'"':'')+' '+props+'><span class="hour-color"></span><span class="hour-emoji" aria-hidden="true">'+(isEvent?icon('calendar',18):esc(t.emoji||'🌿'))+'</span>'+body+
       (isEvent?'':'<button class="check hour-check '+(t.done?'checked':'')+'" data-action="done" data-id="'+esc(t.id)+'" aria-label="'+esc(t.title)+'">'+(t.done?icon('check',14):'')+'</button>')+
       '</div>';
   }
@@ -205,7 +204,7 @@
       '<div class="sectionbar"><h3>'+icon('clock',19)+' '+L('scheduled')+'</h3><span class="subtle small">'+timed.length+'</span></div>'+
       '<div class="card hourly-shell"><div class="agenda hourly-agenda merged-hourly-agenda" data-drop-hours="true" data-first-minute="'+first*60+'" data-hour-px="'+px+'" style="height:'+totalHeight+'px">'+hours+
       '<div class="merged-hourly-overlay">'+blocks+'</div>'+marker+'</div></div>'+
-      '<div class="flex-header"><h3>'+icon('stars',19)+' '+L('flexible')+'</h3><button class="part-add" data-unified-add="part" data-part="other">'+icon('plus',18)+'</button></div>'+
+      '<div class="flex-header"><h3>'+icon('sparkles',19)+' '+L('flexible')+'</h3><button class="part-add" data-unified-add="part" data-part="other">'+icon('plus',18)+'</button></div>'+
       '<div class="daytask-list card" data-drop-part="other">'+(flexible.length?flexible.map(taskVisual).join(''):'<p class="subtle merged-empty">'+L('untimed')+'</p>')+'</div></div>';
   }
   function legend(events){

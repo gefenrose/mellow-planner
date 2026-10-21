@@ -231,3 +231,38 @@ body.dark .gcal-guide,body.dark .gcal-state,body.dark .gcal-error{background:var
 @media(prefers-reduced-motion:reduce){
   .btn,.navbtn,.day,.daytask,.daytask-icon,.iconbtn{transition:none!important;transform:none!important}
 }
+
+
+/* Consistent outlined icons, clear task cards, and comfortable list spacing. */
+.m-icon{flex:0 0 auto;vertical-align:middle}
+.settingsgrid h3{display:flex;align-items:center;gap:8px}
+.settingsgrid h3 .m-icon{color:var(--purple)}
+.empty .big .m-icon{width:44px;height:44px;color:var(--purple);stroke-width:1.55}
+.flourish .m-icon{display:block;color:var(--purple);stroke-width:1.45}
+.routine-icon{width:46px;height:46px;display:grid;place-items:center;flex:0 0 auto;border-radius:15px;background:var(--lightgreen);color:var(--purple)}
+.routine-icon .m-icon{width:24px;height:24px}
+.steps li .step-title{display:flex;align-items:center;gap:9px}
+.steps li .step-title .m-icon{color:var(--purple);opacity:.7}
+.daytask-icon{border-radius:14px}
+.hour-emoji{border-radius:11px}
+.slot-emoji{display:grid;place-items:center;flex:0 0 auto;width:29px;height:29px;border-radius:10px;background:#ffffff88;font-size:18px;line-height:1}
+.tasks-list.card{display:flex;flex-direction:column;gap:12px;min-width:0;margin:0 auto;padding:0;background:transparent;border:0;box-shadow:none}
+.tasks-list .task,.tasks-list .task:last-child{min-height:82px;padding:15px 14px;border:1px solid var(--border);border-radius:19px;background:var(--surface);box-shadow:0 3px 12px rgba(54,39,69,.035);column-gap:12px;row-gap:5px}
+.tasks-list .task-emoji{border-radius:13px;background:var(--surface2);font-size:22px}
+.tasks-list .task > .iconbtn{border-radius:12px;background:var(--surface2);color:var(--muted)}
+.tasks-list .task > .check{border-radius:9px}
+.tasks-list .tasktext small{margin-top:6px}
+.tasks-list .empty{background:var(--surface);border:1px solid var(--border);border-radius:19px}
+.main:has(.tasks-list) .toolbar{margin:19px 0 20px}
+body.dark .tasks-list .task{box-shadow:0 3px 12px rgba(0,0,0,.1)}
+@media(max-width:520px){
+  .tasks-list.card{gap:11px}
+  .tasks-list .task,.tasks-list .task:last-child{grid-template-columns:27px 35px minmax(0,1fr) 36px;grid-template-rows:auto;column-gap:8px;row-gap:0;min-height:78px;padding:13px 10px}
+  .tasks-list .task>.check{grid-column:1;grid-row:1;align-self:center;width:25px;height:25px}
+  .tasks-list .task>.task-emoji{grid-column:2;grid-row:1;align-self:center;width:34px;height:34px;border-radius:11px}
+  .tasks-list .task>.task-emoji .m-icon{width:19px;height:19px}
+  .tasks-list .task>.tasktext{grid-column:3;grid-row:1;align-self:center}
+  .tasks-list .task>.iconbtn{grid-column:4;grid-row:1;width:34px;height:38px}
+  .tasks-list .tasktext .task-title{font-size:15px;line-height:1.32}
+  .tasks-list .tasktext small{font-size:12px;line-height:1.4}
+}

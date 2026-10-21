@@ -196,7 +196,7 @@
       (g.error?'<p class="gcal-error" role="status">'+esc(g.error)+'</p>':'')+
       (readable()?calendarSwitcher()+calendarOptions()+'<p class="hint">'+W('notAutomatic')+'</p>':
       '<div class="gcal-guide"><strong>'+W('config')+'</strong><p>'+W('origin')+'</p><code>'+esc(location.origin||'https://mellow-planner.vercel.app')+'</code>'+
-      '<p><a target="_blank" rel="noopener noreferrer" href="https://console.cloud.google.com/apis/credentials">'+W('cloud')+' ↗</a> · <a target="_blank" rel="noopener noreferrer" href="https://developers.google.com/workspace/calendar/api/quickstart/js">'+W('guide')+' ↗</a></p>'+
+      '<p><a target="_blank" rel="noopener noreferrer" href="https://console.cloud.google.com/apis/credentials">'+W('cloud')+' '+ico('arrowUpRight',14)+'</a> · <a target="_blank" rel="noopener noreferrer" href="https://developers.google.com/workspace/calendar/api/quickstart/js">'+W('guide')+' '+ico('arrowUpRight',14)+'</a></p>'+
       '<p>'+W('test')+'</p></div>')+
       '<p class="hint">'+W('noPassword')+'</p></section>';
   }
@@ -248,7 +248,7 @@
     if(!task)return html;
     const link=safeUrl(task.googleCalendar?.htmlLink);
     let snippet='';
-    if(link)snippet='<div class="gcal-task-send">'+ico('check',18)+' <a target="_blank" rel="noopener noreferrer" href="'+esc(link)+'">'+W('alreadySent')+' ↗</a></div>';
+    if(link)snippet='<div class="gcal-task-send">'+ico('check',18)+' <a target="_blank" rel="noopener noreferrer" href="'+esc(link)+'">'+W('alreadySent')+' '+ico('arrowUpRight',14)+'</a></div>';
     else if(readable()){
       snippet='<div class="gcal-task-send"><button type="button" class="btn secondary small" data-gcal="send-task" data-id="'+esc(task.id)+'" '+(g.busy?'disabled':'')+'>'+ico('calendar',17)+' '+W('sendTask')+'</button>'+
       (task.date&&task.start!=null?'':'<span class="hint">'+W('needsSchedule')+'</span>')+'</div>';

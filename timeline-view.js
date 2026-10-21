@@ -17,7 +17,7 @@ function taskLine(t,extra=''){
  const n=t.steps?.length||0,complete=(t.steps||[]).filter(x=>x.done).length;
  const info=(t.start!=null?fmt(t.start)+' · ':'')+fmtLength(t.minutes)+(extra?' · '+extra:'')+(n?' · '+complete+'/'+n+' '+T('subtasks'):'');
  return '<div class="daytask '+(t.done?'completed':'')+'"><span class="daytask-accent '+esc(t.category)+'"></span>'+
- '<button class="daytask-icon '+esc(t.category)+'" data-action="edit" data-id="'+esc(t.id)+'">'+icon(mellowCategoryIcons[t.category]||'book',21)+'</button>'+
+ '<button class="daytask-icon '+esc(t.category)+'" data-action="edit" data-id="'+esc(t.id)+'" aria-label="'+esc(T('edit')+' '+t.title)+'">'+esc(t.emoji||'🌿')+'</button>'+
  '<button class="daytask-body" data-action="edit" data-id="'+esc(t.id)+'"><strong>'+esc(t.title)+(t.demo?' <span class="demo">'+T('sample')+'</span>':'')+'</strong><small>'+esc(info)+'</small></button>'+
  '<button class="check daytask-check '+(t.done?'checked':'')+'" data-action="done" data-id="'+esc(t.id)+'" aria-label="'+esc((t.done?'Undo':'Complete')+' '+t.title)+'">'+(t.done?icon('check',16):'')+'</button></div>';
 }
@@ -37,7 +37,7 @@ function timeline(tasks){
  const blocks=timed.map(t=>{
  const y=(t.start-first*60)/60*hourPx+2,height=Math.max(34,t.minutes/60*hourPx-4);
  return '<div class="mellow-hour-block '+esc(t.category)+' '+(t.done?'completed':'')+' '+(height<48?'compact':'')+'" style="top:'+y+'px;height:'+height+'px">'+
- '<span class="hour-color"></span><span class="hour-emoji">'+icon(mellowCategoryIcons[t.category]||'book',19)+'</span><button class="hour-info" data-action="edit" data-id="'+esc(t.id)+'"><strong>'+esc(t.title)+'</strong><small>'+fmt(t.start)+' – '+fmt(Math.min(1439,t.start+t.minutes))+' · '+fmtLength(t.minutes)+'</small></button>'+
+ '<span class="hour-color"></span><span class="hour-emoji" aria-hidden="true">'+esc(t.emoji||'🌿')+'</span><button class="hour-info" data-action="edit" data-id="'+esc(t.id)+'"><strong>'+esc(t.title)+'</strong><small>'+fmt(t.start)+' – '+fmt(Math.min(1439,t.start+t.minutes))+' · '+fmtLength(t.minutes)+'</small></button>'+
  '<button class="check hour-check '+(t.done?'checked':'')+'" data-action="done" data-id="'+esc(t.id)+'" aria-label="'+esc(t.title)+'">'+(t.done?icon('check',16):'')+'</button></div>';
  }).join('');
  const now=ui.date===today()?minNow():null;
@@ -45,7 +45,7 @@ function timeline(tasks){
  '<div class="card hourly-shell"><div class="agenda hourly-agenda" style="height:'+((last-first)*hourPx+5)+'px">'+grid+blocks+
  (now!=null&&now>=first*60&&now<=last*60?'<div class="nowline" style="top:'+((now-first*60)/60*hourPx)+'px"><em>'+L('now')+'</em></div>':'')+
  '</div></div><div class="flex-header"><h3>'+L('flexible')+'</h3><button class="part-add" data-action="newpart" data-part="other" aria-label="'+T('newTask')+'">'+icon('plus',18)+'</button></div>'+
- '<div class="daytask-list card">'+(loose.length?loose.map(t=>taskLine(t,L(of(t)))).join(''):'<div class="empty"><span class="big">🌿</span>'+L('noTimeHint')+'</div>')+'</div></div>';
+ '<div class="daytask-list card">'+(loose.length?loose.map(t=>taskLine(t,L(of(t)))).join(''):'<div class="empty"><span class="big">'+mellowIcon('leaf',38)+'</span>'+L('noTimeHint')+'</div>')+'</div></div>';
 }
 renderToday=function(){
  const day=db.tasks.filter(t=>t.date===ui.date),others=ui.date===today()?db.tasks.filter(t=>!t.date&&!t.done):[];
