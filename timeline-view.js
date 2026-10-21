@@ -58,7 +58,7 @@ renderToday=function(){
  '<div class="day-nav-card"><div class="day-nav-top"><button class="iconbtn" data-action="day" data-step="-7" aria-label="Previous week">'+icon('chevronLeft',20)+'</button><strong>'+esc(dt(ui.date,{month:'long',year:'numeric'}))+'</strong><button class="iconbtn" data-action="day" data-step="7" aria-label="Next week">'+icon('chevronRight',20)+'</button></div><div class="week dayticker">'+weekDays()+'</div></div>'+
  '<div class="day-planner-controls"><div><span class="small subtle">'+finished+' / '+day.length+' '+T('tasksDone')+'</span><div class="day-progress"><span style="width:'+percent+'%"></span></div></div>'+toggle+'</div>'+
  (current==='hours'?timeline(visible):'<div class="day-sections">'+PARTS.map(p=>group(p,visible.filter(t=>of(t)===p).sort((a,b)=>(a.start??9999)-(b.start??9999)||Number(a.done)-Number(b.done)))).join('')+'</div>')+
- '<div class="day-footer"><button class="btn secondary" data-action="newtask">'+icon('plus',16)+' '+T('newTask')+'</button><button class="btn ghost" data-action="nav" data-tab="ai">'+icon('sparkles',16)+' '+T('ai')+'</button></div><p class="footnote">'+T('appInfo')+'</p></div>';
+ '<div class="day-footer"><button class="btn secondary" data-action="newtask">'+icon('plus',16)+' '+T('newTask')+'</button></div><p class="footnote">'+T('appInfo')+'</p></div>';
 };
 const originalTaskModal=taskModal;
 taskModal=function(){
