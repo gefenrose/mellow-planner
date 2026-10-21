@@ -1,0 +1,97 @@
+/* Mellow v9 — compact, iPhone-first five-tab navigation.
+   Today · Tasks · Calendar · Routines · Settings. */
+@media (max-width:700px){
+  .bottomnav{
+    position:fixed;
+    inset-inline:0;
+    bottom:0;
+    z-index:30;
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:2px;
+    align-items:stretch;
+    padding:5px 12px max(env(safe-area-inset-bottom),6px);
+    border:0;
+    border-top:1px solid var(--border);
+    border-radius:0;
+    box-shadow:0 -3px 18px #15291b0a;
+    background:var(--surface);
+    background:color-mix(in srgb,var(--surface) 92%,transparent);
+    -webkit-backdrop-filter:saturate(1.35) blur(18px);
+    backdrop-filter:saturate(1.35) blur(18px);
+  }
+  .bottomnav button,
+  .bottomnav button.active{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    min-width:0;
+    min-height:53px;
+    gap:2px;
+    padding:2px 2px 3px;
+    color:var(--muted);
+    font-size:10px;
+    font-weight:600;
+    line-height:1.2;
+    letter-spacing:0;
+    border-radius:12px;
+    background:transparent;
+    box-shadow:none;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .bottomnav button.active{
+    color:var(--green);
+    font-weight:700;
+  }
+  .bottomnav button .icon{
+    width:42px;
+    height:29px;
+    display:grid;
+    place-items:center;
+    border-radius:11px;
+    padding:0;
+    margin:0;
+    background:transparent;
+    color:inherit;
+    transition:background-color 170ms ease,color 170ms ease,transform 170ms cubic-bezier(.22,1,.36,1);
+  }
+  .bottomnav button .icon svg,
+  .bottomnav button .m-icon{
+    width:21px;
+    height:21px;
+    stroke-width:1.8;
+  }
+  .bottomnav button.active .icon{
+    background:var(--lightgreen);
+  }
+  .bottomnav button:active .icon{
+    transform:scale(.91);
+  }
+  .bottomnav button:focus-visible{
+    outline:2px solid var(--green);
+    outline-offset:-2px;
+  }
+  .main{padding-bottom:calc(99px + env(safe-area-inset-bottom));}
+  .floatadd{
+    bottom:calc(79px + env(safe-area-inset-bottom));
+    right:18px;
+    width:50px;
+    height:50px;
+    border-radius:16px;
+    box-shadow:0 6px 22px #1b432529;
+  }
+  [dir="rtl"] .floatadd{right:auto;left:18px}
+  #toast{bottom:calc(88px + env(safe-area-inset-bottom));}
+}
+@media (max-width:350px){
+  .bottomnav{padding-inline:5px;gap:0}
+  .bottomnav button{font-size:9.5px;min-width:0}
+  .bottomnav button .icon{width:37px}
+}
+@media (min-width:701px){
+  .bottomnav{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .bottomnav button .icon{transition:none}
+}
