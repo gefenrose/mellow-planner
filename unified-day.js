@@ -42,7 +42,7 @@
     const category=mellowCategoryIcons[t.category]||'tasks';
     const time=t.start!=null?fmt(t.start)+' · ':'';
     const sync=t.googleCalendar?.eventId?' · '+L('synced'):'';
-    return '<div class="daytask unified-item unified-task '+(t.done?'completed':'')+'">'+
+    return '<div class="daytask unified-item unified-task '+(t.done?'completed':'')+'" data-drag-item="task" data-drag-id="'+esc(t.id)+'">'+
       '<span class="daytask-accent '+esc(t.category)+'"></span>'+
       '<button class="daytask-icon '+esc(t.category)+'" data-action="edit" data-id="'+esc(t.id)+'" aria-label="'+esc(L('task')+' '+t.title)+'">'+icon(category,20)+'</button>'+
       '<button class="daytask-body" data-action="edit" data-id="'+esc(t.id)+'"><span class="kind-label kind-task">'+icon('tasks',12)+' '+L('task')+'</span><strong>'+esc(t.title)+(t.demo?' <span class="demo">'+T('sample')+'</span>':'')+'</strong>'+
@@ -55,7 +55,7 @@
       '<strong>'+esc(e.title)+'</strong><small>'+esc(label+(e.calendarName?' · '+e.calendarName:''))+'</small>';
     const detail=e.href?'<a class="daytask-body event-anchor" href="'+esc(e.href)+'" target="_blank" rel="noopener noreferrer" aria-label="'+esc(L('event')+': '+e.title)+'">'+text+'</a>':
       '<div class="daytask-body">'+text+'</div>';
-    return '<div class="daytask unified-item unified-event" style="--calendar-accent:'+esc(e.color)+'">'+
+    return '<div class="daytask unified-item unified-event" data-drag-item="event" data-drag-id="'+esc(e.id)+'" data-calendar-id="'+esc(e.calendarId)+'" data-all-day="'+e.allDay+'" style="--calendar-accent:'+esc(e.color)+'">'+
       '<span class="daytask-accent event-stripe"></span>'+
       '<span class="daytask-icon event-icon">'+icon('calendar',19)+'</span>'+detail+
       (e.href?'<a class="event-open" href="'+esc(e.href)+'" target="_blank" rel="noopener noreferrer" aria-label="'+esc(L('event'))+'">'+icon('chevronRight',18)+'</a>':'')+'</div>';
@@ -66,7 +66,7 @@
   function section(part,arr){
     const entries=arr.filter(t=>partOf(t)===part).sort(sorted);
     const closed=!!ui.groupCollapsed?.[part];
-    return '<section class="part-section" data-part="'+part+'"><div class="part-heading">'+
+    return '<section class="part-section" data-drop-part="'+part+'" data-part="'+part+'"><div class="part-heading">'+
       '<button class="part-title" data-action="togglepart" data-part="'+part+'" aria-expanded="'+!closed+'"><span class="part-pill '+part+'">'+icon(pIcon[part],16)+' '+L(part)+
       ' <b>'+entries.length+'</b> <span class="part-caret">'+icon('chevronDown',14)+'</span></span></button>'+
       '<button class="part-add" data-unified-add="part" data-part="'+part+'" title="'+L('add')+' · '+L(part)+'" aria-label="'+L('add')+' · '+L(part)+'">'+icon('plus',18)+'</button></div>'+
@@ -101,7 +101,7 @@
     const body=isEvent?(t.href?'<a href="'+esc(t.href)+'" target="_blank" rel="noopener noreferrer" class="hour-info" aria-label="'+esc(role+': '+t.title)+'">'+content+'</a>':'<div class="hour-info">'+content+'</div>'):
       '<button data-action="edit" data-id="'+esc(t.id)+'" class="hour-info" aria-label="'+esc(role+': '+t.title)+'">'+content+'</button>';
     return '<div class="mellow-day-block '+(isEvent?'merged-calendar-block':'merged-task-block '+esc(t.category))+' '+(t.done?'completed':'')+
-      '" '+props+'><span class="hour-color"></span><span class="hour-emoji">'+icon(isEvent?'calendar':mellowCategoryIcons[t.category]||'tasks',18)+'</span>'+body+
+      '" data-drag-item="'+(isEvent?'event':'task')+'" data-drag-id="'+esc(t.id)+'" '+(isEvent?'data-calendar-id="'+esc(t.calendarId)+'"':'')+' '+props+'><span class="hour-color"></span><span class="hour-emoji">'+icon(isEvent?'calendar':mellowCategoryIcons[t.category]||'tasks',18)+'</span>'+body+
       (isEvent?'':'<button class="check hour-check '+(t.done?'checked':'')+'" data-action="done" data-id="'+esc(t.id)+'" aria-label="'+esc(t.title)+'">'+(t.done?icon('check',14):'')+'</button>')+
       '</div>';
   }
@@ -120,10 +120,10 @@
     return '<div class="hour-section">'+
       (allDay.length?'<section class="merged-all-day card"><div class="sectionbar"><h3>'+icon('calendar',17)+' '+L('dayEvents')+'</h3></div>'+allDay.map(eventVisual).join('')+'</section>':'')+
       '<div class="sectionbar"><h3>'+icon('clock',19)+' '+L('scheduled')+'</h3><span class="subtle small">'+timed.length+'</span></div>'+
-      '<div class="card hourly-shell"><div class="agenda hourly-agenda merged-hourly-agenda" style="height:'+((24-first)*px+5)+'px">'+hours+
+      '<div class="card hourly-shell"><div class="agenda hourly-agenda merged-hourly-agenda" data-drop-hours="true" data-first-minute="'+first*60+'" data-hour-px="'+px+'" style="height:'+((24-first)*px+5)+'px">'+hours+
       '<div class="merged-hourly-overlay">'+blocks+'</div>'+marker+'</div></div>'+
       '<div class="flex-header"><h3>'+icon('stars',19)+' '+L('flexible')+'</h3><button class="part-add" data-unified-add="part" data-part="other">'+icon('plus',18)+'</button></div>'+
-      '<div class="daytask-list card">'+(flexible.length?flexible.map(taskVisual).join(''):'<p class="subtle merged-empty">'+L('untimed')+'</p>')+'</div></div>';
+      '<div class="daytask-list card" data-drop-part="other">'+(flexible.length?flexible.map(taskVisual).join(''):'<p class="subtle merged-empty">'+L('untimed')+'</p>')+'</div></div>';
   }
   function legend(events){
     const c=window.MellowCalendar;
