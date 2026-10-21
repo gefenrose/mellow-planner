@@ -45,7 +45,8 @@
     return '<div class="daytask unified-item unified-task '+(t.done?'completed':'')+'" data-drag-item="task" data-drag-id="'+esc(t.id)+'">'+
       '<span class="daytask-accent '+esc(t.category)+'"></span>'+
       '<button class="daytask-icon '+esc(t.category)+'" data-action="edit" data-id="'+esc(t.id)+'" aria-label="'+esc(L('task')+' '+t.title)+'">'+icon(category,20)+'</button>'+
-      '<button class="daytask-body" data-action="edit" data-id="'+esc(t.id)+'"><span class="kind-label kind-task">'+icon('tasks',12)+' '+L('task')+'</span><strong>'+esc(t.title)+(t.demo?' <span class="demo">'+T('sample')+'</span>':'')+'</strong>'+
+      '<button class="daytask-body" data-action="edit" data-id="'+esc(t.id)+'"><span class="kind-label kind-task">'+icon('tasks',12)+' '+L('task')+'</span><strong>'+esc(t.title)+'</strong>'+
+      (t.demo?'<span class="daypart-sample-tag">'+T('sample')+'</span>':'')+
       '<small>'+esc(time+steps+fmtLength(t.minutes)+(t.inboxItem?' · '+L('inbox'):'')+sync)+'</small></button>'+
       '<button class="check daytask-check '+(t.done?'checked':'')+'" data-action="done" data-id="'+esc(t.id)+'" aria-label="'+esc(t.title)+'">'+(t.done?icon('check',15):'')+'</button></div>';
   }
