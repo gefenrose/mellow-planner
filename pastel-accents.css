@@ -107,3 +107,11 @@ body.dark{
 }
 /* Let links, keyboard focus, and selection remain led by the base purple theme. */
 @media(prefers-reduced-motion:reduce){.part-section .part-pill,.part-section .part-add{transition:none}}
+
+/* Dark mode task fills need a more specific selector than the original v10 styles. */
+body.dark .mellow-day-block.work,body.dark .slot.work{background:var(--work-bg);color:var(--ink);border-color:var(--work-accent)}
+body.dark .mellow-day-block.home,body.dark .slot.home{background:var(--home-bg);color:var(--ink);border-color:var(--home-accent)}
+body.dark .mellow-day-block.self,body.dark .slot.self{background:var(--self-bg);color:var(--ink);border-color:var(--self-accent)}
+body.dark .mellow-day-block.health,body.dark .slot.health{background:var(--health-bg);color:var(--ink);border-color:var(--health-accent)}
+body.dark .mellow-day-block.social,body.dark .slot.social{background:var(--social-bg);color:var(--ink);border-color:var(--social-accent)}
+body.dark .mellow-day-block.errands,body.dark .slot.errands{background:var(--errands-bg);color:var(--ink);border-color:var(--errands-accent)}
