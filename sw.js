@@ -1,5 +1,5 @@
-const CACHE='mellow-offline-v32';
-const CORE=['./','./index.html','./app.js','./timeline-view.js','./subtasks.js','./google-calendar.js','./unified-day.js','./drag-drop.js','./task-reorder.js','./month-search.js','./styles.css','./day-layout.css','./subtasks.css','./motion.css','./google-calendar.css','./unified-day.css','./compact-navigation.css','./purple-theme.css','./pastel-accents.css','./drag-drop.css','./roomy-timeline.css','./month-search.css','./readable-task-list.css','./readable-day-sections.css','./soft-ui.css','./mobile-form-fixes.css','./task-reordering.css','./manifest.webmanifest','./assets/mellow-icon-192.png','./assets/mellow-icon-scalable.svg'];
+const CACHE='mellow-offline-v33';
+const CORE=['./','./index.html','./app.js','./timeline-view.js','./subtasks.js','./google-calendar.js','./unified-day.js','./drag-drop.js','./task-reorder.js','./month-search.js','./styles.css','./day-layout.css','./subtasks.css','./motion.css','./google-calendar.css','./unified-day.css','./compact-navigation.css','./purple-theme.css','./pastel-accents.css','./drag-drop.css','./roomy-timeline.css','./month-search.css','./readable-task-list.css','./readable-day-sections.css','./soft-ui.css','./mobile-form-fixes.css','./task-reordering.css','./manifest.webmanifest','./assets/mellow-icon-192.png','./assets/mellow-icon-scalable.svg','./assets/lucide-sprite.svg'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
 });

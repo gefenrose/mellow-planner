@@ -32,4 +32,4 @@ Offline mode does not transmit task text. When Gemini mode is selected, the subm
 
 ## Developer notes
 
-This app has no build dependencies: `index.html`, `styles.css`, `app.js`, `sw.js`, `manifest.webmanifest`, and `assets/`. Static hosting only. No third-party JavaScript runtime dependencies. Interactions were exercised in a headless browser; Gemini was not tested with a live API key.
+This app has no build dependencies: `index.html`, `styles.css`, `app.js`, `sw.js`, `manifest.webmanifest`, and `assets/`. Static hosting only. No third-party JavaScript runtime dependencies. Interface icons come from the locally bundled Lucide Static SVG sprite (`lucide-static` 1.61.0, ISC license; see `assets/lucide/`). Interactions were exercised in a headless browser; Gemini was not tested with a live API key.

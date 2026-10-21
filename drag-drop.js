@@ -29,7 +29,7 @@
   const clamp=(n,lo,hi)=>Math.max(lo,Math.min(hi,n));
   let active=null,keyboard=null,scrollFrame=null,ghost=null,categoryDock=null,announceEl=null,busy=false,press=null,pressTimer=null;
   let preventTapUntil=0,timeBadge=null,timeGuide=null;
-  const svg='<svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><circle cx="8" cy="5" r="1.7"/><circle cx="16" cy="5" r="1.7"/><circle cx="8" cy="12" r="1.7"/><circle cx="16" cy="12" r="1.7"/><circle cx="8" cy="19" r="1.7"/><circle cx="16" cy="19" r="1.7"/></svg>';
+  const svg=mellowIcon('gripVertical',17);
   const itemKey=item=>item?.dataset?.dragId||'';
   function getItem(item){
     if(!item)return null;

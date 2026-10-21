@@ -171,7 +171,7 @@
 .task-priority-pill.selected{box-shadow:0 0 0 2px color-mix(in srgb,var(--purple) 32%,transparent)}
 .task-priority-pill .m-icon{width:14px;height:14px}
 .task-priority-pill>.m-icon:last-child{margin-inline-start:auto;transform:rotate(180deg)}
-.task-priority-icon{display:block;flex:0 0 14px}
+.task-priority-icon{display:block;flex:0 0 14px;fill:currentColor;stroke-width:1.4}.task-priority-icon-low{transform:rotate(180deg)}
 .task-priority-add,.task-group-add{width:35px;height:35px;border-radius:50%;background:#f5f4f6;color:#b9b5bc}
 .task-filter-menu{margin:-9px 0 27px}
 .task-filter-menu summary{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;background:var(--surface2);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;list-style:none}

@@ -3,8 +3,8 @@
    opt-in and paginated. Search results and tokens never leave this browser session. */
 (()=>{
   const i=(name,size=18)=>mellowIcon(name,size);
-  const glass='<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.5"/><path d="m16 16 5 5"/></svg>';
-  const pencil='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5 4 4M4 20l4.5-1 10-10a2.12 2.12 0 0 0-3-3l-10 10L4 20Z"/></svg>';  const w={
+  const glass=mellowIcon('search',19);
+  const pencil=mellowIcon('pencil',17);  const w={
     en:{search:'Search everything',searchHint:'Find tasks and Google events from any date',
       monthTitle:'Jump to a date',today:'Today',close:'Close',previous:'Previous month',next:'Next month',
       all:'All',past:'Past',future:'Upcoming',searchPlaceholder:'Search tasks and events…',
