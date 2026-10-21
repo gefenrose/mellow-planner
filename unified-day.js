@@ -94,7 +94,7 @@
     const isEvent=t.kind==='event',color=isEvent?t.color:null;
     const role=isEvent?L('event'):L('task');
     const label=isEvent?(t.timeLabel+' · '+t.calendarName):(fmt(t.start)+' · '+fmtLength(t.minutes));
-    const props='style="top:'+y+'px;height:'+height+'px;--lane-fraction:'+(lane/lanes).toFixed(6)+';--width-fraction:'+(1/lanes).toFixed(6)+(color?';--calendar-accent:'+esc(color):'')+'"';
+    const props='style="top:'+y+'px;height:'+height+'px;left:'+(100*lane/lanes).toFixed(4)+'%;width:calc('+(100/lanes).toFixed(4)+'% - 3px)'+(color?';--calendar-accent:'+esc(color):'')+'"';
     const tag=isEvent?'<span class="kind-label kind-event">'+icon('calendar',12)+' '+L('event')+'</span>':
       '<span class="kind-label kind-task">'+icon('tasks',12)+' '+L('task')+'</span>';
     const content=tag+'<strong>'+esc(t.title)+'</strong><small>'+esc(label)+'</small>';
@@ -120,7 +120,8 @@
     return '<div class="hour-section">'+
       (allDay.length?'<section class="merged-all-day card"><div class="sectionbar"><h3>'+icon('calendar',17)+' '+L('dayEvents')+'</h3></div>'+allDay.map(eventVisual).join('')+'</section>':'')+
       '<div class="sectionbar"><h3>'+icon('clock',19)+' '+L('scheduled')+'</h3><span class="subtle small">'+timed.length+'</span></div>'+
-      '<div class="card hourly-shell"><div class="agenda hourly-agenda merged-hourly-agenda" style="height:'+((24-first)*px+5)+'px">'+hours+blocks+marker+'</div></div>'+
+      '<div class="card hourly-shell"><div class="agenda hourly-agenda merged-hourly-agenda" style="height:'+((24-first)*px+5)+'px">'+hours+
+      '<div class="merged-hourly-overlay">'+blocks+'</div>'+marker+'</div></div>'+
       '<div class="flex-header"><h3>'+icon('stars',19)+' '+L('flexible')+'</h3><button class="part-add" data-unified-add="part" data-part="other">'+icon('plus',18)+'</button></div>'+
       '<div class="daytask-list card">'+(flexible.length?flexible.map(taskVisual).join(''):'<p class="subtle merged-empty">'+L('untimed')+'</p>')+'</div></div>';
   }
