@@ -153,7 +153,7 @@
     const allDay=items.filter(t=>t.kind==='event'&&t.allDay);
     const flexible=items.filter(t=>t.kind==='task'&&t.start==null);
     const first=timed.length?Math.max(0,Math.min(6,Math.floor(Math.min(...timed.map(t=>t.start))/60))):6;
-    const px=(window.innerWidth||390)<=700?136:116;
+    const px=(window.innerWidth||390)<=700?192:116;
     let hours='';
     for(let h=first;h<24;h++)hours+='<div class="hour" style="height:'+px+'px"><span>'+fmt(h*60)+'</span>'+
       '<button class="hour-add" data-unified-add="hour" data-start="'+h*60+'" aria-label="'+L('add')+' '+fmt(h*60)+'">'+icon('plus',16)+'</button></div>';
