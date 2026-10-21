@@ -178,8 +178,9 @@
     const timed=items.filter(t=>t.start!=null&&!(t.kind==='event'&&t.allDay)&&Number.isFinite(t.start)&&t.start>=0&&t.start<1440);
     const allDay=items.filter(t=>t.kind==='event'&&t.allDay);
     const flexible=items.filter(t=>t.kind==='task'&&t.start==null);
-    const first=timed.length?Math.max(0,Math.min(6,Math.floor(Math.min(...timed.map(t=>t.start))/60))):6;
-    const px=(window.innerWidth||390)<=700?84:96;
+    const earliest=timed.length?Math.floor(Math.min(...timed.map(t=>t.start))/60):6;
+    const first=timed.length?Math.max(0,ui.date===today()?Math.min(earliest,Math.floor(minNow()/60)):earliest):6;
+    const px=(window.innerWidth||390)<=700?74:88;
     let hours='';
     for(let h=first;h<24;h++)hours+='<div class="hour" style="height:'+px+'px"><span>'+fmt(h*60)+'</span>'+
       '<button class="hour-add" data-unified-add="hour" data-start="'+h*60+'" aria-label="'+L('add')+' '+fmt(h*60)+'">'+icon('plus',16)+'</button></div>';
@@ -190,11 +191,12 @@
     const marker=now!=null&&now>=first*60?'<div class="nowline" style="top:'+((now-first*60)/60*px)+'px"><em>'+L('now')+'</em></div>':'';
     return '<div class="hour-section">'+
       (allDay.length?'<section class="merged-all-day card"><div class="sectionbar"><h3>'+icon('calendar',17)+' '+L('dayEvents')+'</h3></div>'+allDay.map(eventVisual).join('')+'</section>':'')+
+      '<div class="flex-header merged-anytime-heading"><h3>'+icon('clock',16)+' '+L('flexible')+' ('+flexible.length+')</h3><button class="part-add" data-unified-add="part" data-part="other">'+icon('plus',18)+'</button></div>'+
+      '<div class="daytask-list card" data-drop-part="other">'+(flexible.length?flexible.map(taskVisual).join(''):'')+
+      '<button class="part-empty" data-unified-add="part" data-part="other"><span>'+L('empty_other')+'</span><span class="part-empty-add">'+icon('plus',16)+'</span></button></div>'+
       '<div class="sectionbar merged-planned-heading"><h3>'+icon('clock',16)+' '+L('scheduled')+' ('+timed.length+')</h3></div>'+
       '<div class="card hourly-shell"><div class="agenda hourly-agenda merged-hourly-agenda" data-drop-hours="true" data-first-minute="'+first*60+'" data-hour-px="'+px+'" style="height:'+totalHeight+'px">'+hours+
-      '<div class="merged-hourly-overlay">'+blocks+'</div>'+marker+'</div></div>'+
-      '<div class="flex-header"><h3>'+icon('sparkles',19)+' '+L('flexible')+'</h3><button class="part-add" data-unified-add="part" data-part="other">'+icon('plus',18)+'</button></div>'+
-      '<div class="daytask-list card" data-drop-part="other">'+(flexible.length?flexible.map(taskVisual).join(''):'<p class="subtle merged-empty">'+L('untimed')+'</p>')+'</div></div>';
+      '<div class="merged-hourly-overlay">'+blocks+'</div>'+marker+'</div></div></div>';
   }
   function legend(events){
     const c=window.MellowCalendar;

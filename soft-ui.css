@@ -176,3 +176,22 @@ body.dark .merged-day-view .hour-check{border-color:var(--ink)}
 @media(prefers-reduced-motion:reduce){
   .merged-day-view .dnd-ready>.dnd-grip{transition:none!important}
 }
+
+.merged-day-view .day-sections .part-section,
+.merged-day-view .day-sections .part-section::before{
+  border:0!important;border-inline-start:0!important;padding-inline-start:0!important;
+  background:transparent!important;box-shadow:none!important
+}
+.merged-day-view .daytask-list.card{
+  display:flex;flex-direction:column;gap:8px;min-width:0;margin:0;padding:0;
+  border:0;background:transparent;box-shadow:none
+}
+.merged-day-view .merged-anytime-heading{margin:8px 0 7px}
+.merged-day-view .merged-anytime-heading h3{
+  display:inline-flex;align-items:center;gap:8px;margin:0;padding:8px 13px;
+  border-radius:999px;background:var(--surface2);font-size:12px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase
+}
+@media(max-width:700px){
+  .merged-day-view .merged-anytime-heading h3{padding:7px 12px}
+}
