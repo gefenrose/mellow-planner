@@ -1,5 +1,5 @@
-const CACHE='mellow-offline-v6';
-const CORE=['./','./index.html','./app.js','./timeline-view.js','./subtasks.js','./styles.css','./day-layout.css','./subtasks.css','./motion.css','./manifest.webmanifest','./assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png'];
+const CACHE='mellow-offline-v7';
+const CORE=['./','./index.html','./app.js','./timeline-view.js','./subtasks.js','./google-calendar.js','./styles.css','./day-layout.css','./subtasks.css','./motion.css','./google-calendar.css','./manifest.webmanifest','./assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
 });
