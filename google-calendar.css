@@ -89,3 +89,5 @@
  .gcal-event{animation:mellow-rise 230ms var(--ease-out-calm) both}
  .gcal-settings-card,.gcal-day-events{animation:mellow-soft-fade 220ms ease both}
 }
+
+.gcal-close-button .m-icon{transform:rotate(45deg)}
