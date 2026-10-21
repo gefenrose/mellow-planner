@@ -160,12 +160,16 @@
       const startMs=valid?Math.max(min,startDate.getTime()):min;
       const endMs=valid?Math.min(max,endDate.getTime()):max;
       if(valid&&endMs<=startMs)return null;
-      const start=valid?Math.max(0,Math.floor((startMs-min)/60000)):null;
+      // Use wall-clock positions so DST changes do not move visible blocks by an hour.
+      const eventStart=valid&&startMs>min?new Date(startMs):null;
+      const eventEnd=valid&&endMs<max?new Date(endMs):null;
+      const start=valid?(eventStart?eventStart.getHours()*60+eventStart.getMinutes():0):null;
+      const endWall=valid?(eventEnd?eventEnd.getHours()*60+eventEnd.getMinutes():1440):null;
       return {
         kind:'event',id:String(ev.id||''),calendarId:String(ev._calendarId||''),
         title:String(ev.summary||W('nothing')),calendarName:String(cal?.summary||W('calendar')),
         color:colorOf(cal),allDay, start,
-        minutes:valid?Math.max(1,Math.ceil((endMs-startMs)/60000)):null,
+        minutes:valid?Math.max(1,endWall-start):null,
         timeLabel:eventTime(ev),
         href:safeUrl(ev.htmlLink),location:String(ev.location||'')
       };
