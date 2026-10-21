@@ -258,7 +258,6 @@
   },true);
   function keyboardBegin(item){
     if(!enter(item,null))return;
-    active.moved=true;
     keyboard={info:active,mode:document.querySelector('.merged-day-view .day-sections')?'part':'hour',index:0};
     if(keyboard.mode==='part'){
       const current=PARTS.indexOf(item.closest('[data-drop-part]')?.dataset.dropPart);
