@@ -503,10 +503,10 @@ body:has(.merged-day-view) .floatadd{display:none!important}
 }
 .main:has(.task-page) .tasks-list .task.task-card .task-title-button{width:100%}
 @media(max-width:700px){
-  .main:has(.task-page) .tasks-list .task.task-card{grid-template-columns:43px minmax(0,1fr) 29px}
+  .main:has(.task-page) .tasks-list .task.task-card{grid-template-columns:36px minmax(0,1fr) 27px}
 }
 @media(max-width:390px){
-  .main:has(.task-page) .tasks-list .task.task-card{grid-template-columns:39px minmax(0,1fr) 27px}
+  .main:has(.task-page) .tasks-list .task.task-card{grid-template-columns:35px minmax(0,1fr) 26px}
 }
 
 /* Keep secondary task filters available after the main list, so the first view stays open. */

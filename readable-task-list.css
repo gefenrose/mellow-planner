@@ -164,12 +164,14 @@
 .task-title-add:hover,.task-priority-add:hover,.task-group-add:hover,.task-suggestions-refresh:hover,.task-suggestion-add:hover{background:var(--lightgreen);color:var(--green)}
 .task-priority-list{display:flex;flex-direction:column;gap:18px;margin:0 0 29px}
 .task-priority-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.task-priority-pill{display:inline-flex;align-items:center;justify-content:space-between;gap:14px;min-width:118px;min-height:42px;padding:8px 13px;border:1px solid transparent;border-radius:999px;color:var(--ink);font-size:13px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;cursor:pointer;transition:filter .15s,box-shadow .15s}
+.task-priority-pill{display:inline-flex;align-items:center;gap:10px;min-width:104px;min-height:42px;padding:8px 13px;border:1px solid transparent;border-radius:999px;color:var(--ink);font-size:13px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;cursor:pointer;transition:filter .15s,box-shadow .15s}
 .task-priority-pill.high{background:#fbedef}
 .task-priority-pill.med{background:#fbf0e4}
 .task-priority-pill.low{background:#eaf0fb}
 .task-priority-pill.selected{box-shadow:0 0 0 2px color-mix(in srgb,var(--purple) 32%,transparent)}
 .task-priority-pill .m-icon{width:14px;height:14px}
+.task-priority-pill>.m-icon:last-child{margin-inline-start:auto;transform:rotate(180deg)}
+.task-priority-icon{display:block;flex:0 0 14px}
 .task-priority-add,.task-group-add{width:35px;height:35px;border-radius:50%;background:#f5f4f6;color:#b9b5bc}
 .task-filter-menu{margin:-9px 0 27px}
 .task-filter-menu summary{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;background:var(--surface2);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;list-style:none}
@@ -223,15 +225,15 @@ body.dark .tasks-list .task-emoji.task-emoji-errands{background:#3b394c}
   .task-page-title{margin:4px 0 25px}
   .task-page-title h1{font-size:34px}
   .task-priority-list{gap:16px;margin-bottom:25px}
-  .task-priority-pill{min-width:118px;min-height:40px}
+  .task-priority-pill{min-width:104px;min-height:40px}
   .task-group{margin-bottom:25px}
   .task-group-heading{margin-bottom:11px}
-  .tasks-list.card{gap:11px}
-  .tasks-list .task.task-card{grid-template-columns:43px minmax(0,1fr) 29px;column-gap:11px;min-height:76px;padding:12px 13px;border-radius:19px}
-  .tasks-list .task.task-card .task-emoji{width:40px;height:40px;font-size:22px}
-  .tasks-list .task-title-button{font-size:16px;line-height:1.3}
-  .tasks-list .task.task-card .tasktext small{font-size:13px}
-  .tasks-list .task.task-card .task-complete{width:25px;height:25px}
+  .tasks-list.card{gap:9px}
+  .tasks-list .task.task-card{grid-template-columns:36px minmax(0,1fr) 27px;column-gap:10px;min-height:54px;padding:6px 13px;border-radius:18px}
+  .tasks-list .task.task-card .task-emoji{width:32px;height:32px;font-size:20px}
+  .tasks-list .task-title-button{font-size:16px;line-height:1.25}
+  .tasks-list .task.task-card .tasktext small{font-size:13px;line-height:1.2}
+  .tasks-list .task.task-card .task-complete{width:24px;height:24px}
 }
 @media(max-width:390px){
   .task-page-title h1{font-size:32px}
@@ -239,4 +241,8 @@ body.dark .tasks-list .task-emoji.task-emoji-errands{background:#3b394c}
   .tasks-list .task.task-card .task-emoji{width:37px;height:37px;font-size:21px}
   .tasks-list .task-title-button{font-size:15px}
   .task-priority-list{gap:15px}
+  .task-page{padding-inline:8px}
+  .tasks-list .task.task-card{grid-template-columns:35px minmax(0,1fr) 26px;min-height:52px;padding:6px 12px}
+  .tasks-list .task.task-card .task-emoji{width:31px;height:31px}
+  .tasks-list .task-title-button{font-size:16px}
 }
