@@ -1,0 +1,109 @@
+/* Mellow v11 — airy pastel accents against the white, gray and lavender base.
+   Time-of-day names are the primary color landmarks, not the whole screen. */
+:root{
+  --morning-bg:#fff0c7; --morning-text:#735018; --morning-accent:#c48b29;
+  --afternoon-bg:#ffe5d1; --afternoon-text:#84502f; --afternoon-accent:#cd8453;
+  --evening-bg:#fbe0eb; --evening-text:#853f62; --evening-accent:#c97397;
+  --night-bg:#e0e9ff; --night-text:#3f5e95; --night-accent:#7394cf;
+  --other-bg:#dff3eb; --other-text:#246e5a; --other-accent:#58a68a;
+  --work-bg:#eaf0ff; --work-ink:#45639b; --work-accent:#7293d2;
+  --home-bg:#fff0e5; --home-ink:#945b3e; --home-accent:#d69b76;
+  --self-bg:#f0e9fd; --self-ink:#6a4b9b; --self-accent:#9b7bc4;
+  --health-bg:#e2f4eb; --health-ink:#2d7758; --health-accent:#6caf90;
+  --social-bg:#ffe9ef; --social-ink:#934b69; --social-accent:#d78aa6;
+  --errands-bg:#fff4db; --errands-ink:#81612b; --errands-accent:#ccad65;
+}
+/* Heading tags and contextual add buttons, including the collapsible versions. */
+.part-section[data-part="morning"]{--section-bg:var(--morning-bg);--section-text:var(--morning-text);--section-accent:var(--morning-accent)}
+.part-section[data-part="afternoon"]{--section-bg:var(--afternoon-bg);--section-text:var(--afternoon-text);--section-accent:var(--afternoon-accent)}
+.part-section[data-part="evening"]{--section-bg:var(--evening-bg);--section-text:var(--evening-text);--section-accent:var(--evening-accent)}
+.part-section[data-part="night"]{--section-bg:var(--night-bg);--section-text:var(--night-text);--section-accent:var(--night-accent)}
+.part-section[data-part="other"]{--section-bg:var(--other-bg);--section-text:var(--other-text);--section-accent:var(--other-accent)}
+.part-section .part-pill,
+.part-section .part-pill.morning,
+.part-section .part-pill.afternoon,
+.part-section .part-pill.evening,
+.part-section .part-pill.night,
+.part-section .part-pill.other{
+  background:var(--section-bg);
+  color:var(--section-text);
+  border:1px solid color-mix(in srgb,var(--section-accent) 22%,transparent);
+  box-shadow:0 2px 8px color-mix(in srgb,var(--section-accent) 8%,transparent);
+}
+.part-section .part-pill b{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:20px;
+  height:20px;
+  padding:0 5px;
+  border-radius:7px;
+  background:color-mix(in srgb,var(--section-accent) 16%,transparent);
+  color:inherit;
+  opacity:1;
+  font-size:11px;
+  font-variant-numeric:tabular-nums;
+}
+.part-section .part-add{
+  background:var(--section-bg);
+  color:var(--section-text);
+  border:1px solid color-mix(in srgb,var(--section-accent) 26%,transparent);
+}
+.part-section .part-add:hover{
+  background:color-mix(in srgb,var(--section-bg) 75%,var(--section-accent));
+  color:var(--section-text);
+}
+.part-section .part-empty{
+  color:var(--section-text);
+  border-color:color-mix(in srgb,var(--section-accent) 35%,var(--border));
+  background:color-mix(in srgb,var(--section-bg) 24%,var(--surface));
+}
+/* A slim colored marker on the left of each group, while cards stay bright and uncluttered. */
+.day-sections .part-section{position:relative}
+.day-sections .part-heading{padding-inline-start:8px;border-inline-start:3px solid var(--section-accent)}
+/* Task category tints are another quick scan cue; Google events keep their outlined identity. */
+.daytask-accent.work,.mellow-day-block.work .hour-color{background:var(--work-accent)}
+.daytask-accent.home,.mellow-day-block.home .hour-color{background:var(--home-accent)}
+.daytask-accent.self,.mellow-day-block.self .hour-color{background:var(--self-accent)}
+.daytask-accent.health,.mellow-day-block.health .hour-color{background:var(--health-accent)}
+.daytask-accent.social,.mellow-day-block.social .hour-color{background:var(--social-accent)}
+.daytask-accent.errands,.mellow-day-block.errands .hour-color{background:var(--errands-accent)}
+.daytask-icon.work,.mellow-day-block.work .hour-emoji{background:var(--work-bg);color:var(--work-ink)}
+.daytask-icon.home,.mellow-day-block.home .hour-emoji{background:var(--home-bg);color:var(--home-ink)}
+.daytask-icon.self,.mellow-day-block.self .hour-emoji{background:var(--self-bg);color:var(--self-ink)}
+.daytask-icon.health,.mellow-day-block.health .hour-emoji{background:var(--health-bg);color:var(--health-ink)}
+.daytask-icon.social,.mellow-day-block.social .hour-emoji{background:var(--social-bg);color:var(--social-ink)}
+.daytask-icon.errands,.mellow-day-block.errands .hour-emoji{background:var(--errands-bg);color:var(--errands-ink)}
+.mellow-day-block.work,.slot.work{background:var(--work-bg);border-color:var(--work-accent)}
+.mellow-day-block.home,.slot.home{background:var(--home-bg);border-color:var(--home-accent)}
+.mellow-day-block.self,.slot.self{background:var(--self-bg);border-color:var(--self-accent)}
+.mellow-day-block.health,.slot.health{background:var(--health-bg);border-color:var(--health-accent)}
+.mellow-day-block.social,.slot.social{background:var(--social-bg);border-color:var(--social-accent)}
+.mellow-day-block.errands,.slot.errands{background:var(--errands-bg);border-color:var(--errands-accent)}
+/* Consistent but restrained accents for older task list badges too. */
+.task-emoji{color:#7354a5}
+.pill.work{background:var(--work-bg);color:var(--work-ink);border-color:var(--work-accent)}
+.pill.home{background:var(--home-bg);color:var(--home-ink);border-color:var(--home-accent)}
+.pill.self{background:var(--self-bg);color:var(--self-ink);border-color:var(--self-accent)}
+.pill.health{background:var(--health-bg);color:var(--health-ink);border-color:var(--health-accent)}
+.pill.social{background:var(--social-bg);color:var(--social-ink);border-color:var(--social-accent)}
+.pill.errands{background:var(--errands-bg);color:var(--errands-ink);border-color:var(--errands-accent)}
+/* Preserve the distinctive outline and calendar symbol when task colors mix with events. */
+.unified-event,.merged-calendar-block{background:var(--surface)}
+.unified-event .daytask-accent,.merged-calendar-block .hour-color{background:var(--calendar-accent)}
+/* Dark palette keeps the same time-of-day hue language without bright patches. */
+body.dark{
+  --morning-bg:#493d2c;--morning-text:#ffe2a0;--morning-accent:#dcb266;
+  --afternoon-bg:#503a35;--afternoon-text:#ffd2b5;--afternoon-accent:#dfaa83;
+  --evening-bg:#513544;--evening-text:#ffcadf;--evening-accent:#de97b6;
+  --night-bg:#343e58;--night-text:#ccdcff;--night-accent:#91abe2;
+  --other-bg:#304a43;--other-text:#b5ebd7;--other-accent:#80c8af;
+  --work-bg:#30384f;--work-ink:#ceddff;--work-accent:#a4b9e6;
+  --home-bg:#46372f;--home-ink:#ffdac2;--home-accent:#d8a889;
+  --self-bg:#423650;--self-ink:#e4d1ff;--self-accent:#baa1e1;
+  --health-bg:#2e453b;--health-ink:#c5f4dd;--health-accent:#89cfaa;
+  --social-bg:#4b3440;--social-ink:#ffcfde;--social-accent:#d99bb3;
+  --errands-bg:#48402f;--errands-ink:#ffe7b1;--errands-accent:#d5b978;
+}
+/* Let links, keyboard focus, and selection remain led by the base purple theme. */
+@media(prefers-reduced-motion:reduce){.part-section .part-pill,.part-section .part-add{transition:none}}
