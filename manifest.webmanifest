@@ -9,15 +9,15 @@
   "lang": "en",
   "icons": [
     {
-      "src": "./assets/icon-192.png",
+      "src": "./assets/mellow-icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "./assets/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
+      "src": "./assets/mellow-icon-scalable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "any maskable"
     }
   ]
