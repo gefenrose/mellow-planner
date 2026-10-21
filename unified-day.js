@@ -97,7 +97,44 @@
     return Math.ceil(Math.max(phone?88:82,contentHeight,
       (Math.max(1,item.minutes||25)/60)*px-4));
   }
+  function allocateMobile(entries,px){
+    // Phone screens cannot display readable titles in three or four skinny lanes.
+    // Limit conflicting activities to two lanes, stacking overflow vertically.
+    // Each card still displays its real scheduled time; dragging uses the ruler.
+    const ordered=entries.slice().sort((a,b)=>a.start-b.start||(b.minutes-a.minutes));
+    const groups=[];let group=null;
+    for(const item of ordered){
+      const top=item.start*px/60;
+      const end=top+visualHeight(item,1,px)+7;
+      if(!group||top>=group.end){
+        group={end,items:[]};groups.push(group);
+      }
+      group.items.push(item);group.end=Math.max(group.end,end);
+    }
+    let bottom=-Infinity;
+    const placed=[];
+    for(const group of groups){
+      const lanes=group.items.length>1?2:1;
+      const firstScheduled=group.items[0].start*px/60;
+      const offset=Math.max(0,bottom+8-firstScheduled);
+      const laneEnd=Array(lanes).fill(-Infinity);
+      for(const item of group.items){
+        const scheduled=item.start*px/60+offset;
+        const height=visualHeight(item,lanes,px);
+        let lane=0,top=Math.max(scheduled,laneEnd[0]);
+        for(let candidate=1;candidate<lanes;candidate++){
+          const candidateTop=Math.max(scheduled,laneEnd[candidate]);
+          if(candidateTop<top){lane=candidate;top=candidateTop}
+        }
+        placed.push({item,lane,lanes,height,displayTop:top});
+        laneEnd[lane]=top+height+8;
+      }
+      bottom=Math.max(...laneEnd);
+    }
+    return placed;
+  }
   function allocate(entries,px=120){
+    if((window.innerWidth||390)<=700)return allocateMobile(entries,px);
     // Measure visual overlap, not only schedule overlap, so taller labels never
     // cover neighboring entries. Iterate as lane widths affect word wrapping.
     const ordered=entries.slice().sort((a,b)=>a.start-b.start||(b.minutes-a.minutes));
@@ -132,8 +169,8 @@
       return {item,lane,lanes,height:visualHeight(item,lanes,px)};
     }));
   }
-  function hourBlock({item,lane,lanes,height},first,px){
-    const t=item, y=(t.start-first*60)/60*px+2;
+  function hourBlock({item,lane,lanes,height,displayTop},first,px){
+    const t=item, y=(displayTop??t.start*px/60)-first*px+2;
     const isEvent=t.kind==='event',color=isEvent?t.color:null;
     const role=isEvent?L('event'):L('task');
     const label=isEvent?t.timeLabel:(fmt(t.start)+' · '+fmtLength(t.minutes));
@@ -159,7 +196,7 @@
       '<button class="hour-add" data-unified-add="hour" data-start="'+h*60+'" aria-label="'+L('add')+' '+fmt(h*60)+'">'+icon('plus',16)+'</button></div>';
     const laidOut=allocate(timed,px);
     const blocks=laidOut.map(t=>hourBlock(t,first,px)).join('');
-    const totalHeight=Math.max((24-first)*px+5,...laidOut.map(t=>(t.item.start-first*60)/60*px+t.height+16));
+    const totalHeight=Math.max((24-first)*px+5,...laidOut.map(t=>(t.displayTop??t.item.start*px/60)-first*px+t.height+16));
     const now=ui.date===today()?minNow():null;
     const marker=now!=null&&now>=first*60?'<div class="nowline" style="top:'+((now-first*60)/60*px)+'px"><em>'+L('now')+'</em></div>':'';
     return '<div class="hour-section">'+
