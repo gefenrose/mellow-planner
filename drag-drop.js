@@ -4,7 +4,7 @@
   const LABELS={
     en:{drag:'Drag to move',task:'task',event:'calendar event',drop:'Drop to move',category:'Change task category',
       moved:'Moved',other:'Other / Anytime',locked:'This calendar event cannot be edited.',allDay:'All-day events are not draggable.',
-      noOther:'Calendar events need an exact time. Drag to Morning, Afternoon, Evening, Night, or the hourly view.',
+      noOther:'Calendar events need an exact time. Drag to Morning, Afternoon, Evening, or the hourly view.',
       failed:'Could not move this event in Google Calendar.',noTime:'Move to',linked:'Mellow saved the task. Reconnect Google Calendar to sync its time.',unscheduledLinked:'Task set to Anytime; the linked Google event kept its original time.',syncFailed:'Task saved in Mellow, but the linked Google event could not be updated.',
       keyboard:'Use the arrow keys to choose a time or section. Press C for task categories, Enter to save, or Escape to cancel.',
       categoryDock:'Drop here to change task category',cancel:'Move canceled',
@@ -13,7 +13,7 @@
       section:'Move to',minute:'New time',savedGoogle:'Updated in Google Calendar',busy:'Saving change…'},
     he:{drag:'גרירה לשינוי מקום',task:'משימה',event:'אירוע ביומן',drop:'שחרור כדי להעביר',category:'שינוי קטגוריית המשימה',
       moved:'הועבר',other:'אחר / בכל שעה',locked:'אין הרשאת עריכה לאירוע זה.',allDay:'לא ניתן לגרור אירועים של יום שלם.',
-      noOther:'אירוע ביומן צריך שעה מדויקת. גררי לחלק ביום או לציר השעות.',
+      noOther:'אירוע ביומן צריך שעה מדויקת. גררי לבוקר, צהריים, ערב או לציר השעות.',
       failed:'אי אפשר לעדכן את האירוע ב-Google Calendar.',noTime:'העברה אל',linked:'המשימה נשמרה ב-Mellow. יש להתחבר ל-Google כדי לסנכרן את השעה.',unscheduledLinked:'המשימה הועברה ל״בכל שעה״. האירוע המקושר ב-Google נשאר בשעה המקורית.',syncFailed:'המשימה נשמרה ב-Mellow, אך לא ניתן לעדכן את האירוע המקושר ב-Google.',
       keyboard:'השתמשי בחצים לבחירת שעה או חלק ביום. C לשינוי קטגוריה, Enter לשמירה, Escape לביטול.',
       categoryDock:'שחררי כאן כדי לשנות קטגוריית משימה',cancel:'ההעברה בוטלה',
@@ -22,12 +22,12 @@
       section:'העברה אל',minute:'שעה חדשה',savedGoogle:'עודכן ביומן Google',busy:'שומרת שינויים…'}
   };
   const L=k=>LABELS[db.settings.lang==='he'?'he':'en'][k]||k;
-  const PARTS=['morning','afternoon','evening','night','other'];
+  const PARTS=['other','morning','afternoon','evening'];
   const CATS=['work','home','self','health','social','errands'];
-  const anchor={morning:540,afternoon:840,evening:1080,night:1320};
+  const anchor={morning:540,afternoon:840,evening:1080};
   const timeLabel=n=>fmt(Math.max(0,Math.min(1439,n)));
   const clamp=(n,lo,hi)=>Math.max(lo,Math.min(hi,n));
-  let active=null,keyboard=null,scrollFrame=null,ghost=null,categoryDock=null,announceEl=null,busy=false;
+  let active=null,keyboard=null,scrollFrame=null,ghost=null,categoryDock=null,announceEl=null,busy=false,press=null,pressTimer=null;
   let preventTapUntil=0,timeBadge=null,timeGuide=null;
   const svg='<svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><circle cx="8" cy="5" r="1.7"/><circle cx="16" cy="5" r="1.7"/><circle cx="8" cy="12" r="1.7"/><circle cx="16" cy="12" r="1.7"/><circle cx="8" cy="19" r="1.7"/><circle cx="16" cy="19" r="1.7"/></svg>';
   const itemKey=item=>item?.dataset?.dragId||'';
@@ -60,7 +60,7 @@
     }
     categoryDock.querySelector('.dnd-dock-label').textContent=L('categoryDock');
     if(!ghost){
-      ghost=document.createElement('div');ghost.className='dnd-ghost';ghost.setAttribute('aria-hidden','true');
+      ghost=document.createElement('div');ghost.className='dnd-ghost dnd-ghost-card';ghost.setAttribute('aria-hidden','true');
       document.body.appendChild(ghost);
     }
     if(!timeBadge){
@@ -73,6 +73,22 @@
     }
   }
   function announce(s){if(announceEl)announceEl.textContent=s}
+  function clearPress(){
+    if(pressTimer!=null){clearTimeout(pressTimer);pressTimer=null}
+    press=null;
+  }
+  function paintGhost(){
+    if(!ghost||!active)return;
+    const emoji=(active.el.querySelector('.daytask-icon,.hour-emoji')?.textContent||'🌿').trim()||'🌿';
+    const time=(active.el.querySelector('.daytask-body small,.hour-info small')?.textContent||'').trim();
+    const badge=document.createElement('span');badge.className='dnd-ghost-emoji';badge.textContent=emoji;
+    const info=document.createElement('span');info.className='dnd-ghost-info';
+    const title=document.createElement('strong');title.textContent=active.title;
+    const meta=document.createElement('small');meta.textContent=time;
+    info.append(title,meta);
+    const check=document.createElement('span');check.className='dnd-ghost-check';
+    ghost.replaceChildren(badge,info,check);
+  }
   function decorate(){
     if(active||keyboard)return;
     const items=document.querySelectorAll('.merged-day-view [data-drag-item]');
@@ -108,7 +124,7 @@
     active.moved=true;document.body.classList.add('dnd-active');
     document.body.classList.toggle('dnd-task-active',active.kind==='task');
     active.el.classList.add('dnd-origin');
-    ghost.textContent=active.title;
+    paintGhost();
     ghost.classList.add('dnd-ghost-visible');
     announce(L('drag')+' '+active.title+'. '+L('keyboard'));
   }
@@ -151,9 +167,8 @@
       const msg=target.kind==='hour'?L('minute')+': '+timeLabel(target.minute):
         target.kind==='part'?L('section')+': '+L(target.part==='other'?'otherPart':target.part):
         L('category')+': '+L(target.category);
-      ghost.textContent=target.kind==='hour'?active.title:active.title+' · '+msg;
       if(last?.kind!==target.kind||last?.minute!==target.minute||last?.part!==target.part||last?.category!==target.category)announce(msg);
-    }else ghost.textContent=active.title;
+    }
   }
   function targetAt(x,y){
     const el=document.elementFromPoint(x,y);
@@ -181,10 +196,10 @@
   }
   function positionGhost(x,y){
     if(!ghost)return;
-    ghost.style.left=Math.max(8,Math.min(window.innerWidth-190,x+16))+'px';
-    // Keep the task title below the finger when a time badge is above it.
-    const yPosition=active?.target?.kind==='hour'?y+20:y-22;
-    ghost.style.top=clamp(yPosition,8,Math.max(8,window.innerHeight-72))+'px';
+    const rect=ghost.getBoundingClientRect(),width=rect.width||230,height=rect.height||62;
+    ghost.style.left=clamp(x+16,8,Math.max(8,window.innerWidth-width-8))+'px';
+    const yPosition=active?.target?.kind==='hour'?y-height-18:y-height/2;
+    ghost.style.top=clamp(yPosition,8,Math.max(8,window.innerHeight-height-8))+'px';
   }
   function autoScroll(){
     if(!active?.moved)return;
@@ -204,6 +219,10 @@
     scrollFrame=requestAnimationFrame(autoScroll);
   }
   function move(e){
+    if(press&&press.pointerId===e.pointerId&&!press.ready){
+      if(Math.hypot(e.clientX-press.x,e.clientY-press.y)>9){clearPress();active=null}
+      return;
+    }
     if(!active||active.pointerId!==e.pointerId)return;
     active.x=e.clientX;active.y=e.clientY;
     if(!active.moved&&Math.hypot(active.x-active.startX,active.y-active.startY)<5)return;
@@ -211,6 +230,7 @@
       begin();
       if(scrollFrame==null)scrollFrame=requestAnimationFrame(autoScroll);
     }
+    active.didMove=true;
     e.preventDefault();
     showTarget(targetAt(active.x,active.y));
     positionGhost(active.x,active.y);
@@ -230,7 +250,7 @@
     if(m!=null&&partFrom(m)===part)return m;
     return clamp(anchor[part]+(m!=null?m%60:0),0,1435);
   };
-  const partFrom=m=>m==null?'other':m<300?'night':m<720?'morning':m<1020?'afternoon':m<1260?'evening':'night';
+  const partFrom=m=>m==null||m<300?'other':m<720?'morning':m<1020?'afternoon':'evening';
   async function applyMove(info,target){
     if(!info||!target||busy)return;
     if(target.kind==='category'){
@@ -274,24 +294,36 @@
   }
   function release(e,canceled=false){
     if(!active||active.pointerId!==e.pointerId)return;
-    const info=active,target=!canceled&&active.moved?active.target:null,moved=active.moved;
-    removeVisual();active=null;
+    const info=active,target=!canceled&&active.didMove?active.target:null,moved=!!active.didMove;
+    clearPress();removeVisual();active=null;
     if(moved)preventTapUntil=Date.now()+350;
     if(target)void applyMove(info,target);
     else if(canceled&&moved)toast(L('cancel'));
   }
   document.addEventListener('pointerdown',e=>{
+    if(e.button!==0||busy)return;
     const handle=e.target.closest?.('.dnd-grip');
-    if(!handle||e.button!==0||busy)return;
-    const item=handle.closest('[data-drag-item]');
+    const item=handle?.closest('[data-drag-item]')||e.target.closest?.('[data-drag-item]');
+    if(!item)return;
+    if(!handle&&e.target.closest?.('.daytask-check,.hour-check,.event-open'))return;
     if(!enter(item,e))return;
-    // The grip, not the entire card, cancels touch scrolling.
-    e.preventDefault();
-    try{handle.setPointerCapture(e.pointerId)}catch{}
+    if(handle){
+      e.preventDefault();
+      try{handle.setPointerCapture(e.pointerId)}catch{}
+      return;
+    }
+    if(e.pointerType==='touch'||e.pointerType==='pen'){
+      press={pointerId:e.pointerId,item,x:e.clientX,y:e.clientY,ready:false};
+      pressTimer=setTimeout(()=>{
+        if(press?.pointerId===e.pointerId&&active?.pointerId===e.pointerId){
+          press.ready=true;begin();
+        }
+      },320);
+    }
   },true);
   document.addEventListener('pointermove',move,{passive:false,capture:true});
-  document.addEventListener('pointerup',e=>release(e),true);
-  document.addEventListener('pointercancel',e=>release(e,true),true);
+  document.addEventListener('pointerup',e=>{if(press?.pointerId===e.pointerId)clearPress();release(e)},true);
+  document.addEventListener('pointercancel',e=>{if(press?.pointerId===e.pointerId)clearPress();release(e,true)},true);
   document.addEventListener('click',e=>{
     if(e.target.closest?.('.dnd-grip')){e.preventDefault();e.stopImmediatePropagation();return}
     if(Date.now()<preventTapUntil&&e.target.closest?.('[data-drag-item]')){
@@ -314,7 +346,7 @@
     let t=null;
     if(keyboard.mode==='part'){
       let part=PARTS[keyboard.index];
-      if(active.kind==='event'&&part==='other')part='night';
+      if(active.kind==='event'&&part==='other')part='evening';
       t={kind:'part',part,element:document.querySelector('[data-drop-part="'+part+'"]')};
     } else if(keyboard.mode==='category'){
       t={kind:'category',category:CATS[keyboard.index],element:categoryDock?.querySelector('[data-drop-category="'+CATS[keyboard.index]+'"]')};

@@ -3,32 +3,32 @@
 (() => {
   const icon=(name,size=17)=>mellowIcon(name,size);
   const tr={
-    en:{task:'Task',event:'Google event',allDay:'All day',scheduled:'Scheduled',anytime:'Flexible tasks',untimed:'Without a time',
+    en:{task:'Task',event:'Google event',allDay:'All day',scheduled:'Planned',anytime:'Anytime',untimed:'Without a time',
       choose:'What would you like to add?',chooseSub:'Create a Mellow task or a Google Calendar event.',
       makeTask:'Mellow task',makeTaskSub:'Checklist, reminders and focus',
       makeEvent:'Calendar event',makeEventSub:'Appears in Google Calendar',
       connected:'Google connected',disconnected:'Connect Google to show events',
       refresh:'Refresh',noEvent:'No calendar events',synced:'Linked to Google',legend:'In your plan',
       needGoogle:'Connect Google Calendar first to create an event.',
-      linked:'Google linked',other:'Other · Anytime',morning:'Morning',afternoon:'Afternoon',evening:'Evening',night:'Night',
+      linked:'Google linked',other:'Anytime',morning:'Morning',afternoon:'Afternoon',evening:'Evening',night:'Night',
       partsView:'Day sections',hoursView:'Hourly',now:'Now',noTasks:'Add a task or event',dayEvents:'All-day events',
-      add:'Add',none:'Your day has room to breathe',calInfo:'Google events appear here once connected',
-      flexible:'Flexible tasks',inbox:'Inbox'},
-    he:{task:'משימה',event:'אירוע Google',allDay:'כל היום',scheduled:'מתוזמן',anytime:'משימות גמישות',untimed:'ללא שעה',
+      add:'Add',none:'Your day has room to breathe',calInfo:'Google events appear here once connected',empty_other:'Anytime today works',empty_morning:'A little room for the morning',empty_afternoon:'Leave a little space',empty_evening:'End the day your way',
+      flexible:'Anytime',inbox:'Inbox'},
+    he:{task:'משימה',event:'אירוע Google',allDay:'כל היום',scheduled:'מתוכנן',anytime:'בכל שעה',untimed:'ללא שעה',
       choose:'מה תרצי להוסיף?',chooseSub:'משימה ב-Mellow או אירוע ביומן Google.',
       makeTask:'משימה ב-Mellow',makeTaskSub:'רשימות, צעדים וריכוז',
       makeEvent:'אירוע ביומן',makeEventSub:'נוסף ל-Google Calendar',
       connected:'Google מחובר',disconnected:'יש להתחבר ל-Google כדי לראות אירועים',
       refresh:'רענון',noEvent:'אין אירועים ביומן',synced:'מקושר ליומן Google',legend:'בתוכנית שלך',
       needGoogle:'יש להתחבר ל-Google Calendar כדי ליצור אירוע.',
-      linked:'מקושר ל-Google',other:'אחר · בכל שעה',morning:'בוקר',afternoon:'צהריים',evening:'ערב',night:'לילה',
+      linked:'מקושר ל-Google',other:'בכל שעה',morning:'בוקר',afternoon:'צהריים',evening:'ערב',night:'לילה',
       partsView:'חלקי היום',hoursView:'לפי שעות',now:'עכשיו',noTasks:'הוספת משימה או אירוע',dayEvents:'אירועים לכל היום',
-      add:'הוספה',none:'יש לך זמן פנוי היום',calInfo:'אירועי Google יופיעו כאן אחרי התחברות',
-      flexible:'משימות גמישות',inbox:'תיבת המשימות'}};
+      add:'הוספה',none:'יש לך זמן פנוי היום',calInfo:'אירועי Google יופיעו כאן אחרי התחברות',empty_other:'יש מקום לכל מה שיתאים',empty_morning:'להתחיל את הבוקר בנחת',empty_afternoon:'להשאיר קצת מקום',empty_evening:'לסיים את היום בדרך שלך',
+      flexible:'בכל שעה',inbox:'תיבת המשימות'}};
   const L=k=>tr[db.settings.lang==='he'?'he':'en'][k]||T(k);
-  const PARTS=['morning','afternoon','evening','night','other'];
-  const pIcon={morning:'sun',afternoon:'cloudsun',evening:'sunset',night:'moon',other:'sparkles'};
-  const partFromTime=m=>m==null?'other':m<300?'night':m<720?'morning':m<1020?'afternoon':m<1260?'evening':'night';
+  const PARTS=['other','morning','afternoon','evening'];
+  const pIcon={morning:'sun',afternoon:'cloudsun',evening:'moon',other:'clock'};
+  const partFromTime=m=>m==null||m<300?'other':m<720?'morning':m<1020?'afternoon':'evening';
   const partOf=t=>t.kind==='event'?(t.allDay?'other':partFromTime(t.start)):t.start!=null?partFromTime(t.start):PARTS.includes(t.daypart)?t.daypart:'other';
   const findEvents=()=>window.MellowCalendar?.dayItems?.(ui.date)||[];
   function viewItems(){
@@ -38,27 +38,19 @@
     return {items:[...planned,...inbox,...events],tasks:planned,events};
   }
   function taskVisual(t){
-    const steps=t.steps?.length?t.steps.filter(x=>x.done).length+'/'+t.steps.length+' · ':'';
-    const time=t.start!=null?fmt(t.start)+' · ':'';
-    const sync=t.googleCalendar?.eventId?' · '+L('synced'):'';
+    const time=t.start!=null?fmt(t.start)+' · '+fmtLength(t.minutes):fmtLength(t.minutes);
     return '<div class="daytask unified-item unified-task '+(t.done?'completed':'')+'" data-drag-item="task" data-drag-id="'+esc(t.id)+'">'+
-      '<span class="daytask-accent '+esc(t.category)+'"></span>'+
       '<button class="daytask-icon '+esc(t.category)+'" data-action="edit" data-id="'+esc(t.id)+'" aria-label="'+esc(L('task')+' '+t.title)+'">'+esc(t.emoji||'🌿')+'</button>'+
-      '<button class="daytask-body" data-action="edit" data-id="'+esc(t.id)+'"><span class="kind-label kind-task">'+icon('tasks',12)+' '+L('task')+'</span><strong>'+esc(t.title)+'</strong>'+
-      (t.demo?'<span class="daypart-sample-tag">'+T('sample')+'</span>':'')+
-      '<small>'+esc(time+steps+fmtLength(t.minutes)+(t.inboxItem?' · '+L('inbox'):'')+sync)+'</small></button>'+
+      '<button class="daytask-body" data-action="edit" data-id="'+esc(t.id)+'"><strong>'+esc(t.title)+'</strong><small>'+esc(time)+'</small></button>'+
       '<button class="check daytask-check '+(t.done?'checked':'')+'" data-action="done" data-id="'+esc(t.id)+'" aria-label="'+esc(t.title)+'">'+(t.done?icon('check',15):'')+'</button></div>';
   }
   function eventVisual(e){
     const label=e.allDay?L('allDay'):e.timeLabel;
-    const text='<span class="kind-label kind-event">'+icon('calendar',12)+' '+L('event')+'</span>'+
-      '<strong>'+esc(e.title)+'</strong><small>'+esc(label+(e.calendarName?' · '+e.calendarName:''))+'</small>';
+    const text='<strong>'+esc(e.title)+'</strong><small>'+esc(label)+'</small>';
     const detail=e.href?'<a class="daytask-body event-anchor" href="'+esc(e.href)+'" target="_blank" rel="noopener noreferrer" aria-label="'+esc(L('event')+': '+e.title)+'">'+text+'</a>':
       '<div class="daytask-body">'+text+'</div>';
     return '<div class="daytask unified-item unified-event" data-drag-item="event" data-drag-id="'+esc(e.id)+'" data-calendar-id="'+esc(e.calendarId)+'" data-all-day="'+e.allDay+'" style="--calendar-accent:'+esc(e.color)+'">'+
-      '<span class="daytask-accent event-stripe"></span>'+
-      '<span class="daytask-icon event-icon">'+icon('calendar',19)+'</span>'+detail+
-      (e.href?'<a class="event-open" href="'+esc(e.href)+'" target="_blank" rel="noopener noreferrer" aria-label="'+esc(L('event'))+'">'+icon('chevronRight',18)+'</a>':'')+'</div>';
+      '<span class="daytask-icon event-icon" aria-hidden="true">📅</span>'+detail+'</div>';
   }
   const itemVisual=t=>t.kind==='event'?eventVisual(t):taskVisual(t);
   const sorted=(a,b)=>(a.kind==='event'&&a.allDay?-2:0)-(b.kind==='event'&&b.allDay?-2:0)||
@@ -71,7 +63,7 @@
       ' <b>'+entries.length+'</b> <span class="part-caret">'+icon('chevronDown',14)+'</span></span></button>'+
       '<button class="part-add" data-unified-add="part" data-part="'+part+'" title="'+L('add')+' · '+L(part)+'" aria-label="'+L('add')+' · '+L(part)+'">'+icon('plus',18)+'</button></div>'+
       '<div class="part-list-wrap '+(closed?'is-collapsed':'')+'" aria-hidden="'+closed+'" '+(closed?'inert':'')+'><div class="part-list">'+
-      (entries.length?entries.map(itemVisual).join(''):'<button class="part-empty" data-unified-add="part" data-part="'+part+'">'+icon('plus',16)+' '+L('noTasks')+'</button>')+
+      (entries.length?entries.map(itemVisual).join(''):'<button class="part-empty" data-unified-add="part" data-part="'+part+'"><span>'+L('empty_'+part)+'</span><span class="part-empty-add">'+icon('plus',16)+'</span></button>')+
       '</div></div></section>';
   }
   // Give even five-minute activities space to show a wrapped title and its time.
@@ -81,7 +73,7 @@
     const viewport=window.innerWidth||390;
     const fullLaneWidth=phone?Math.max(230,viewport-110):Math.max(360,Math.min(860,viewport-300));
     const width=fullLaneWidth/Math.max(1,lanes);
-    const reserved=phone?(lanes>1?39:75):78;
+    const reserved=phone?(lanes>1?54:68):80;
     const textWidth=Math.max(48,width-reserved);
     const charsPerLine=Math.max(6,Math.floor(textWidth/(phone?7.25:7.7)));
     const title=String(item.title||'');
@@ -93,9 +85,8 @@
       if(position+1+word.length<=charsPerLine)position+=1+word.length;
       else{lines++;lines+=Math.max(0,Math.ceil(word.length/charsPerLine)-1);position=word.length%charsPerLine||charsPerLine}
     }
-    const contentHeight=17+lines*(phone?17:18)+(item.kind==='event'&&lanes>1?27:15)+17; // type, title, time, padding
-    return Math.ceil(Math.max(phone?88:82,contentHeight,
-      (Math.max(1,item.minutes||25)/60)*px-4));
+    const contentHeight=lines*(phone?17:18)+31;
+    return Math.ceil(Math.max(phone?70:66,contentHeight));
   }
   function allocateMobile(entries,px){
     // Phone screens cannot display readable titles in three or four skinny lanes.
@@ -173,15 +164,13 @@
     const t=item, y=(displayTop??t.start*px/60)-first*px+2;
     const isEvent=t.kind==='event',color=isEvent?t.color:null;
     const role=isEvent?L('event'):L('task');
-    const label=isEvent?t.timeLabel:(fmt(t.start)+' · '+fmtLength(t.minutes));
+    const label=isEvent?t.timeLabel:fmtLength(t.minutes);
     const props='style="top:'+y+'px;height:'+height+'px;left:'+(100*lane/lanes).toFixed(4)+'%;width:calc('+(100/lanes).toFixed(4)+'% - 3px)'+(color?';--calendar-accent:'+esc(color):'')+'"';
-    const tag=isEvent?'<span class="kind-label kind-event">'+icon('calendar',12)+' '+L('event')+'</span>':
-      '<span class="kind-label kind-task">'+icon('tasks',12)+' '+L('task')+'</span>';
-    const content=tag+'<strong>'+esc(t.title)+'</strong><small>'+esc(label)+'</small>';
+    const content='<strong>'+esc(t.title)+'</strong><small>'+esc(label)+'</small>';
     const body=isEvent?(t.href?'<a href="'+esc(t.href)+'" target="_blank" rel="noopener noreferrer" class="hour-info" aria-label="'+esc(role+': '+t.title)+'">'+content+'</a>':'<div class="hour-info">'+content+'</div>'):
       '<button data-action="edit" data-id="'+esc(t.id)+'" class="hour-info" aria-label="'+esc(role+': '+t.title)+'">'+content+'</button>';
     return '<div class="mellow-day-block '+(isEvent?'merged-calendar-block':'merged-task-block '+esc(t.category))+' '+(t.done?'completed':'')+
-      '" data-lanes="'+lanes+'" data-drag-item="'+(isEvent?'event':'task')+'" data-drag-id="'+esc(t.id)+'" '+(isEvent?'data-calendar-id="'+esc(t.calendarId)+'"':'')+' '+props+'><span class="hour-color"></span><span class="hour-emoji" aria-hidden="true">'+(isEvent?icon('calendar',18):esc(t.emoji||'🌿'))+'</span>'+body+
+      '" data-lanes="'+lanes+'" data-drag-item="'+(isEvent?'event':'task')+'" data-drag-id="'+esc(t.id)+'" '+(isEvent?'data-calendar-id="'+esc(t.calendarId)+'"':'')+' '+props+'><span class="hour-color"></span><span class="hour-emoji" aria-hidden="true">'+(isEvent?esc(t.emoji||'📅'):esc(t.emoji||'🌿'))+'</span>'+body+
       (isEvent?'':'<button class="check hour-check '+(t.done?'checked':'')+'" data-action="done" data-id="'+esc(t.id)+'" aria-label="'+esc(t.title)+'">'+(t.done?icon('check',14):'')+'</button>')+
       '</div>';
   }
@@ -190,7 +179,7 @@
     const allDay=items.filter(t=>t.kind==='event'&&t.allDay);
     const flexible=items.filter(t=>t.kind==='task'&&t.start==null);
     const first=timed.length?Math.max(0,Math.min(6,Math.floor(Math.min(...timed.map(t=>t.start))/60))):6;
-    const px=(window.innerWidth||390)<=700?192:116;
+    const px=(window.innerWidth||390)<=700?84:96;
     let hours='';
     for(let h=first;h<24;h++)hours+='<div class="hour" style="height:'+px+'px"><span>'+fmt(h*60)+'</span>'+
       '<button class="hour-add" data-unified-add="hour" data-start="'+h*60+'" aria-label="'+L('add')+' '+fmt(h*60)+'">'+icon('plus',16)+'</button></div>';
@@ -201,7 +190,7 @@
     const marker=now!=null&&now>=first*60?'<div class="nowline" style="top:'+((now-first*60)/60*px)+'px"><em>'+L('now')+'</em></div>':'';
     return '<div class="hour-section">'+
       (allDay.length?'<section class="merged-all-day card"><div class="sectionbar"><h3>'+icon('calendar',17)+' '+L('dayEvents')+'</h3></div>'+allDay.map(eventVisual).join('')+'</section>':'')+
-      '<div class="sectionbar"><h3>'+icon('clock',19)+' '+L('scheduled')+'</h3><span class="subtle small">'+timed.length+'</span></div>'+
+      '<div class="sectionbar merged-planned-heading"><h3>'+icon('clock',16)+' '+L('scheduled')+' ('+timed.length+')</h3></div>'+
       '<div class="card hourly-shell"><div class="agenda hourly-agenda merged-hourly-agenda" data-drop-hours="true" data-first-minute="'+first*60+'" data-hour-px="'+px+'" style="height:'+totalHeight+'px">'+hours+
       '<div class="merged-hourly-overlay">'+blocks+'</div>'+marker+'</div></div>'+
       '<div class="flex-header"><h3>'+icon('sparkles',19)+' '+L('flexible')+'</h3><button class="part-add" data-unified-add="part" data-part="other">'+icon('plus',18)+'</button></div>'+
@@ -216,9 +205,8 @@
       '</div>';
   }
   renderToday=function(){
-    const {items,tasks,events}=viewItems(),done=tasks.filter(t=>t.done).length;
+    const {items}=viewItems();
     const mode=db.settings.todayView==='hours'?'hours':'parts';
-    const percentage=tasks.length?Math.round(done/tasks.length*100):0;
     const toggle='<div class="planner-view-toggle" role="group" aria-label="'+L('partsView')+'">'+
       '<button data-action="dayview" data-view="parts" class="'+(mode==='parts'?'selected':'')+'" aria-pressed="'+(mode==='parts')+'">'+icon('tasks',17)+' '+L('partsView')+'</button>'+
       '<button data-action="dayview" data-view="hours" class="'+(mode==='hours'?'selected':'')+'" aria-pressed="'+(mode==='hours')+'">'+icon('clock',17)+' '+L('hoursView')+'</button></div>';
@@ -227,11 +215,10 @@
       '<button class="btn secondary small" data-action="gotoday">'+T('today')+'</button></div></header>'+
       '<div class="day-nav-card"><div class="day-nav-top"><button class="iconbtn" data-action="day" data-step="-7" aria-label="Previous week">'+icon('chevronLeft',20)+'</button>'+
       '<strong>'+esc(dt(ui.date,{month:'long',year:'numeric'}))+'</strong><button class="iconbtn" data-action="day" data-step="7" aria-label="Next week">'+icon('chevronRight',20)+'</button></div>'+
-      '<div class="week dayticker">'+weekDays()+'</div></div>'+legend(events)+
-      '<div class="day-planner-controls"><div><span class="small subtle">'+done+' / '+tasks.length+' '+T('tasksDone')+'</span><div class="day-progress"><span style="width:'+percentage+'%"></span></div></div>'+toggle+'</div>'+
+      '<div class="week dayticker">'+weekDays()+'</div></div>'+
+      '<div class="day-planner-controls">'+toggle+'</div>'+
       (mode==='hours'?hourly(items):'<div class="day-sections">'+PARTS.map(part=>section(part,items)).join('')+'</div>')+
-      '<div class="day-footer"><button data-unified-add="footer" class="btn secondary">'+icon('plus',17)+' '+L('add')+'</button>'+'</div>'+
-      '<p class="footnote">'+T('appInfo')+'</p></div>';
+      '</div>';
   };
   function chooser(){
     return '<div class="modal-bg choice-modal-bg" data-unified-dismiss="true"><section class="modal create-choice-modal" role="dialog" aria-modal="true" aria-labelledby="choiceTitle">'+
