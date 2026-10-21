@@ -28,7 +28,7 @@
   const timeLabel=n=>fmt(Math.max(0,Math.min(1439,n)));
   const clamp=(n,lo,hi)=>Math.max(lo,Math.min(hi,n));
   let active=null,keyboard=null,scrollFrame=null,ghost=null,categoryDock=null,announceEl=null,busy=false;
-  let preventTapUntil=0;
+  let preventTapUntil=0,timeBadge=null,timeGuide=null;
   const svg='<svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><circle cx="8" cy="5" r="1.7"/><circle cx="16" cy="5" r="1.7"/><circle cx="8" cy="12" r="1.7"/><circle cx="16" cy="12" r="1.7"/><circle cx="8" cy="19" r="1.7"/><circle cx="16" cy="19" r="1.7"/></svg>';
   const itemKey=item=>item?.dataset?.dragId||'';
   function getItem(item){
@@ -62,6 +62,14 @@
     if(!ghost){
       ghost=document.createElement('div');ghost.className='dnd-ghost';ghost.setAttribute('aria-hidden','true');
       document.body.appendChild(ghost);
+    }
+    if(!timeBadge){
+      timeBadge=document.createElement('div');timeBadge.className='dnd-time-badge';
+      timeBadge.setAttribute('aria-hidden','true');document.body.appendChild(timeBadge);
+    }
+    if(!timeGuide){
+      timeGuide=document.createElement('div');timeGuide.className='dnd-time-guide';
+      timeGuide.setAttribute('aria-hidden','true');
     }
   }
   function announce(s){if(announceEl)announceEl.textContent=s}
@@ -104,17 +112,48 @@
     ghost.classList.add('dnd-ghost-visible');
     announce(L('drag')+' '+active.title+'. '+L('keyboard'));
   }
+  function hideTimePreview(){
+    timeBadge?.classList.remove('dnd-time-badge-visible');
+    timeGuide?.classList.remove('dnd-time-guide-visible');
+  }
+  function showTimePreview(target){
+    if(!timeBadge||!timeGuide||!active||target?.kind!=='hour'){
+      hideTimePreview();return;
+    }
+    const timeline=target.element;
+    if(!timeline){hideTimePreview();return}
+    if(timeGuide.parentNode!==timeline)timeline.appendChild(timeGuide);
+    const minute=target.minute,first=Number(timeline.dataset.firstMinute||0);
+    const px=Number(timeline.dataset.hourPx||61);
+    timeGuide.style.top=((minute-first)/60*px)+'px';
+    // Time line stays anchored to the scheduled slot, including while the timeline auto-scrolls.
+    const shell=timeline.closest('.hourly-shell');
+    const lineY=timeline.getBoundingClientRect().top+(minute-first)/60*px;
+    const visible=shell?.getBoundingClientRect();
+    timeGuide.classList.toggle('dnd-time-guide-visible',!visible||(lineY>=visible.top&&lineY<=visible.bottom));
+    timeBadge.textContent=timeLabel(minute);
+    const x=Number.isFinite(active.x)?active.x:timeline.getBoundingClientRect().left+66;
+    const y=Number.isFinite(active.y)?active.y:lineY;
+    const badgeWidth=76,badgeHeight=36;
+    timeBadge.style.left=clamp(x+16,8,Math.max(8,window.innerWidth-badgeWidth-8))+'px';
+    timeBadge.style.top=clamp(y-badgeHeight-32,8,Math.max(8,window.innerHeight-badgeHeight-8))+'px';
+    timeBadge.classList.add('dnd-time-badge-visible');
+  }
   function showTarget(target){
-    document.querySelectorAll('.dnd-target').forEach(x=>x.classList.remove('dnd-target'));
+    const last=active.target;
+    if(last?.element!==target?.element){
+      document.querySelectorAll('.dnd-target').forEach(x=>x.classList.remove('dnd-target'));
+      if(target?.element)target.element.classList.add('dnd-target');
+    }
     active.target=target;
-    if(target?.element)target.element.classList.add('dnd-target');
+    showTimePreview(target);
     if(target){
       const msg=target.kind==='hour'?L('minute')+': '+timeLabel(target.minute):
         target.kind==='part'?L('section')+': '+L(target.part==='other'?'otherPart':target.part):
         L('category')+': '+L(target.category);
-      ghost.textContent=active.title+' · '+msg;
-      announce(msg);
-    } else ghost.textContent=active.title;
+      ghost.textContent=target.kind==='hour'?active.title:active.title+' · '+msg;
+      if(last?.kind!==target.kind||last?.minute!==target.minute||last?.part!==target.part||last?.category!==target.category)announce(msg);
+    }else ghost.textContent=active.title;
   }
   function targetAt(x,y){
     const el=document.elementFromPoint(x,y);
@@ -143,7 +182,9 @@
   function positionGhost(x,y){
     if(!ghost)return;
     ghost.style.left=Math.max(8,Math.min(window.innerWidth-190,x+16))+'px';
-    ghost.style.top=Math.max(8,Math.min(window.innerHeight-72,y-22))+'px';
+    // Keep the task title below the finger when a time badge is above it.
+    const yPosition=active?.target?.kind==='hour'?y+20:y-22;
+    ghost.style.top=clamp(yPosition,8,Math.max(8,window.innerHeight-72))+'px';
   }
   function autoScroll(){
     if(!active?.moved)return;
@@ -171,8 +212,8 @@
       if(scrollFrame==null)scrollFrame=requestAnimationFrame(autoScroll);
     }
     e.preventDefault();
-    positionGhost(active.x,active.y);
     showTarget(targetAt(active.x,active.y));
+    positionGhost(active.x,active.y);
   }
   function removeVisual(){
     if(scrollFrame!=null){cancelAnimationFrame(scrollFrame);scrollFrame=null}
@@ -180,6 +221,7 @@
     document.body.classList.remove('dnd-active','dnd-task-active');
     document.querySelectorAll('.dnd-target').forEach(x=>x.classList.remove('dnd-target'));
     if(ghost)ghost.classList.remove('dnd-ghost-visible');
+    hideTimePreview();
     if(categoryDock)categoryDock.classList.remove('dnd-keyboard');
   }
   const calcPartMinute=(item,part)=>{
@@ -309,6 +351,6 @@
       keyboardUpdate();
     }
   },true);
-  window.MellowDrag={applyMove,partFrom,getItem,decorate,version:12};
+  window.MellowDrag={applyMove,partFrom,getItem,decorate,version:13};
   decorate();
 })();
