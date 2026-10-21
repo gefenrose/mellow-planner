@@ -1,4 +1,4 @@
-/* Mellow day view: original design, flexible Tiimo-style group and hour structures. */
+/* Mellow day view: an original design with flexible groups and hour blocks. */
 (()=>{
 const PARTS=['other','morning','afternoon','evening','night'];
 const words={
@@ -36,7 +36,7 @@ function timeline(tasks){
  for(let h=first;h<last;h++)grid+='<div class="hour" style="height:'+hourPx+'px"><span>'+fmt(h*60)+'</span><button class="hour-add" data-action="addhour" data-start="'+h*60+'" aria-label="'+L('addTo')+' '+fmt(h*60)+'">'+icon('plus',16)+'</button></div>';
  const blocks=timed.map(t=>{
  const y=(t.start-first*60)/60*hourPx+2,height=Math.max(34,t.minutes/60*hourPx-4);
- return '<div class="tiimo-hour-block '+esc(t.category)+' '+(t.done?'completed':'')+' '+(height<48?'compact':'')+'" style="top:'+y+'px;height:'+height+'px">'+
+ return '<div class="mellow-hour-block '+esc(t.category)+' '+(t.done?'completed':'')+' '+(height<48?'compact':'')+'" style="top:'+y+'px;height:'+height+'px">'+
  '<span class="hour-color"></span><span class="hour-emoji">'+icon(mellowCategoryIcons[t.category]||'book',19)+'</span><button class="hour-info" data-action="edit" data-id="'+esc(t.id)+'"><strong>'+esc(t.title)+'</strong><small>'+fmt(t.start)+' – '+fmt(Math.min(1439,t.start+t.minutes))+' · '+fmtLength(t.minutes)+'</small></button>'+
  '<button class="check hour-check '+(t.done?'checked':'')+'" data-action="done" data-id="'+esc(t.id)+'" aria-label="'+esc(t.title)+'">'+(t.done?icon('check',16):'')+'</button></div>';
  }).join('');
@@ -53,8 +53,8 @@ renderToday=function(){
  const percent=day.length?Math.round(finished/day.length*100):0;
  const current=db.settings.todayView;
  const toggle='<div class="planner-view-toggle" role="group" aria-label="'+L('partsView')+'"><button data-action="dayview" data-view="parts" class="'+(current==='parts'?'selected':'')+'" aria-pressed="'+(current==='parts')+'">'+icon('tasks',17)+' <span>'+L('partsView')+'</span></button><button data-action="dayview" data-view="hours" class="'+(current==='hours'?'selected':'')+'" aria-pressed="'+(current==='hours')+'">'+icon('clock',17)+' <span>'+L('hoursView')+'</span></button></div>';
- return '<div class="tiimo-day-view"><header class="tiimo-day-heading"><div class="overline">'+icon('sparkles',14)+' MELLOW / '+T('today')+'</div>'+
- '<div class="tiimo-title-line"><div><h1>'+esc(dt(ui.date,{weekday:'long'}))+'</h1><p class="subtle">'+esc(dt(ui.date,{day:'numeric',month:'long',year:'numeric'}))+'</p></div><button class="btn secondary small" data-action="gotoday">'+T('today')+'</button></div></header>'+
+ return '<div class="mellow-day-view"><header class="mellow-day-heading"><div class="overline">'+icon('sparkles',14)+' MELLOW / '+T('today')+'</div>'+
+ '<div class="mellow-title-line"><div><h1>'+esc(dt(ui.date,{weekday:'long'}))+'</h1><p class="subtle">'+esc(dt(ui.date,{day:'numeric',month:'long',year:'numeric'}))+'</p></div><button class="btn secondary small" data-action="gotoday">'+T('today')+'</button></div></header>'+
  '<div class="day-nav-card"><div class="day-nav-top"><button class="iconbtn" data-action="day" data-step="-7" aria-label="Previous week">'+icon('chevronLeft',20)+'</button><strong>'+esc(dt(ui.date,{month:'long',year:'numeric'}))+'</strong><button class="iconbtn" data-action="day" data-step="7" aria-label="Next week">'+icon('chevronRight',20)+'</button></div><div class="week dayticker">'+weekDays()+'</div></div>'+
  '<div class="day-planner-controls"><div><span class="small subtle">'+finished+' / '+day.length+' '+T('tasksDone')+'</span><div class="day-progress"><span style="width:'+percent+'%"></span></div></div>'+toggle+'</div>'+
  (current==='hours'?timeline(visible):'<div class="day-sections">'+PARTS.map(p=>group(p,visible.filter(t=>of(t)===p).sort((a,b)=>(a.start??9999)-(b.start??9999)||Number(a.done)-Number(b.done)))).join('')+'</div>')+

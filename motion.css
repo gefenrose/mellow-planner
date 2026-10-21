@@ -26,7 +26,7 @@
 }
 
 /* Entry motion is short and never blocks taps. */
-.main > :is(.tiimo-day-view,.topbar,.greeting,.statrow,.twocol,.toolbar,.routinegrid,.focusbox,.settingsgrid,.ai-intro),
+.main > :is(.mellow-day-view,.topbar,.greeting,.statrow,.twocol,.toolbar,.routinegrid,.focusbox,.settingsgrid,.ai-intro),
 .main > .card,
 .day-sections,.hour-section{
   animation:mellow-rise var(--motion-gentle) var(--ease-out-calm) both;
@@ -42,7 +42,7 @@
 
 /* Tap feedback; hover shifts only apply where a real cursor exists. */
 button,a,
-.check,.chip,.day,.daytask,.tiimo-hour-block,.navbtn,
+.check,.chip,.day,.daytask,.mellow-hour-block,.navbtn,
 .step-iconbtn,.part-pill,.card,.routine,.pill,.step-select{
   -webkit-tap-highlight-color:transparent;
 }
@@ -59,7 +59,7 @@ button,a,[role="button"],input,textarea,select{touch-action:manipulation}
     transform var(--motion-quick) var(--ease-out-calm),
     opacity var(--motion-quick) ease;
 }
-.daytask,.tiimo-hour-block,.routine,.ai-result,.card{
+.daytask,.mellow-hour-block,.routine,.ai-result,.card{
   transition:border-color 190ms ease,box-shadow 190ms ease,background-color 190ms ease,opacity 190ms ease;
 }
 button:not(:disabled):active{transform:scale(.97)}
@@ -67,7 +67,7 @@ button:not(:disabled):active{transform:scale(.97)}
 .check:active{transform:scale(.88)}
 .day.active,.planner-view-toggle button.selected,.bottomnav button.active{transition:background-color 160ms ease,color 160ms ease,box-shadow 200ms ease,transform 160ms ease}
 @media (hover:hover) and (pointer:fine){
-  .daytask:hover,.tiimo-hour-block:hover,.routine:hover,.ai-result:hover{box-shadow:0 7px 20px #24392912;border-color:var(--green)}
+  .daytask:hover,.mellow-hour-block:hover,.routine:hover,.ai-result:hover{box-shadow:0 7px 20px #24392912;border-color:var(--green)}
   .part-add:hover,.iconbtn:hover{transform:translateY(-1px)}
   .daytask:hover .daytask-icon{transform:scale(1.04)}
 }

@@ -1,4 +1,4 @@
-# Mellow 🌿 — a free Tiimo-inspired visual planner
+# Mellow 🌿 — a free visual planner
 
 A self-contained, independent, mobile-first visual day planner. No subscription, login, npm install, or database is required. Core functionality persists in your own browser.
 
@@ -24,7 +24,7 @@ Offline mode does not transmit task text. When Gemini mode is selected, the subm
 
 ## Limitations
 
-- This is a functional prototype, not a pixel-perfect copy of Tiimo. Original branding and layouts are used.
+- This is a functional prototype with its own original branding and layouts.
 - There is no account/cloud sync; schedules are not connected to Apple/Google Calendar.
 - Browsers on iOS may suspend timers and background notifications. The timer uses a target timestamp to update correctly when you return.
 - Date/time inputs and notification support vary across browsers.

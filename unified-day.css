@@ -1,5 +1,5 @@
 /* Shared day plan styling — Mellow v8. Google events are a distinct indigo/outlined treatment. */
-.merged-day-view .tiimo-day-heading{margin-bottom:13px}
+.merged-day-view .mellow-day-heading{margin-bottom:13px}
 .merged-legend{display:flex;align-items:center;gap:9px 15px;flex-wrap:wrap;margin:8px 0 12px;padding-bottom:12px;border-bottom:1px solid var(--border);font-size:12px}
 .merged-legend>span{display:inline-flex;align-items:center;gap:6px;font-weight:700}
 .merged-legend>span:first-child{color:var(--green)}

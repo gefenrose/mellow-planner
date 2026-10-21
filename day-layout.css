@@ -1,10 +1,10 @@
 
 /* Mellow — daypart sections and hourly blocks, mobile-first */
-.tiimo-day-view{max-width:860px;margin:auto}
-.tiimo-day-heading{margin:0 0 14px}
-.tiimo-title-line,.day-nav-top,.day-planner-controls,.part-heading,.flex-header{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.tiimo-title-line h1{font-size:clamp(33px,4.2vw,46px)}
-.tiimo-title-line p{margin:5px 0 0;color:var(--muted);font-size:14px}
+.mellow-day-view{max-width:860px;margin:auto}
+.mellow-day-heading{margin:0 0 14px}
+.mellow-title-line,.day-nav-top,.day-planner-controls,.part-heading,.flex-header{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.mellow-title-line h1{font-size:clamp(33px,4.2vw,46px)}
+.mellow-title-line p{margin:5px 0 0;color:var(--muted);font-size:14px}
 .day-nav-card{border-bottom:1px solid var(--border);margin-bottom:18px}
 .day-nav-top{padding:5px 0;font-size:14px}
 .day-nav-top .iconbtn{font-size:27px;background:none}
@@ -53,23 +53,23 @@
 .hourly-agenda .hour span{left:-61px;right:auto;top:-10px;color:var(--muted);font-size:12px}
 .hour-add{display:none;position:absolute;right:4px;top:5px;height:26px;width:26px;border-radius:50%;background:var(--surface2)}
 .hourly-agenda .hour:hover .hour-add,.hourly-agenda .hour-add:focus-visible{display:block}
-.tiimo-hour-block{position:absolute;left:65px;right:5px;border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;gap:9px;padding:4px 10px 4px 0;overflow:hidden;min-height:34px;background:var(--surface);box-shadow:0 2px 7px #0001;z-index:1;direction:ltr}
-.tiimo-hour-block.work{background:var(--sky)}.tiimo-hour-block.home{background:var(--pink)}.tiimo-hour-block.self{background:var(--lav)}.tiimo-hour-block.health{background:var(--lightgreen)}.tiimo-hour-block.social{background:var(--pink)}.tiimo-hour-block.errands{background:var(--sky)}
+.mellow-hour-block{position:absolute;left:65px;right:5px;border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;gap:9px;padding:4px 10px 4px 0;overflow:hidden;min-height:34px;background:var(--surface);box-shadow:0 2px 7px #0001;z-index:1;direction:ltr}
+.mellow-hour-block.work{background:var(--sky)}.mellow-hour-block.home{background:var(--pink)}.mellow-hour-block.self{background:var(--lav)}.mellow-hour-block.health{background:var(--lightgreen)}.mellow-hour-block.social{background:var(--pink)}.mellow-hour-block.errands{background:var(--sky)}
 .hour-color{width:4px;height:100%;flex-shrink:0;background:var(--green)}.work .hour-color{background:var(--blue)}.home .hour-color{background:var(--peach)}.self .hour-color{background:var(--purple)}
 .hour-emoji{height:30px;width:30px;display:grid;place-items:center;border-radius:50%;background:#ffffff7c;flex-shrink:0;font-size:19px}
 .hour-info{flex:1;min-width:0;display:flex;flex-direction:column;background:none;color:var(--ink);text-align:start;padding:1px 0;line-height:1.25}
 .hour-info strong{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hour-info small{font-size:11px;color:var(--muted);white-space:nowrap}
 .hour-check{width:23px;height:23px;border-radius:50%;background:transparent;border-color:var(--muted)}
-.tiimo-hour-block.completed{opacity:.5}.tiimo-hour-block.completed strong{text-decoration:line-through}
-.tiimo-hour-block.compact .hour-emoji{height:24px;width:24px;font-size:15px}.tiimo-hour-block.compact .hour-info small{display:none}
+.mellow-hour-block.completed{opacity:.5}.mellow-hour-block.completed strong{text-decoration:line-through}
+.mellow-hour-block.compact .hour-emoji{height:24px;width:24px;font-size:15px}.mellow-hour-block.compact .hour-info small{display:none}
 .hourly-agenda .nowline{left:54px;right:0;background:#db887d;z-index:3}.hourly-agenda .nowline:before{background:#db887d;left:0;right:auto}
 .hourly-agenda .nowline em{position:absolute;right:4px;top:-13px;background:#db887d;color:#fff;border-radius:5px;padding:1px 5px;font-size:10px;font-style:normal}
 .flex-header{margin:21px 0 12px}.flex-header h3{font-size:20px}
 .daytask-list{padding:8px;display:grid;gap:7px}
-@media(max-width:720px){.tiimo-day-view{max-width:550px}.tiimo-title-line h1{font-size:35px}.planner-view-toggle button{font-size:12px;padding:6px 9px}.daytask{padding:10px;min-height:70px}.hourly-shell{padding:14px 8px}.hourly-agenda{padding-left:51px!important}.hourly-agenda .hour span{left:-50px}.tiimo-hour-block{left:51px;right:1px}.hourly-agenda .nowline{left:41px}.hour-emoji{width:25px;height:25px;font-size:16px}}
+@media(max-width:720px){.mellow-day-view{max-width:550px}.mellow-title-line h1{font-size:35px}.planner-view-toggle button{font-size:12px;padding:6px 9px}.daytask{padding:10px;min-height:70px}.hourly-shell{padding:14px 8px}.hourly-agenda{padding-left:51px!important}.hourly-agenda .hour span{left:-50px}.mellow-hour-block{left:51px;right:1px}.hourly-agenda .nowline{left:41px}.hour-emoji{width:25px;height:25px;font-size:16px}}
 @media(max-width:390px){.day-progress{width:66px}.daytask-body strong{font-size:14px}.daytask-icon{height:34px;width:34px}}
-[dir=rtl] .hourly-agenda{direction:ltr}[dir=rtl] .hourly-agenda .hour span{left:-50px;right:auto}[dir=rtl] .tiimo-hour-block{direction:rtl;padding:4px 0 4px 10px}[dir=rtl] .hour-info{text-align:right}
+[dir=rtl] .hourly-agenda{direction:ltr}[dir=rtl] .hourly-agenda .hour span{left:-50px;right:auto}[dir=rtl] .mellow-hour-block{direction:rtl;padding:4px 0 4px 10px}[dir=rtl] .hour-info{text-align:right}
 
 /* v4 icon and visible date ticker fixes */
 .m-icon{display:inline-block;vertical-align:middle;flex-shrink:0;stroke:currentColor;pointer-events:none}
@@ -79,6 +79,6 @@
 .part-add,.hour-add{display:grid;place-items:center}
 .hourly-shell{max-height:75dvh;overflow-y:auto;scrollbar-color:var(--border) transparent;overscroll-behavior:contain}
 .hourly-agenda{overflow:visible!important}
-.tiimo-hour-block{z-index:2;min-width:80px}
+.mellow-hour-block{z-index:2;min-width:80px}
 .day-planner-controls .planner-view-toggle{flex-shrink:0}
 @media(max-width:400px){.day-planner-controls{flex-wrap:wrap}.day-planner-controls .planner-view-toggle{margin-inline-start:auto}}

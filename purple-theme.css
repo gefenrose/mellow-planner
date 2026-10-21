@@ -126,7 +126,7 @@ body.dark .unified-event,body.dark .merged-calendar-block{
 .btn.danger{background:#b35067;color:#fff}
 .gcal-error,.step-delete:hover{color:#ba5977}
 @media (hover:hover) and (pointer:fine){
-  .daytask:hover,.tiimo-hour-block:hover,.mellow-day-block:hover,
+  .daytask:hover,.mellow-hour-block:hover,.mellow-day-block:hover,
   .routine:hover,.ai-result:hover{border-color:#a68bcf;box-shadow:0 7px 20px #6e538519}
 }
 @media (max-width:700px){
