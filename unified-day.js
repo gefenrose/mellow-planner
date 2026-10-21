@@ -74,23 +74,66 @@
       (entries.length?entries.map(itemVisual).join(''):'<button class="part-empty" data-unified-add="part" data-part="'+part+'">'+icon('plus',16)+' '+L('noTasks')+'</button>')+
       '</div></div></section>';
   }
-  function allocate(entries){
-    // Split disjoint overlapping runs; greedily assign a lane to each item within the run.
-    const ordered=entries.slice().sort((a,b)=>a.start-b.start||(b.minutes-a.minutes));
-    const groups=[];let group=null;
-    for(const item of ordered){
-      const end=Math.min(1440,item.start+(item.minutes||25));
-      if(!group||item.start>=group.end){group={end,rows:[],ends:[]};groups.push(group)}
-      const slot=group.ends.findIndex(v=>v<=item.start);
-      const lane=slot<0?group.ends.length:slot;
-      group.ends[lane]=end;group.end=Math.max(group.end,end);
-      group.rows.push({item,lane});
+  // Give even five-minute activities space to show a wrapped title and its time.
+  // Visual height is deliberately independent of the task's real duration.
+  function visualHeight(item,lanes,px){
+    const phone=(window.innerWidth||390)<=700;
+    const viewport=window.innerWidth||390;
+    const fullLaneWidth=phone?Math.max(230,viewport-110):Math.max(360,Math.min(860,viewport-300));
+    const width=fullLaneWidth/Math.max(1,lanes);
+    const reserved=phone?(lanes>1?39:75):78;
+    const textWidth=Math.max(48,width-reserved);
+    const charsPerLine=Math.max(6,Math.floor(textWidth/(phone?7.25:7.7)));
+    const title=String(item.title||'');
+    // Estimate word wrapping to reserve enough space before the browser lays out.
+    let lines=1,position=0;
+    for(const word of title.split(/\\s+/)){
+      if(!word)continue;
+      if(position===0){lines+=Math.max(0,Math.ceil(word.length/charsPerLine)-1);position=word.length%charsPerLine||charsPerLine;continue}
+      if(position+1+word.length<=charsPerLine)position+=1+word.length;
+      else{lines++;lines+=Math.max(0,Math.ceil(word.length/charsPerLine)-1);position=word.length%charsPerLine||charsPerLine}
     }
-    return groups.flatMap(g=>g.rows.map(x=>({...x,lanes:g.ends.length})));
+    const contentHeight=17+lines*(phone?17:18)+15+17; // type, title, time, padding
+    return Math.ceil(Math.max(phone?88:82,contentHeight,
+      (Math.max(1,item.minutes||25)/60)*px-4));
   }
-  function hourBlock({item,lane,lanes},first,px){
+  function allocate(entries,px=120){
+    // Measure visual overlap, not only schedule overlap, so taller labels never
+    // cover neighboring entries. Iterate as lane widths affect word wrapping.
+    const ordered=entries.slice().sort((a,b)=>a.start-b.start||(b.minutes-a.minutes));
+    const lanesExpected=new Map(ordered.map((t,i)=>[i,1]));
+    let groups=[];
+    for(let pass=0;pass<Math.min(ordered.length+2,16);pass++){
+      groups=[];let group=null;
+      ordered.forEach((item,i)=>{
+        const start=item.start*px/60;
+        const height=visualHeight(item,lanesExpected.get(i),px);
+        if(!group||start>=group.end){
+          group={end:start,rows:[],ends:[]};
+          groups.push(group);
+        }
+        const slot=group.ends.findIndex(end=>end<=start);
+        const lane=slot<0?group.ends.length:slot;
+        const end=start+height+6;
+        group.ends[lane]=end;
+        group.end=Math.max(group.end,end);
+        group.rows.push({item,index:i,lane});
+      });
+      let changed=false;
+      for(const group of groups)for(const row of group.rows){
+        if(group.ends.length>lanesExpected.get(row.index)){
+          lanesExpected.set(row.index,group.ends.length);changed=true;
+        }
+      }
+      if(!changed)break;
+    }
+    return groups.flatMap(g=>g.rows.map(({item,lane,index})=>{
+      const lanes=g.ends.length;
+      return {item,lane,lanes,height:visualHeight(item,lanes,px)};
+    }));
+  }
+  function hourBlock({item,lane,lanes,height},first,px){
     const t=item, y=(t.start-first*60)/60*px+2;
-    const height=Math.max(35,Math.min(1440-t.start,t.minutes||25)/60*px-4);
     const isEvent=t.kind==='event',color=isEvent?t.color:null;
     const role=isEvent?L('event'):L('task');
     const label=isEvent?(t.timeLabel+' · '+t.calendarName):(fmt(t.start)+' · '+fmtLength(t.minutes));
@@ -101,7 +144,7 @@
     const body=isEvent?(t.href?'<a href="'+esc(t.href)+'" target="_blank" rel="noopener noreferrer" class="hour-info" aria-label="'+esc(role+': '+t.title)+'">'+content+'</a>':'<div class="hour-info">'+content+'</div>'):
       '<button data-action="edit" data-id="'+esc(t.id)+'" class="hour-info" aria-label="'+esc(role+': '+t.title)+'">'+content+'</button>';
     return '<div class="mellow-day-block '+(isEvent?'merged-calendar-block':'merged-task-block '+esc(t.category))+' '+(t.done?'completed':'')+
-      '" data-drag-item="'+(isEvent?'event':'task')+'" data-drag-id="'+esc(t.id)+'" '+(isEvent?'data-calendar-id="'+esc(t.calendarId)+'"':'')+' '+props+'><span class="hour-color"></span><span class="hour-emoji">'+icon(isEvent?'calendar':mellowCategoryIcons[t.category]||'tasks',18)+'</span>'+body+
+      '" data-lanes="'+lanes+'" data-drag-item="'+(isEvent?'event':'task')+'" data-drag-id="'+esc(t.id)+'" '+(isEvent?'data-calendar-id="'+esc(t.calendarId)+'"':'')+' '+props+'><span class="hour-color"></span><span class="hour-emoji">'+icon(isEvent?'calendar':mellowCategoryIcons[t.category]||'tasks',18)+'</span>'+body+
       (isEvent?'':'<button class="check hour-check '+(t.done?'checked':'')+'" data-action="done" data-id="'+esc(t.id)+'" aria-label="'+esc(t.title)+'">'+(t.done?icon('check',14):'')+'</button>')+
       '</div>';
   }
@@ -110,17 +153,19 @@
     const allDay=items.filter(t=>t.kind==='event'&&t.allDay);
     const flexible=items.filter(t=>t.kind==='task'&&t.start==null);
     const first=timed.length?Math.max(0,Math.min(6,Math.floor(Math.min(...timed.map(t=>t.start))/60))):6;
-    const px=61;
+    const px=(window.innerWidth||390)<=700?136:116;
     let hours='';
     for(let h=first;h<24;h++)hours+='<div class="hour" style="height:'+px+'px"><span>'+fmt(h*60)+'</span>'+
       '<button class="hour-add" data-unified-add="hour" data-start="'+h*60+'" aria-label="'+L('add')+' '+fmt(h*60)+'">'+icon('plus',16)+'</button></div>';
-    const blocks=allocate(timed).map(t=>hourBlock(t,first,px)).join('');
+    const laidOut=allocate(timed,px);
+    const blocks=laidOut.map(t=>hourBlock(t,first,px)).join('');
+    const totalHeight=Math.max((24-first)*px+5,...laidOut.map(t=>(t.item.start-first*60)/60*px+t.height+16));
     const now=ui.date===today()?minNow():null;
     const marker=now!=null&&now>=first*60?'<div class="nowline" style="top:'+((now-first*60)/60*px)+'px"><em>'+L('now')+'</em></div>':'';
     return '<div class="hour-section">'+
       (allDay.length?'<section class="merged-all-day card"><div class="sectionbar"><h3>'+icon('calendar',17)+' '+L('dayEvents')+'</h3></div>'+allDay.map(eventVisual).join('')+'</section>':'')+
       '<div class="sectionbar"><h3>'+icon('clock',19)+' '+L('scheduled')+'</h3><span class="subtle small">'+timed.length+'</span></div>'+
-      '<div class="card hourly-shell"><div class="agenda hourly-agenda merged-hourly-agenda" data-drop-hours="true" data-first-minute="'+first*60+'" data-hour-px="'+px+'" style="height:'+((24-first)*px+5)+'px">'+hours+
+      '<div class="card hourly-shell"><div class="agenda hourly-agenda merged-hourly-agenda" data-drop-hours="true" data-first-minute="'+first*60+'" data-hour-px="'+px+'" style="height:'+totalHeight+'px">'+hours+
       '<div class="merged-hourly-overlay">'+blocks+'</div>'+marker+'</div></div>'+
       '<div class="flex-header"><h3>'+icon('stars',19)+' '+L('flexible')+'</h3><button class="part-add" data-unified-add="part" data-part="other">'+icon('plus',18)+'</button></div>'+
       '<div class="daytask-list card" data-drop-part="other">'+(flexible.length?flexible.map(taskVisual).join(''):'<p class="subtle merged-empty">'+L('untimed')+'</p>')+'</div></div>';
