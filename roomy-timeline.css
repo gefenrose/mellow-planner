@@ -1,0 +1,137 @@
+/* Mellow v14 — roomy, readable hourly cards.
+   Title wrapping + measured JS heights keep even brief tasks readable. */
+.merged-day-view .mellow-day-block{
+  align-items:stretch;
+  min-width:0;
+  padding:4px 8px 4px 0;
+  border-radius:14px;
+  gap:6px;
+  overflow:hidden;
+  box-sizing:border-box;
+}
+.merged-day-view .mellow-day-block .hour-color{
+  width:4px;
+  align-self:stretch;
+  height:auto;
+  min-height:100%;
+}
+.merged-day-view .mellow-day-block .hour-info{
+  height:100%;
+  min-height:0;
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:stretch;
+  text-align:start;
+  padding:6px 0;
+  gap:3px;
+  line-height:1.25;
+  overflow:visible;
+}
+.merged-day-view .mellow-day-block .hour-info strong{
+  display:block;
+  flex:0 0 auto;
+  width:100%;
+  max-width:100%;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.24;
+  white-space:normal;
+  overflow:visible;
+  text-overflow:clip;
+  overflow-wrap:anywhere;
+  word-break:normal;
+  -webkit-line-clamp:unset;
+  -webkit-box-orient:initial;
+}
+.merged-day-view .mellow-day-block .hour-info small{
+  display:block;
+  width:100%;
+  max-width:100%;
+  font-size:11px;
+  line-height:1.24;
+  white-space:normal;
+  overflow:visible;
+  text-overflow:clip;
+  overflow-wrap:anywhere;
+  font-variant-numeric:tabular-nums;
+}
+.merged-day-view .mellow-day-block .hour-info .kind-label{
+  font-size:10px;
+  font-weight:800;
+  line-height:1.12;
+  margin:0 0 1px;
+  letter-spacing:.03em;
+  white-space:normal;
+  overflow:visible;
+}
+.merged-day-view .mellow-day-block .hour-info .kind-label svg{
+  width:11px;
+  height:11px;
+}
+.merged-day-view .mellow-day-block .dnd-grip{
+  align-self:center;
+  margin:0;
+  width:26px;
+  min-width:26px;
+  height:40px;
+}
+.merged-day-view .mellow-day-block .hour-emoji{
+  align-self:center;
+  width:23px;
+  height:23px;
+}
+.merged-day-view .mellow-day-block .hour-check{
+  align-self:center;
+  width:20px;
+  height:20px;
+  flex-shrink:0;
+}
+/* Now should remain visible in gaps, without drawing a line over task titles. */
+.merged-day-view .hourly-agenda .nowline{
+  z-index:1!important;
+  pointer-events:none;
+}
+.merged-day-view .hourly-agenda .nowline em{
+  font-size:11px;
+  font-weight:800;
+}
+/* Calendar blocks retain their outlined treatment and gain the same readable text. */
+.merged-day-view .mellow-day-block.merged-calendar-block .hour-info strong{
+  text-decoration:none;
+}
+@media(max-width:700px){
+  .merged-day-view .mellow-day-block{
+    gap:4px;
+    padding:4px 7px 4px 0;
+  }
+  .merged-day-view .mellow-day-block .dnd-grip{
+    width:25px;
+    min-width:25px;
+    height:42px;
+  }
+  .merged-day-view .mellow-day-block .hour-info{
+    padding:6px 0;
+    gap:2px;
+  }
+  .merged-day-view .mellow-day-block .hour-info strong{
+    font-size:13px;
+    line-height:1.25;
+  }
+  .merged-day-view .mellow-day-block .hour-info small{
+    font-size:10.5px;
+    line-height:1.25;
+  }
+  .merged-day-view .mellow-day-block .hour-emoji{display:none}
+  /* Multiple simultaneous activities must prioritize legible names. */
+  .merged-day-view .mellow-day-block:not([data-lanes="1"]) .hour-check{display:none}
+}
+@media(max-width:390px){
+  .merged-day-view .mellow-day-block .hour-info strong{font-size:12.5px}
+  .merged-day-view .mellow-day-block .dnd-grip{width:24px;min-width:24px}
+}
+@media(prefers-reduced-motion:reduce){
+  .merged-day-view .mellow-day-block{transition:none}
+}
