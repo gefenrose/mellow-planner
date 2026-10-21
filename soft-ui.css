@@ -396,7 +396,7 @@ body.dark .tasks-list .task{box-shadow:0 3px 12px rgba(0,0,0,.1)}
   outline:2px solid var(--purple);outline-offset:1px
 }
 .dnd-ghost.dnd-ghost-card{
-  display:flex;align-items:center;gap:9px;width:min(290px,82vw);max-width:82vw;
+  display:none;align-items:center;gap:9px;width:min(290px,82vw);max-width:82vw;
   min-height:54px;padding:8px 11px;border:1px solid #ded6e6;border-radius:16px;
   background:var(--surface);color:var(--ink);box-shadow:0 9px 28px rgba(40,31,48,.2);
   line-height:1.2;overflow:hidden
@@ -483,3 +483,5 @@ body:has(.merged-day-view) .floatadd{display:none!important}
 .dnd-active.dnd-task-active.dnd-dock-visible .dnd-category-dock{
   display:block!important;pointer-events:auto
 }
+
+.dnd-ghost.dnd-ghost-card.dnd-ghost-visible{display:flex!important}
