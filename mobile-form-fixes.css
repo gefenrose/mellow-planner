@@ -1,0 +1,196 @@
+/* Mellow mobile editor repair.
+   Keep forms above the fixed tab bar and make Hebrew/iOS inputs fit their columns. */
+.modal-bg{
+  z-index:200;
+  box-sizing:border-box;
+  padding:max(12px,env(safe-area-inset-top,0px)) 12px max(12px,env(safe-area-inset-bottom,0px));
+  overflow:hidden;
+  isolation:isolate;
+}
+.modal-bg > .modal{
+  box-sizing:border-box;
+  width:min(100%,550px);
+  max-width:100%;
+  max-height:calc(100dvh - max(24px,env(safe-area-inset-top,0px)) - max(24px,env(safe-area-inset-bottom,0px)));
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  scroll-padding-block:75px;
+  min-width:0;
+}
+.modal-bg .modal > form,
+.modal-bg .modal .formgrid,
+.modal-bg .modal .field,
+.modal-bg .modal .steps-editor,
+.modal-bg .modal .gcal-event-form{
+  min-width:0;
+  max-width:100%;
+}
+.modal-bg .modal .formgrid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  align-items:start;
+  width:100%;
+}
+.modal-bg .modal .field{
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:7px;
+  min-width:0;
+  width:100%;
+  margin:0;
+}
+.modal-bg .modal .field.full{
+  grid-column:1 / -1;
+}
+.modal-bg .modal .field > label,
+.modal-bg .modal label.field,
+.modal-bg .modal .field > span{
+  min-width:0;
+  max-width:100%;
+  line-height:1.4;
+  overflow-wrap:anywhere;
+}
+.modal-bg .modal input:not([type=checkbox]):not([type=radio]):not([type=hidden]),
+.modal-bg .modal textarea,
+.modal-bg .modal select{
+  display:block;
+  box-sizing:border-box;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  min-height:46px;
+  padding:11px 12px;
+  font-size:16px!important;
+  line-height:1.35;
+}
+.modal-bg .modal input[type=date],
+.modal-bg .modal input[type=time]{
+  min-width:0;
+  max-width:100%;
+  direction:ltr;
+  text-align:start;
+}
+.modal-bg .modal textarea{
+  min-height:98px;
+  resize:vertical;
+}
+/* iOS date inputs have a large native intrinsic size: give them their own row. */
+@media(max-width:620px){
+  .modal-bg{
+    align-items:center;
+    padding-inline:10px;
+  }
+  .modal-bg > .modal{
+    padding:18px 16px;
+    border-radius:22px;
+    max-height:calc(100dvh - max(22px,env(safe-area-inset-top,0px)) - max(22px,env(safe-area-inset-bottom,0px)));
+  }
+  .modal-bg .modal .formgrid{
+    grid-template-columns:minmax(0,1fr);
+    gap:14px;
+  }
+  .modal-bg .modal .field.full{
+    grid-column:1;
+  }
+  .modal-bg .modal #taskForm .field,
+  .modal-bg .modal #gcalEventForm .field{
+    margin-bottom:0;
+  }
+  .modal-bg .modal .modalheader{
+    position:sticky;
+    top:-18px;
+    z-index:6;
+    padding:8px 0 13px;
+    margin-top:-8px;
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+  }
+  .modal-bg .modal .formactions{
+    position:sticky;
+    bottom:-18px;
+    z-index:5;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    padding:13px 0 14px;
+    margin-top:17px;
+    background:var(--surface);
+    border-top:1px solid var(--border);
+  }
+  .modal-bg .modal .formactions .buttonrow{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-inline-start:auto;
+    max-width:100%;
+  }
+  .modal-bg .modal .formactions .btn{
+    min-height:43px;
+    max-width:100%;
+    white-space:normal;
+  }
+  .modal-bg .modal .steps-editor{
+    grid-column:1;
+    width:100%;
+    min-width:0;
+    padding:14px 12px;
+  }
+  .modal-bg .modal .step-entry{
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    gap:9px;
+    width:100%;
+  }
+  .modal-bg .modal .step-entry input,
+  .modal-bg .modal .step-entry button{
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    margin:0;
+    white-space:normal;
+  }
+  .modal-bg .modal .step-manual-row{
+    grid-template-columns:24px minmax(0,1fr) auto;
+    padding:5px 4px;
+    gap:3px;
+  }
+  .modal-bg .modal .step-suggest-row{
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    gap:8px;
+  }
+  .modal-bg .modal .step-suggest-row .btn{
+    width:100%;
+    white-space:normal;
+    min-height:45px;
+  }
+  .modal-bg .modal .step-suggest-row .step-source{
+    align-self:flex-start;
+  }
+  .modal-bg .modal .step-preview-actions{
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+  }
+  .modal-bg .modal .step-preview-actions .btn{
+    width:100%;
+    white-space:normal;
+  }
+}
+@media(max-width:360px){
+  .modal-bg > .modal{padding-inline:13px}
+  .modal-bg .modal .formactions .buttonrow{width:100%;margin-inline-start:0}
+  .modal-bg .modal .formactions .buttonrow .btn{flex:1}
+}
+@media(prefers-reduced-motion:reduce){
+  .modal-bg > .modal{scroll-behavior:auto}
+}
+/* Toasts from form validation must appear above the modal overlay. */
+#toast{z-index:250}
