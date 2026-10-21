@@ -473,6 +473,45 @@
       return updated;
     } finally {rescheduling=false}
   }
-  window.MellowCalendar={renderPage,refresh:()=>refreshEvents(ui.date,true),state:g,disconnect,dayItems,isConnected:readable,moveEvent,canMove:(calendarId,eventId)=>readable()&&writable().some(c=>c.id===calendarId)&&!!g.events.find(e=>e._calendarId===calendarId&&e.id===eventId&&!e.start?.date&&e.start?.dateTime&&e.end?.dateTime&&(!e.eventType||e.eventType==='default'))};
+  // On-demand search across past, present and future Google events.
+  // No timeMin/timeMax; results remain in memory only and never replace the day cache.
+  async function searchEvents(term){
+    if(!readable())return {items:[],partial:false,disconnected:true};
+    const q=String(term||'').trim().slice(0,120);
+    if(q.length<2)return {items:[],partial:false};
+    const ids=shownCalendars();
+    let partial=false;
+    const requests=await Promise.allSettled(ids.map(async calendarId=>{
+      const matches=[];let page='';
+      for(let n=0;n<3;n++){
+        const params='?q='+encodeURIComponent(q)+'&singleEvents=true&showDeleted=false&maxResults=100'+
+          (page?'&pageToken='+encodeURIComponent(page):'');
+        const found=await request('/calendars/'+encodeURIComponent(calendarId)+'/events'+params);
+        for(const e of found.items||[]){
+          if(e.status==='cancelled')continue;
+          const raw=e.start?.date||e.start?.dateTime;
+          if(!raw)continue;
+          const dtValue=e.start?.date?null:new Date(raw);
+          const date=e.start?.date||(!Number.isNaN(dtValue.getTime())?dayKey(dtValue):'');
+          if(!date)continue;
+          matches.push({kind:'event',id:e.id,calendarId,title:String(e.summary||'(Untitled)').slice(0,240),
+            date,start:e.start?.dateTime?dtValue.getHours()*60+dtValue.getMinutes():null,
+            calendarName:g.calendars.find(c=>c.id===calendarId)?.summary||'Google',
+            location:String(e.location||'').slice(0,200),
+            href:safeUrl(e.htmlLink)});
+        }
+        if(!found.nextPageToken){page='';break}
+        page=found.nextPageToken;
+      }
+      if(page)partial=true;
+      return matches;
+    }));
+    const failures=requests.filter(x=>x.status==='rejected');
+    const items=requests.filter(x=>x.status==='fulfilled').flatMap(x=>x.value);
+    const seen=new Set();
+    return {items:items.filter(e=>{const k=e.calendarId+':'+e.id;if(seen.has(k))return false;seen.add(k);return true}),
+      partial:partial||failures.length>0,error:failures.length?String(failures[0].reason?.message||'Google search failed'):''};
+  }
+  window.MellowCalendar={renderPage,refresh:()=>refreshEvents(ui.date,true),state:g,disconnect,dayItems,isConnected:readable,moveEvent,searchEvents,canMove:(calendarId,eventId)=>readable()&&writable().some(c=>c.id===calendarId)&&!!g.events.find(e=>e._calendarId===calendarId&&e.id===eventId&&!e.start?.date&&e.start?.dateTime&&e.end?.dateTime&&(!e.eventType||e.eventType==='default'))};
   render();
 })();
