@@ -25,7 +25,7 @@
 .merged-hourly-agenda{--time-left:65px;direction:ltr}
 .merged-hourly-agenda .hour{border-top:1px solid var(--border)}
 .merged-hourly-agenda .hour-add{right:6px}
-.mellow-day-block{position:absolute;z-index:2;min-width:0;left:calc(var(--time-left) + (100% - var(--time-left) - 4px) * var(--lane-fraction));width:calc((100% - var(--time-left) - 4px) * var(--width-fraction) - 3px);right:auto;overflow:hidden;display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:2px 7px 2px 0;box-shadow:0 2px 8px #2439290f;direction:ltr;transition:box-shadow 180ms ease,border-color 180ms ease,background-color 180ms ease}
+.mellow-day-block{position:absolute;z-index:2;min-width:0;left:0;width:100%;right:auto;pointer-events:auto;overflow:hidden;display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:2px 7px 2px 0;box-shadow:0 2px 8px #2439290f;direction:ltr;transition:box-shadow 180ms ease,border-color 180ms ease,background-color 180ms ease}
 .mellow-day-block .hour-color{height:100%;width:4px;flex-shrink:0;background:var(--green)}
 .mellow-day-block.work{background:var(--sky)}.mellow-day-block.work .hour-color{background:var(--blue)}
 .mellow-day-block.home{background:var(--pink)}.mellow-day-block.home .hour-color{background:var(--peach)}
@@ -99,3 +99,6 @@
 [dir="rtl"] .mellow-day-block .hour-info{text-align:right;align-items:flex-start}
 [dir="rtl"] .merged-hourly-agenda{direction:ltr}
 @media(prefers-reduced-motion:reduce){.choice-card,.mellow-day-block{transition:none!important}}
+
+/* The overlay is laid out against the available hour lane, not the full scroller. */
+.merged-hourly-overlay{position:absolute;z-index:2;top:0;bottom:0;left:var(--time-left);right:0;pointer-events:none}
