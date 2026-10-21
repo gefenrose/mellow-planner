@@ -93,7 +93,7 @@
       if(position+1+word.length<=charsPerLine)position+=1+word.length;
       else{lines++;lines+=Math.max(0,Math.ceil(word.length/charsPerLine)-1);position=word.length%charsPerLine||charsPerLine}
     }
-    const contentHeight=17+lines*(phone?17:18)+15+17; // type, title, time, padding
+    const contentHeight=17+lines*(phone?17:18)+(item.kind==='event'&&lanes>1?27:15)+17; // type, title, time, padding
     return Math.ceil(Math.max(phone?88:82,contentHeight,
       (Math.max(1,item.minutes||25)/60)*px-4));
   }
@@ -136,7 +136,7 @@
     const t=item, y=(t.start-first*60)/60*px+2;
     const isEvent=t.kind==='event',color=isEvent?t.color:null;
     const role=isEvent?L('event'):L('task');
-    const label=isEvent?(t.timeLabel+' · '+t.calendarName):(fmt(t.start)+' · '+fmtLength(t.minutes));
+    const label=isEvent?t.timeLabel:(fmt(t.start)+' · '+fmtLength(t.minutes));
     const props='style="top:'+y+'px;height:'+height+'px;left:'+(100*lane/lanes).toFixed(4)+'%;width:calc('+(100/lanes).toFixed(4)+'% - 3px)'+(color?';--calendar-accent:'+esc(color):'')+'"';
     const tag=isEvent?'<span class="kind-label kind-event">'+icon('calendar',12)+' '+L('event')+'</span>':
       '<span class="kind-label kind-task">'+icon('tasks',12)+' '+L('task')+'</span>';
