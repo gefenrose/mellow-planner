@@ -1,0 +1,101 @@
+/* Shared day plan styling — Mellow v8. Google events are a distinct indigo/outlined treatment. */
+.merged-day-view .tiimo-day-heading{margin-bottom:13px}
+.merged-legend{display:flex;align-items:center;gap:9px 15px;flex-wrap:wrap;margin:8px 0 12px;padding-bottom:12px;border-bottom:1px solid var(--border);font-size:12px}
+.merged-legend>span{display:inline-flex;align-items:center;gap:6px;font-weight:700}
+.merged-legend>span:first-child{color:var(--green)}
+.merged-legend>span:nth-child(2){color:var(--purple)}
+.merged-legend .gcal-live-status{margin-inline-start:auto;font-size:11px;color:var(--muted);font-weight:600}
+.merged-refresh{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--surface2);color:var(--green)}
+.merged-connect{display:inline-flex;align-items:center;gap:5px;color:var(--purple);background:var(--lav);border-radius:11px;padding:8px 10px;font-size:11px;font-weight:700;margin-inline-start:auto}
+.unified-item{box-shadow:0 2px 9px #00000007}
+.unified-item .daytask-body{display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
+.unified-item .daytask-body strong{max-width:100%;font-size:14px}
+.unified-item .daytask-body small{max-width:100%}
+.kind-label{display:inline-flex;align-items:center;gap:4px;line-height:1.1;font-size:10px;font-weight:800;letter-spacing:.025em;text-transform:uppercase;margin-bottom:3px;white-space:nowrap}
+.kind-task{color:var(--green)}
+.kind-event{color:var(--purple)}
+.unified-event{--calendar-accent:var(--purple);border:1px dashed var(--calendar-accent);background:var(--surface)}
+.unified-event .daytask-accent,.merged-calendar-block .hour-color{background:var(--calendar-accent)}
+.unified-event .daytask-icon{display:grid;place-items:center;background:var(--lav);color:var(--purple)}
+.unified-event .event-anchor{color:var(--ink);text-decoration:none}
+.unified-event .event-anchor:hover strong,.merged-calendar-block .hour-info:hover strong{text-decoration:underline;text-underline-offset:2px}
+.unified-event .event-open{display:grid;place-items:center;flex-shrink:0;width:28px;height:33px;border-radius:8px;color:var(--purple)}
+.unified-event .daytask-body small{color:var(--muted)}
+.part-list .unified-item{min-height:76px}
+.merged-hourly-agenda{--time-left:65px;direction:ltr}
+.merged-hourly-agenda .hour{border-top:1px solid var(--border)}
+.merged-hourly-agenda .hour-add{right:6px}
+.mellow-day-block{position:absolute;z-index:2;min-width:0;left:calc(var(--time-left) + (100% - var(--time-left) - 4px) * var(--lane) / var(--lanes));width:calc((100% - var(--time-left) - 4px) / var(--lanes) - 3px);right:auto;overflow:hidden;display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:2px 7px 2px 0;box-shadow:0 2px 8px #2439290f;direction:ltr;transition:box-shadow 180ms ease,border-color 180ms ease,background-color 180ms ease}
+.mellow-day-block .hour-color{height:100%;width:4px;flex-shrink:0;background:var(--green)}
+.mellow-day-block.work{background:var(--sky)}.mellow-day-block.work .hour-color{background:var(--blue)}
+.mellow-day-block.home{background:var(--pink)}.mellow-day-block.home .hour-color{background:var(--peach)}
+.mellow-day-block.self{background:var(--lav)}.mellow-day-block.self .hour-color{background:var(--purple)}
+.mellow-day-block.health{background:var(--lightgreen)}
+.mellow-day-block.social{background:var(--pink)}
+.mellow-day-block.errands{background:var(--sky)}
+.mellow-day-block .hour-emoji{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:#ffffff70;flex-shrink:0}
+.mellow-day-block .hour-info{flex:1;min-width:0;height:100%;background:transparent;color:var(--ink);text-align:start;padding:2px 0;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;line-height:1.15;text-decoration:none}
+.mellow-day-block .hour-info strong{max-width:100%;font-size:12px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mellow-day-block .hour-info small{max-width:100%;font-size:10px;line-height:1.2;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mellow-day-block .hour-info .kind-label{font-size:9px;margin-bottom:2px}
+.mellow-day-block .hour-info .kind-label svg{width:11px;height:11px}
+.mellow-day-block .hour-check{flex-shrink:0;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--muted);margin:0}
+.mellow-day-block.completed{opacity:.52}
+.mellow-day-block.completed strong{text-decoration:line-through}
+.merged-calendar-block{--calendar-accent:var(--purple);background:var(--surface);border:1px dashed var(--calendar-accent)}
+.merged-calendar-block .hour-color{background:var(--calendar-accent)}
+.merged-calendar-block .hour-emoji{color:var(--purple);background:var(--lav)}
+.merged-calendar-block .hour-info .kind-label{color:var(--purple)}
+.merged-task-block .hour-info .kind-label{color:var(--green)}
+.merged-all-day.card{display:grid;gap:7px;padding:13px;margin-bottom:17px}
+.merged-all-day .sectionbar{margin:0 0 3px}.merged-all-day .sectionbar h3{display:flex;align-items:center;gap:8px;font-size:15px}
+.merged-all-day .unified-event{box-shadow:none}
+.merged-empty{text-align:center;font-size:13px;margin:10px 0 8px}
+.merged-day-view .hourly-shell{overflow-y:auto;overflow-x:hidden;max-height:75dvh;-webkit-overflow-scrolling:touch}
+.merged-day-view .merged-hourly-agenda{overflow:visible!important}
+.merged-day-view .daytask-check{margin-inline-start:5px}
+.merged-day-view .hourly-agenda .nowline{z-index:5}
+.merged-day-view .hourly-agenda .hour{position:relative}
+.merged-day-view .part-list-wrap:not(.is-collapsed){overflow:visible}
+.merged-day-view .day-footer{margin-top:22px}
+.choice-modal-bg{z-index:100;display:flex;align-items:center;justify-content:center}
+.create-choice-modal{width:min(460px,calc(100vw - 24px));padding:23px;border-radius:23px;animation:mellow-modal-in 260ms var(--ease-out-calm) both}
+.create-choice-modal .modalheader{align-items:flex-start;margin-bottom:12px}
+.create-choice-modal .modalheader h2{font-family:var(--head);font-size:25px;margin:0}
+.create-choice-modal .modalheader p{font-size:13px;margin:5px 0 0}
+.create-choice-modal .iconbtn svg{transform:rotate(45deg)}
+.choice-grid{display:grid;gap:10px}
+.choice-card{display:flex;align-items:center;gap:13px;width:100%;min-height:88px;text-align:start;padding:14px;border:1px solid var(--border);background:var(--surface);border-radius:15px;color:var(--ink);transition:background-color 150ms ease,border-color 150ms ease,transform 160ms var(--ease-out-calm)}
+.choice-card:active{transform:scale(.98)}
+.choice-card .choice-symbol{height:47px;width:47px;display:grid;place-items:center;border-radius:13px;flex-shrink:0}
+.choice-task .choice-symbol{background:var(--lightgreen);color:var(--green)}
+.choice-calendar .choice-symbol{background:var(--lav);color:var(--purple)}
+.choice-card .choice-text{min-width:0;flex:1;display:flex;flex-direction:column;gap:4px}
+.choice-text strong{font-size:16px;font-weight:700}
+.choice-text small{font-size:12px;color:var(--muted)}
+.choice-card>svg:last-child{color:var(--muted)}
+.choice-card:hover{background:var(--surface2);border-color:var(--green)}
+@media(max-width:700px){
+ .merged-hourly-agenda{--time-left:51px}
+ .mellow-day-block{gap:4px;padding-inline-end:3px}
+ .mellow-day-block .hour-emoji{width:24px;height:24px}
+ .mellow-day-block .hour-info strong{font-size:11px}
+ .mellow-day-block .hour-info small{font-size:9px}
+ .mellow-day-block .hour-info .kind-label{font-size:8px}
+ .mellow-day-block .hour-check{width:18px;height:18px}
+ .merged-legend{gap:8px 13px;font-size:11px}
+ .merged-legend .gcal-live-status{margin-inline-start:0}
+ .create-choice-modal{width:calc(100vw - 20px);padding:18px}
+ .part-list .unified-item{min-height:70px}
+}
+@media(max-width:400px){
+ .mellow-day-block .hour-emoji{display:none}
+ .mellow-day-block .hour-info .kind-label svg{display:none}
+ .mellow-day-block .hour-info{min-width:0}
+ .mellow-day-block .hour-check{display:none}
+ .merged-legend .merged-connect{margin-inline-start:0}
+}
+[dir="rtl"] .mellow-day-block{direction:rtl;padding:2px 0 2px 6px}
+[dir="rtl"] .mellow-day-block .hour-info{text-align:right;align-items:flex-start}
+[dir="rtl"] .merged-hourly-agenda{direction:ltr}
+@media(prefers-reduced-motion:reduce){.choice-card,.mellow-day-block{transition:none!important}}
