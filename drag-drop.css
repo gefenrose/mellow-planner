@@ -113,3 +113,74 @@ body.dark .dnd-active [data-drop-part].dnd-target{background:#443750}
 @media(prefers-reduced-motion:reduce){
   .dnd-category-dock,.dnd-category-chip,.dnd-origin{transition:none!important}
 }
+
+/* v13 live drop-time cue.
+   The badge is fixed above the dragging finger; the line marks the exact snap slot. */
+.dnd-time-badge{
+  position:fixed;
+  z-index:1010;
+  left:-999px;top:-999px;
+  min-width:66px;
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 10px;
+  border:1px solid #ad91d5;
+  border-radius:12px;
+  background:#7453a5;
+  color:#ffffff;
+  box-shadow:0 6px 17px #46316947;
+  font-size:16px;
+  font-weight:800;
+  line-height:1;
+  letter-spacing:.2px;
+  font-variant-numeric:tabular-nums;
+  pointer-events:none;
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(5px) scale(.96);
+  transition:opacity 110ms ease,transform 110ms ease,visibility 110ms ease;
+}
+.dnd-time-badge-visible{
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0) scale(1);
+}
+.dnd-time-guide{
+  position:absolute;
+  z-index:8;
+  left:var(--time-left,65px);
+  right:4px;
+  height:2px;
+  background:#8764bd;
+  border-radius:99px;
+  box-shadow:0 0 0 1px #ffffffab,0 2px 8px #7f58b857;
+  pointer-events:none;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity 95ms ease,visibility 95ms ease;
+}
+.dnd-time-guide::before{
+  content:'';
+  position:absolute;
+  left:-4px;
+  top:-4px;
+  width:10px;height:10px;
+  background:#8764bd;
+  border:2px solid #ffffff;
+  border-radius:50%;
+  box-sizing:border-box;
+}
+.dnd-time-guide-visible{opacity:1;visibility:visible}
+body.dark .dnd-time-badge{
+  color:#211a2f;
+  background:#d7bdf9;
+  border-color:#af91df;
+  box-shadow:0 6px 18px #00000065;
+}
+body.dark .dnd-time-guide{background:#d1b5f5;box-shadow:0 0 0 1px #342741,0 2px 9px #0005}
+body.dark .dnd-time-guide::before{background:#d1b5f5;border-color:#392e48}
+@media(prefers-reduced-motion:reduce){
+  .dnd-time-badge,.dnd-time-guide{transition:none}
+}
