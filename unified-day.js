@@ -251,7 +251,7 @@
       document.querySelector('#taskTitle')?.focus();
     }else if(kind==='event'){
       if(!window.MellowCalendar?.isConnected?.()){
-        ui.modal=null;ui.tab='calendar';render();toast(L('needGoogle'));return;
+        ui.modal=null;ui.tab='settings';render();window.scrollTo({top:0,behavior:'instant'});toast(L('needGoogle'));return;
       }
       ui.modal='calendarEvent';render();
       document.querySelector('#gcalTitle')?.focus();

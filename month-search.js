@@ -169,15 +169,6 @@
     // The global search covers tasks too, so avoid a second full-size search bar.
     return insertIconInRow(prevTasks(),'sectionbar');
   };
-  if(window.MellowCalendar?.renderPage){
-    const prevPage=window.MellowCalendar.renderPage;
-    window.MellowCalendar.renderPage=function(){
-      const html=prevPage();
-      if(html.includes('<div class="gcal-toolbar">'))return insertIconInRow(html,'gcal-toolbar');
-      return html.replace('<section class="card gcal-settings-card">',
-        '<div class="jump-calendar-search-header">'+searchIcon()+'</div><section class="card gcal-settings-card">');
-    };
-  }
   function reloadList(){
     if(ui.modal==='globalSearch'){
       const node=document.querySelector('#journeySearchResults');

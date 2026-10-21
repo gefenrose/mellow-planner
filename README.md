@@ -10,8 +10,8 @@ A self-contained, independent, mobile-first visual day planner. No subscription,
 
 ## Features
 
-- **Today**: visual, color-coded timeline; week picker; create, edit, schedule, complete, and delete tasks; unscheduled inbox.
-- **Tasks**: search, priority sorting, categories, task notes, and checkable/editable subtasks.
+- **Today**: visual, color-coded timeline; week picker; create, edit, schedule, complete, and delete tasks; unscheduled inbox; optional Google Calendar events beside your plan.
+- **Tasks**: search, priority sorting, drag to reorder, categories, task notes, and checkable/editable subtasks.
 - **Routines**: build sequences of timed steps, save them, and add them to any selected day's available slots. Repeat-day chips are informational, not automatic recurring scheduling.
 - **Focus**: start/pause/reset a timer with time presets and optional linked task, sound, vibration, and session history. Browser support and background execution vary.
 - **AI Planner / offline smart suggestions**: deterministic, keyword-based task parsing, rough step breakdown, time estimates, and free-slot scheduling; this is **not** a generative LLM. Preview and edit results before saving. It operates offline with no API key.
@@ -25,7 +25,7 @@ Offline mode does not transmit task text. When Gemini mode is selected, the subm
 ## Limitations
 
 - This is a functional prototype with its own original branding and layouts.
-- There is no account/cloud sync; schedules are not connected to Apple/Google Calendar.
+- Tasks stay in this browser and do not sync between devices. An optional Google Calendar connection can show events alongside Today, create Google events, and send scheduled tasks; its access token and loaded events stay in the current browser session.
 - Browsers on iOS may suspend timers and background notifications. The timer uses a target timestamp to update correctly when you return.
 - Date/time inputs and notification support vary across browsers.
 - The Google Gemini browser-based option is experimental; a server-side authenticated proxy is recommended for a widely shared deployment.

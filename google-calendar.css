@@ -1,9 +1,4 @@
 /* Google Calendar integration — Mellow v7 */
-.gcal-page {max-width:860px;margin:auto;display:grid;gap:16px}
-.gcal-page .topbar{margin-bottom:5px}
-.gcal-page .topbar h1,.gcal-settings-card h3,.gcal-panel-title h3{display:flex;align-items:center;gap:9px}
-.gcal-page .topbar p{max-width:590px;margin:7px 0 0}
-.gcal-page .card{width:100%}
 .gcal-settings-card{display:grid;gap:13px;min-width:0}
 .gcal-settings-card h3{font-size:21px;margin:0}
 .gcal-settings-card p{margin:0;line-height:1.55}
@@ -48,15 +43,6 @@
 .gcal-event-main small{font-size:12px;color:var(--muted);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gcal-event-link{display:grid;place-items:center;height:37px;width:37px;border-radius:10px;color:var(--green);background:var(--surface2);flex-shrink:0}
 .gcal-event-link:hover{background:var(--lightgreen)}
-.gcal-toolbar{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-.gcal-toolbar strong{min-width:100px;flex:1;text-align:center;font-size:14px;line-height:1.2}
-.gcal-toolbar .btn{padding:9px;min-width:41px;min-height:42px}
-.gcal-date-strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
-.gcal-actionbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.gcal-actionbar button{display:inline-flex;align-items:center;gap:7px}
-.gcal-day-events{padding:14px 15px}
-.gcal-day-events .gcal-event{margin:5px 0}
-.gcal-filter-panel{display:grid;gap:16px}
 .gcal-event-form{display:grid;gap:13px}
 .gcal-event-form .field{min-width:0}
 .gcal-event-form .formactions{padding-top:10px}
@@ -65,15 +51,12 @@
 .gcal-task-send .hint{font-size:12px;line-height:1.4}
 .gcal-task-send>a{color:var(--green);font-weight:700;font-size:13px}
 @media(max-width:700px){
- .bottomnav{grid-template-columns:repeat(7,minmax(0,1fr));gap:0}
  .bottomnav button{font-size:9px;padding:4px 1px;min-width:0;gap:3px}
  .bottomnav .icon,.bottomnav .m-icon{width:19px;height:19px}
- .gcal-page{gap:12px}
  .gcal-settings-card{padding:16px}
  .gcal-client-row{flex-wrap:wrap}
  .gcal-client-row input{flex-basis:100%}
  .gcal-client-row button{width:100%}
- .gcal-toolbar strong{font-size:13px}
  .gcal-event-main strong{font-size:13px}
  .gcal-today-prompt{padding:10px}
  .gcal-today-prompt .btn{font-size:11px;padding:7px}
@@ -83,11 +66,10 @@
 @media(max-width:360px){
  .bottomnav button{font-size:8px}
  .bottomnav .icon,.bottomnav .m-icon{width:17px;height:17px}
- .gcal-date-strip{gap:2px}
 }
 @media(prefers-reduced-motion:no-preference){
  .gcal-event{animation:mellow-rise 230ms var(--ease-out-calm) both}
- .gcal-settings-card,.gcal-day-events{animation:mellow-soft-fade 220ms ease both}
+ .gcal-settings-card{animation:mellow-soft-fade 220ms ease both}
 }
 
 .gcal-close-button .m-icon{transform:rotate(45deg)}

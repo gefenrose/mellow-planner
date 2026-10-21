@@ -13,7 +13,7 @@
   };
   const copy={
     en:{
-      calendar:'Calendar',calendarIntro:'Google Calendar',setup:'Connect Google Calendar',
+      calendar:'Google Calendar',calendarIntro:'Google Calendar',setup:'Connect Google Calendar',
       explain:'See your Google events next to your Mellow tasks. Add new events or send scheduled Mellow tasks to a calendar.',
       connect:'Connect with Google',reconnect:'Reconnect Google',disconnect:'Disconnect this session',
       connected:'Connected to Google Calendar',disconnected:'Not connected',expired:'Your Google session expired. Reconnect to refresh events.',
@@ -42,7 +42,7 @@
       selected:'Selected calendars',send:'Send to Google'
     },
     he:{
-      calendar:'יומן',calendarIntro:'Google Calendar',setup:'חיבור ליומן Google',
+      calendar:'Google Calendar',calendarIntro:'Google Calendar',setup:'חיבור ליומן Google',
       explain:'האירועים מ-Google מופיעים לצד המשימות ב-Mellow. אפשר ליצור אירוע חדש או לשלוח משימה מתוזמנת ליומן.',
       connect:'התחברות עם Google',reconnect:'התחברות מחדש',disconnect:'ניתוק החיבור הנוכחי',
       connected:'היומן מחובר',disconnected:'לא מחובר',expired:'תוקף החיבור ל-Google הסתיים. יש להתחבר מחדש.',
@@ -132,10 +132,10 @@
     return '';
   }
   function todayPanel(date){
-    if(!g.clientId)return '<div class="gcal-today-prompt"><span>'+ico('calendar',20)+' '+W('calendarIntro')+'</span><button data-gcal="open-tab" type="button" class="btn secondary small">'+W('setup')+'</button></div>';
+    if(!g.clientId)return '<div class="gcal-today-prompt"><span>'+ico('calendar',20)+' '+W('calendarIntro')+'</span><button data-gcal="open-settings" type="button" class="btn secondary small">'+W('setup')+'</button></div>';
     if(!readable())return '<div class="gcal-today-prompt"><span>'+ico('calendar',19)+' '+W('calendarIntro')+'</span><button type="button" data-gcal="connect" class="btn secondary small">'+W('connect')+'</button></div>';
     const events=dayEvents(date),content=g.loadedDate===date?events.slice(0,8).map(eventCard).join(''):g.loading?'':('<p class="subtle">'+esc(W('none'))+'</p>');
-    return '<section class="gcal-today-panel card"><div class="gcal-panel-title"><h3>'+ico('calendar',19)+' '+W('events')+' <span class="gcal-smallcount">'+events.length+'</span></h3><button type="button" class="btn ghost small" data-gcal="open-tab">'+W('calendar')+' '+ico('chevronRight',15)+'</button></div>'+loadStatus()+
+    return '<section class="gcal-today-panel card"><div class="gcal-panel-title"><h3>'+ico('calendar',19)+' '+W('events')+' <span class="gcal-smallcount">'+events.length+'</span></h3><button type="button" class="btn ghost small" data-gcal="open-settings">'+W('calendar')+' '+ico('chevronRight',15)+'</button></div>'+loadStatus()+
       '<div class="gcal-events">'+(content||(!g.loading?'<p class="subtle">'+W('none')+'</p>':''))+'</div></section>';
   }
   const origToday=renderToday;
@@ -204,23 +204,6 @@
   renderSettings=function(){
     return origSettings().replace('<div class="settingsgrid">','<div class="settingsgrid">'+connectionPanel());
   };
-  function renderPage(){
-    const events=dayEvents(ui.date);
-    const header='<div class="topbar"><div><div class="overline">MELLOW / '+W('calendar')+'</div><h1>'+W('calendar')+'</h1><p class="subtle">'+W('explain')+'</p></div></div>';
-    if(!readable())return '<div class="gcal-page">'+header+connectionPanel()+'</div>';
-    return '<div class="gcal-page">'+header+
-      '<div class="gcal-toolbar"><button type="button" class="btn secondary small" data-action="gotoday">'+T('today')+'</button>'+
-      '<button type="button" class="btn secondary small" data-gcal="prev-day">'+ico('chevronLeft',18)+'</button><strong>'+esc(dt(ui.date,{weekday:'short',month:'long',day:'numeric',year:'numeric'}))+'</strong>'+
-      '<button type="button" class="btn secondary small" data-gcal="next-day">'+ico('chevronRight',18)+'</button></div>'+
-      '<div class="week dayticker gcal-date-strip">'+weekDays()+'</div>'+
-      '<div class="gcal-actionbar"><button type="button" class="btn" data-gcal="new-event">'+ico('plus',16)+' '+W('newEvent')+'</button>'+
-      '<button type="button" class="btn secondary small" data-gcal="refresh">'+ico('repeat',16)+' '+W('refresh')+'</button></div>'+
-      loadStatus()+
-      '<div class="gcal-day-events card"><div class="gcal-panel-title"><h3>'+W('events')+' <span class="gcal-smallcount">'+events.length+'</span></h3></div>'+
-      (events.length?events.map(eventCard).join(''):g.loading?'<p class="subtle">'+W('busy')+'</p>':'<p class="subtle">'+W('none')+'</p>')+'</div>'+
-      '<div class="card gcal-filter-panel">'+calendarSwitcher()+calendarOptions()+'</div>'+
-      '<p class="hint">'+W('privacy')+'</p></div>';
-  }
   function eventModal(){
     const canWrite=writable().length>0;
     const start=Math.ceil((minNow()+15)/15)*15 % (24*60);
@@ -386,16 +369,12 @@
       description:task.notes||''
     },task);
   }
-  function addDay(delta){
-    const d=localMidnight(ui.date);d.setDate(d.getDate()+delta);
-    ui.date=dayKey(d);render();void refreshEvents(ui.date);
-  }
   document.addEventListener('click',event=>{
     const control=event.target.closest?.('[data-gcal]');
     if(control){
       event.preventDefault();event.stopImmediatePropagation();
       const action=control.dataset.gcal;
-      if(action==='open-tab'){ui.tab='calendar';ui.modal=null;render();if(readable())void refreshEvents(ui.date)}
+      if(action==='open-settings'){ui.tab='settings';ui.modal=null;render();window.scrollTo({top:0,behavior:'instant'})}
       if(action==='connect')connect();
       if(action==='save-client'){
         const id=document.querySelector('#gcalClient')?.value.trim()||'';
@@ -406,14 +385,12 @@
       if(action==='refresh')void refreshEvents(ui.date,true);
       if(action==='new-event'){if(!readable()){toast(W('reconnect'));return}ui.modal='calendarEvent';render()}
       if(action==='send-task')void sendTask(control.dataset.id);
-      if(action==='prev-day')addDay(-1);
-      if(action==='next-day')addDay(1);
       return;
     }
     const el=event.target.closest?.('[data-action]');
     if(el&&['day','setdate','gotoday','nav','dayview'].includes(el.dataset.action)){
       setTimeout(()=>{
-        if(readable()&&(ui.tab==='calendar'||ui.tab==='today'))void refreshEvents(ui.date);
+        if(readable()&&ui.tab==='today')void refreshEvents(ui.date);
       },20);
     }
   },true);
@@ -439,9 +416,6 @@
     if(!dateParts(date)||!localDateTime(date,time)){toast(W('timeInvalid'));return}
     void createEvent({summary,date,time,minutes,calendarId,description:document.querySelector('#gcalDescription')?.value||'',place:document.querySelector('#gcalLocation')?.value||''});
   },true);
-  E.calendar='Calendar';H.calendar='יומן';
-  icons.calendar=mellowIcon('calendar',20);
-
   // Move a timed event or recurring instance without altering its other details.
   let rescheduling=false;
   async function moveEvent(calendarId,eventId,date,minute){
@@ -512,6 +486,6 @@
     return {items:items.filter(e=>{const k=e.calendarId+':'+e.id;if(seen.has(k))return false;seen.add(k);return true}),
       partial:partial||failures.length>0,error:failures.length?String(failures[0].reason?.message||'Google search failed'):''};
   }
-  window.MellowCalendar={renderPage,refresh:()=>refreshEvents(ui.date,true),state:g,disconnect,dayItems,isConnected:readable,moveEvent,searchEvents,canMove:(calendarId,eventId)=>readable()&&writable().some(c=>c.id===calendarId)&&!!g.events.find(e=>e._calendarId===calendarId&&e.id===eventId&&!e.start?.date&&e.start?.dateTime&&e.end?.dateTime&&(!e.eventType||e.eventType==='default'))};
+  window.MellowCalendar={refresh:()=>refreshEvents(ui.date,true),state:g,disconnect,dayItems,isConnected:readable,moveEvent,searchEvents,canMove:(calendarId,eventId)=>readable()&&writable().some(c=>c.id===calendarId)&&!!g.events.find(e=>e._calendarId===calendarId&&e.id===eventId&&!e.start?.date&&e.start?.dateTime&&e.end?.dateTime&&(!e.eventType||e.eventType==='default'))};
   render();
 })();

@@ -1,5 +1,5 @@
-/* Mellow v9 — compact, iPhone-first five-tab navigation.
-   Today · Tasks · Calendar · Routines · Settings. */
+/* Mellow v9 — compact, iPhone-first four-tab navigation.
+   Today · Tasks · Routines · Settings. */
 @media (max-width:700px){
   .bottomnav{
     position:fixed;
@@ -7,7 +7,7 @@
     bottom:0;
     z-index:30;
     display:grid;
-    grid-template-columns:repeat(5,minmax(0,1fr));
+    grid-template-columns:repeat(4,minmax(0,1fr));
     gap:2px;
     align-items:stretch;
     padding:5px 12px max(env(safe-area-inset-bottom),6px);

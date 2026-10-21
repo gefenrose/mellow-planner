@@ -1,0 +1,38 @@
+/* Task-list drag handles and reorder feedback. */
+.tasks-list .task.task-card[data-task-reorder-id]{
+  grid-template-columns:24px 42px minmax(0,1fr) 27px!important;
+  transition:transform 150ms ease,box-shadow 150ms ease,outline-color 150ms ease;
+}
+.main:has(.task-page) .tasks-list .task.task-card[data-task-reorder-id]>.task-reorder-grip{grid-column:1!important;grid-row:1!important}
+.main:has(.task-page) .tasks-list .task.task-card[data-task-reorder-id]>.task-emoji{grid-column:2!important;grid-row:1!important}
+.main:has(.task-page) .tasks-list .task.task-card[data-task-reorder-id]>.tasktext{grid-column:3!important;grid-row:1!important}
+.main:has(.task-page) .tasks-list .task.task-card[data-task-reorder-id]>.check{grid-column:4!important;grid-row:1!important}
+.tasks-list .task-reorder-grip{
+  display:grid;place-items:center;align-self:stretch;
+  width:24px;min-height:40px;padding:0;
+  border:0;border-radius:9px;background:transparent;color:var(--muted);
+  cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.tasks-list .task-reorder-grip:hover,
+.tasks-list .task-reorder-grip:focus-visible{background:var(--surface2);color:var(--ink)}
+.tasks-list .task-reorder-grip:active{cursor:grabbing}
+body.task-reordering{cursor:grabbing}
+.tasks-list .task.task-card.task-reorder-moving{
+  position:relative;z-index:2;opacity:.78;transform:scale(.99);
+  box-shadow:0 10px 28px rgba(46,37,54,.16)
+}
+.tasks-list .task.task-card.task-reorder-target{
+  outline:2px solid #bba6da;outline-offset:2px
+}
+body.dark .tasks-list .task.task-card.task-reorder-target{outline-color:#a78acb}
+@media(max-width:700px){
+  .tasks-list .task.task-card[data-task-reorder-id]{
+    grid-template-columns:25px 36px minmax(0,1fr) 25px!important
+  }
+  .tasks-list .task-reorder-grip{width:25px;min-height:42px}
+  .tasks-list .task-reorder-grip svg{width:15px;height:18px}
+}
+@media(prefers-reduced-motion:reduce){
+  .tasks-list .task.task-card[data-task-reorder-id]{transition:none}
+}

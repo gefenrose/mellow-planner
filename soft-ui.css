@@ -159,7 +159,7 @@ body.dark .part-pill.night,body.dark .part-section[data-part="night"] .part-pill
 .field label{font-weight:500}
 .formactions{margin-top:17px}
 .checkboxrow input,.toggle{accent-color:var(--purple)}
-.gcal-page .card,.gcal-settings-card,.gcal-guide,.gcal-today-prompt,.gcal-today-panel.card{
+.gcal-settings-card,.gcal-guide,.gcal-today-prompt,.gcal-today-panel.card{
   background:var(--surface);border-color:var(--border);border-radius:19px;box-shadow:none
 }
 .gcal-guide,.gcal-state,.gcal-error{background:var(--surface2);border-radius:15px}
@@ -516,7 +516,7 @@ body:has(.task-page) .floatadd{display:none!important}
 
 /* Shared task-card language: quiet white surfaces, soft lift, and pill controls. */
 .card,.stat,.ai-result,.routine,.gcal-event,.gcal-settings-card,
-.gcal-page .card,.gcal-today-prompt,.gcal-today-panel.card,.gcal-day-events{
+.gcal-today-prompt,.gcal-today-panel.card{
   background:var(--surface);
   border:1px solid var(--border);
   border-radius:20px;
@@ -546,7 +546,6 @@ body:has(.task-page) .floatadd{display:none!important}
 .settingsgrid>.card{padding:21px}
 .settingsgrid h3{font-size:19px}
 .gcal-guide,.notice{border:1px solid var(--border);border-radius:16px}
-.gcal-page{position:relative}
 .jump-calendar-search-header{position:absolute;inset-block-start:26px;inset-inline-end:0;margin:0}
 .jump-calendar-search-header .jump-search-icon{border-radius:50%}
 .greeting,.ai-intro{background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--card-shadow)}

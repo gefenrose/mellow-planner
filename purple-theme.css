@@ -117,7 +117,7 @@ body.dark .unified-event,body.dark .merged-calendar-block{
 .hourly-agenda .nowline,.merged-day-view .hourly-agenda .nowline{background:#9975c8}
 .hourly-agenda .nowline:before,.merged-day-view .hourly-agenda .nowline:before{background:#9975c8}
 .hourly-agenda .nowline em{background:#9975c8;color:#fff}
-.gcal-today-prompt,.gcal-today-panel,.gcal-day-events{border-color:var(--border)}
+.gcal-today-prompt,.gcal-today-panel{border-color:var(--border)}
 .gcal-event-link:hover,.choice-card:hover{background:var(--lightgreen)}
 .step-source{background:var(--lightgreen);color:var(--green)}
 .gcal-client-row input,.steps-editor input,.step-preview{background:var(--surface)}
