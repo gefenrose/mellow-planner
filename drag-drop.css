@@ -1,0 +1,115 @@
+/* Mellow v12 — grab handles, drop feedback and a temporary category palette. */
+.merged-day-view .dnd-ready{position:relative}
+.dnd-grip{
+  display:grid;place-items:center;flex-shrink:0;
+  width:29px;height:36px;min-width:29px;
+  padding:0;margin:0 1px;
+  background:transparent;color:#857598;
+  border:0;border-radius:9px;
+  cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.dnd-grip svg{width:17px;height:17px;pointer-events:none}
+.dnd-grip:hover,.dnd-grip:focus-visible{background:#f0eafa;color:#7354a5}
+.dnd-grip:active{cursor:grabbing}
+.dnd-ready .dnd-grip{order:0}
+.unified-task .dnd-grip,.unified-event .dnd-grip{margin-inline-start:-4px;margin-inline-end:1px}
+.mellow-day-block .dnd-grip{
+  width:21px;height:30px;min-width:21px;margin:0;
+  color:#756d86;flex-shrink:0;
+}
+.mellow-day-block .dnd-grip svg{width:14px;height:14px}
+.mellow-day-block .hour-info{min-width:0}
+.mellow-day-block .hour-emoji{width:23px;height:23px}
+.dnd-origin{opacity:.36!important;filter:saturate(.7)}
+.dnd-ghost{
+  display:none;position:fixed;left:-9999px;top:-9999px;z-index:1004;
+  pointer-events:none;max-width:min(275px,75vw);
+  border-radius:12px;padding:10px 14px;
+  color:#503c72;background:#f4ecff;
+  box-shadow:0 10px 32px #30223f30;
+  font-size:12px;font-weight:700;line-height:1.3;
+  border:1px solid #b3a0d6;overflow-wrap:anywhere;
+}
+.dnd-ghost-visible{display:block}
+body.dnd-active{cursor:grabbing}
+.dnd-active .part-section,
+.dnd-active [data-drop-part]{
+  transition:background-color 160ms ease,outline-color 160ms ease;
+}
+.dnd-active .part-section[data-drop-part]{
+  outline:2px dashed #bfa8de;
+  outline-offset:4px;border-radius:12px;
+}
+.dnd-active .part-section.dnd-target,
+.dnd-active [data-drop-part="other"].dnd-target{
+  outline:3px solid #9474c6;outline-offset:4px;
+  background:#f5f1fb;
+  border-radius:12px;
+}
+.dnd-active [data-drop-hours]{outline:2px dashed #bda5e1;outline-offset:0}
+.dnd-active [data-drop-hours].dnd-target{
+  background:linear-gradient(90deg,#eee6fa 0,transparent 90px);
+  outline:2px solid #9273bd;
+}
+.dnd-active .hourly-shell{scroll-behavior:auto}
+.dnd-category-dock{
+  position:fixed;
+  z-index:1002;bottom:calc(82px + env(safe-area-inset-bottom));
+  left:50%;transform:translateX(-50%) translateY(12px);
+  width:min(560px,calc(100vw - 24px));
+  display:none;
+  border:1px solid #d9d0e6;background:#ffffffee;
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  box-shadow:0 9px 28px #42375523;
+  border-radius:16px;padding:10px;
+  pointer-events:auto;
+}
+.dnd-active.dnd-task-active .dnd-category-dock{display:block;transform:translateX(-50%)}
+.dnd-dock-label{
+  display:block;text-align:center;
+  font-size:11px;color:#6a587f;font-weight:800;margin:0 0 7px;
+}
+.dnd-dock-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.dnd-category-chip{
+  border:1px solid transparent;border-radius:10px;
+  min-height:36px;padding:5px 7px;
+  font-size:12px;font-weight:700;color:#473850;
+}
+.dnd-category-chip.work{background:#eaf0ff;color:#45639b}
+.dnd-category-chip.home{background:#fff0e5;color:#945b3e}
+.dnd-category-chip.self{background:#f0e9fd;color:#6a4b9b}
+.dnd-category-chip.health{background:#e2f4eb;color:#2d7758}
+.dnd-category-chip.social{background:#ffe9ef;color:#934b69}
+.dnd-category-chip.errands{background:#fff4db;color:#81612b}
+.dnd-category-chip.dnd-target{
+  outline:3px solid #8d6dc5;
+  outline-offset:0;transform:scale(1.04);
+}
+.dnd-screenreader{
+  position:absolute!important;width:1px!important;height:1px!important;
+  padding:0!important;margin:-1px!important;overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important;
+}
+body.dark .dnd-grip{color:#c9b8de}
+body.dark .dnd-grip:hover,body.dark .dnd-grip:focus-visible{background:#463954;color:#f0eafa}
+body.dark .dnd-ghost{background:#43364e;color:#f5eafc;border-color:#8668b3}
+body.dark .dnd-category-dock{background:#30293dec;border-color:#564866}
+body.dark .dnd-dock-label{color:#e1d2ef}
+body.dark .dnd-active [data-drop-part].dnd-target{background:#443750}
+@media(max-width:700px){
+  .dnd-grip{width:34px;min-width:34px;height:41px}
+  .mellow-day-block .dnd-grip{width:29px;min-width:29px;height:34px;margin:0}
+  .mellow-day-block .hour-emoji{display:none}
+  .dnd-category-dock{bottom:calc(75px + env(safe-area-inset-bottom))}
+  .dnd-category-chip{min-height:40px}
+}
+@media(max-width:390px){
+  .dnd-dock-options{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mellow-day-block .dnd-grip{width:25px;min-width:25px}
+  .mellow-day-block .dnd-grip svg{width:13px;height:13px}
+  .mellow-day-block .hour-check{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .dnd-category-dock,.dnd-category-chip,.dnd-origin{transition:none!important}
+}
