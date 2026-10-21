@@ -148,8 +148,7 @@
       '<div class="week dayticker">'+weekDays()+'</div></div>'+legend(events)+
       '<div class="day-planner-controls"><div><span class="small subtle">'+done+' / '+tasks.length+' '+T('tasksDone')+'</span><div class="day-progress"><span style="width:'+percentage+'%"></span></div></div>'+toggle+'</div>'+
       (mode==='hours'?hourly(items):'<div class="day-sections">'+PARTS.map(part=>section(part,items)).join('')+'</div>')+
-      '<div class="day-footer"><button data-unified-add="footer" class="btn secondary">'+icon('plus',17)+' '+L('add')+'</button>'+
-      '<button class="btn ghost" data-action="nav" data-tab="ai">'+icon('sparkles',17)+' '+T('ai')+'</button></div>'+
+      '<div class="day-footer"><button data-unified-add="footer" class="btn secondary">'+icon('plus',17)+' '+L('add')+'</button>'+'</div>'+
       '<p class="footnote">'+T('appInfo')+'</p></div>';
   };
   function chooser(){
