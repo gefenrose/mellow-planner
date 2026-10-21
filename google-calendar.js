@@ -221,7 +221,9 @@
     const canWrite=writable().length>0;
     const start=Math.ceil((minNow()+15)/15)*15 % (24*60);
     const context=ui.createContext||{};
-    const time=Number.isFinite(context.start)?fmt(context.start):(ui.date===today()?fmt(start):'09:00');
+    const partTimes={morning:540,afternoon:840,evening:1080,night:1320};
+    const suggested=Number.isFinite(context.start)?context.start:partTimes[context.part];
+    const time=Number.isFinite(suggested)?fmt(suggested):(ui.date===today()?fmt(start):'09:00');
     return '<div class="modal-bg"><div class="modal" role="dialog" aria-modal="true" aria-label="'+W('newEvent')+'"><div class="modalheader"><h2>'+ico('calendar',21)+' '+W('newEvent')+'</h2><button type="button" class="iconbtn gcal-close-button" data-action="close">'+ico('plus',18)+'</button></div>'+
     '<form id="gcalEventForm" class="gcal-event-form"><div class="field full"><label for="gcalTitle">'+W('title')+'</label><input id="gcalTitle" required maxlength="160"></div>'+
     '<div class="formgrid"><div class="field"><label for="gcalDate">'+W('when')+'</label><input id="gcalDate" type="date" required value="'+esc(ui.createContext?.date||ui.date)+'"></div>'+
