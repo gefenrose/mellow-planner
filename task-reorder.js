@@ -20,8 +20,15 @@
     persist();render();document.querySelector('[data-task-reorder-id="'+CSS.escape(card.dataset.taskReorderId)+'"] .task-reorder-grip')?.focus();
   }
   function saveOrder(list){
-    const cards=cardsIn(list),ids=cards.map(card=>card.dataset.taskReorderId);
-    ids.forEach((id,index)=>{const task=db.tasks.find(item=>item.id===id);if(task)task.order=index});
+    const cards=cardsIn(list),ids=cards.map(card=>card.dataset.taskReorderId),moving=new Map(ids.map(id=>[id,db.tasks.find(item=>item.id===id)]));
+    const done=!!list.closest('.task-done-group');
+    const priority={high:0,med:1,low:2};
+    const fallback=(a,b)=>(priority[a.priority]-priority[b.priority])||(a.start??1440)-(b.start??1440)||(a.createdAt||0)-(b.createdAt||0);
+    const tasks=db.tasks.filter(task=>!!task.done===done).sort((a,b)=>
+      (Number.isFinite(a.order)||Number.isFinite(b.order)?(Number.isFinite(a.order)?a.order:Number.MAX_SAFE_INTEGER)-(Number.isFinite(b.order)?b.order:Number.MAX_SAFE_INTEGER)||fallback(a,b):fallback(a,b)));
+    const positions=tasks.map((task,index)=>moving.has(task.id)?index:-1).filter(index=>index>=0),ordered=tasks.slice();
+    positions.forEach((position,index)=>{if(moving.get(ids[index]))ordered[position]=moving.get(ids[index])});
+    ordered.forEach((task,index)=>{task.order=index});
   }
   document.addEventListener('pointerdown',event=>{
     if(event.button!==0)return;
