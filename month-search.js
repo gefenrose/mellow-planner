@@ -144,6 +144,15 @@
     if(ui.modal==='globalSearch')return searchModal();
     return prevModal();
   };
+  const searchIcon=()=>'<button class="jump-search-icon" type="button" data-planner-nav="search" aria-label="'+
+    W('searchAll')+'" title="'+W('searchAll')+'">'+glass+'</button>';
+  function insertIconInRow(html,rowClass){
+    const start=html.indexOf('<div class="'+rowClass+'">');
+    if(start<0)return html;
+    const end=html.indexOf('</div>',start);
+    if(end<0)return html;
+    return html.slice(0,end)+searchIcon()+html.slice(end);
+  }
   const prevToday=renderToday;
   renderToday=function(){
     let html=prevToday();
@@ -152,22 +161,18 @@
     if(html.includes(original)){
       html=html.replace(original,'<button class="jump-month-trigger" type="button" data-planner-nav="month" aria-label="'+W('month')+'">'+label+i('chevronDown',15)+'</button>');
     }
-    const anchor='<div class="week dayticker">';
-    if(html.includes(anchor)){
-      html=html.replace(anchor,'<div class="jump-inline-search"><button class="jump-search-trigger" type="button" data-planner-nav="search">'+glass+' '+W('searchAll')+'</button></div>'+anchor);
-    }
-    return html;
+    // One quiet icon beside the month controls, not a full-width search button.
+    return insertIconInRow(html,'day-nav-top');
   };
   const prevTasks=renderTasks;
   renderTasks=function(){
-    const html=prevTasks();
-    return html.replace('<div class="toolbar">','<div class="jump-task-search"><button type="button" data-planner-nav="search">'+glass+' '+W('searchAll')+'</button></div><div class="toolbar">');
+    // The global search covers tasks too, so avoid a second full-size search bar.
+    return insertIconInRow(prevTasks(),'sectionbar');
   };
   if(window.MellowCalendar?.renderPage){
     const prevPage=window.MellowCalendar.renderPage;
     window.MellowCalendar.renderPage=function(){
-      const html=prevPage();
-      return html.replace('<div class="gcal-toolbar">','<div class="jump-task-search"><button type="button" data-planner-nav="search">'+glass+' '+W('searchAll')+'</button></div><div class="gcal-toolbar">');
+      return insertIconInRow(prevPage(),'gcal-toolbar');
     };
   }
   function reloadList(){
