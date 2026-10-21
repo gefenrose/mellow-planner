@@ -94,7 +94,7 @@
     const isEvent=t.kind==='event',color=isEvent?t.color:null;
     const role=isEvent?L('event'):L('task');
     const label=isEvent?(t.timeLabel+' · '+t.calendarName):(fmt(t.start)+' · '+fmtLength(t.minutes));
-    const props='style="top:'+y+'px;height:'+height+'px;--lane:'+lane+';--lanes:'+lanes+(color?';--calendar-accent:'+esc(color):'')+'"';
+    const props='style="top:'+y+'px;height:'+height+'px;--lane-fraction:'+(lane/lanes).toFixed(6)+';--width-fraction:'+(1/lanes).toFixed(6)+(color?';--calendar-accent:'+esc(color):'')+'"';
     const tag=isEvent?'<span class="kind-label kind-event">'+icon('calendar',12)+' '+L('event')+'</span>':
       '<span class="kind-label kind-task">'+icon('tasks',12)+' '+L('task')+'</span>';
     const content=tag+'<strong>'+esc(t.title)+'</strong><small>'+esc(label)+'</small>';
@@ -174,7 +174,7 @@
     if(kind==='cancel'){ui.modal=null;ui.createContext=null;render();return}
     const context=ui.createContext||{date:ui.date,part:'other',start:null};
     if(kind==='task'){
-      ui.newPart=context.part;ui.editId=null;ui.modal='task';render();
+      ui.newPart=context.part;ui.editId=null;ui.stepContext=null;ui.stepDraft=null;ui.stepCandidates=[];ui.modal='task';render();
       const date=document.querySelector('#taskDate');if(date)date.value=context.date;
       if(context.start!=null){const start=document.querySelector('#taskStart');if(start)start.value=fmt(context.start)}
       document.querySelector('#taskTitle')?.focus();
