@@ -36,3 +36,5 @@ body.dark .tasks-list .task.task-card.task-reorder-target{outline-color:#a78acb}
 @media(prefers-reduced-motion:reduce){
   .tasks-list .task.task-card[data-task-reorder-id]{transition:none}
 }
+.task-priority-section.task-priority-drop-target .task-priority-tasks:not([hidden]){border-radius:18px;background:color-mix(in srgb,var(--purple) 5%,transparent)}
+body.dark .task-priority-section.task-priority-drop-target .task-priority-tasks:not([hidden]){background:color-mix(in srgb,#a78acb 9%,transparent)}
