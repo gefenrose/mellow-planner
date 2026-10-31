@@ -23,7 +23,7 @@
       cloud:'Google Cloud credentials',guide:'Google setup guide',
       test:'If the consent screen is in Testing, add your Google account as a test user. Calendar access may require verification if published broadly.',
       noPassword:'Google handles sign-in. Mellow never asks for your password, stores no Google access token, and does not upload your events to Mellow servers.',
-      privacy:'Calendar data stays in this browser session. Disconnecting leaves your Mellow tasks untouched.',
+      privacy:'Linked task details are saved on this device; other calendar events stay in this browser session. Disconnecting leaves your Mellow tasks untouched.',
       refresh:'Refresh events',newEvent:'New Google event',title:'Event name',when:'Date',at:'Starts at',duration:'Duration (minutes)',
       location:'Location (optional)',description:'Notes (optional)',save:'Create Google event',chooseCalendar:'Save events to',visible:'Visible calendars',
       shown:'Show',hidden:'Hide',none:'No Google events for this day',viewEvent:'Open in Google Calendar',
@@ -32,7 +32,7 @@
       busy:'Working…',loadFailed:'Could not load calendar events. Try reconnecting.',
       authFailed:'Google authorization failed. Check OAuth origin and test-user settings.',
       popup:'Google sign-in is unavailable. Check your connection or browser popup settings.',
-      calendarMissing:'Choose a calendar you can edit.',notSaved:'This event is in Google Calendar; Mellow does not automatically sync later changes.',
+      calendarMissing:'Choose a calendar you can edit.',notSaved:'This event is in Google Calendar; linked task changes sync while Mellow is open and connected.',
       primary:'Primary',readOnly:'View only',events:'Google events',timed:'Timed events',allDay:'All-day',
       noWritable:'You need a calendar with editing permission to create events.',
       account:'Your calendar connection',notAutomatic:'Connection lasts for the current browser session. Reconnect after reloading.',
@@ -52,7 +52,7 @@
       cloud:'פרטי ההתחברות ב-Google Cloud',guide:'מדריך הגדרה של Google',
       test:'אם מסך ההסכמה נמצא במצב Testing, יש להוסיף את חשבון Google לרשימת משתמשי הבדיקה. לשימוש ציבורי נרחב עשוי להידרש תהליך אימות.',
       noPassword:'ההתחברות מתבצעת דרך Google. Mellow לא מבקשת סיסמה ולא שומרת אסימוני גישה או מעבירה אירועים לשרתים שלה.',
-      privacy:'פרטי האירועים זמינים בזיכרון הדפדפן בלבד. ניתוק Google לא מוחק משימות ב-Mellow.',
+      privacy:'פרטי משימות מקושרות נשמרים במכשיר; יתר האירועים נשמרים בזיכרון הדפדפן בלבד. ניתוק Google לא מוחק משימות ב-Mellow.',
       refresh:'רענון אירועים',newEvent:'אירוע חדש ב-Google',title:'שם האירוע',when:'תאריך',at:'שעת התחלה',duration:'משך בדקות',
       location:'מיקום (לא חובה)',description:'הערות (לא חובה)',save:'יצירת אירוע',chooseCalendar:'שמירה ביומן',visible:'יומנים מוצגים',
       shown:'הצגה',hidden:'הסתרה',none:'אין אירועים ביומן ביום הזה',viewEvent:'פתיחת האירוע ב-Google',
@@ -61,7 +61,7 @@
       busy:'בביצוע…',loadFailed:'לא ניתן לטעון אירועים. כדאי להתחבר מחדש.',
       authFailed:'ההרשאה נדחתה. יש לבדוק את כתובת האתר ומשתמשי הבדיקה בהגדרות OAuth.',
       popup:'לא ניתן להיכנס ל-Google. כדאי לבדוק את החיבור ואת הגדרות החלוניות.',
-      calendarMissing:'צריך לבחור יומן שניתן לערוך.',notSaved:'האירוע נוסף ל-Google. שינויים עתידיים ב-Mellow אינם מתעדכנים אוטומטית ביומן.',
+      calendarMissing:'צריך לבחור יומן שניתן לערוך.',notSaved:'האירוע נוסף ל-Google. שינויים במשימה המקושרת מסתנכרנים כשהאפליקציה פתוחה ומחוברת.',
       primary:'ראשי',readOnly:'לצפייה בלבד',events:'אירועים מ-Google',timed:'אירועים עם שעה',allDay:'אירועים לאורך היום',
       noWritable:'כדי ליצור אירועים יש צורך ביומן עם הרשאות עריכה.',
       account:'חיבור ליומן',notAutomatic:'החיבור תקף לסשן הדפדפן הנוכחי. לאחר טעינה מחדש צריך להתחבר שוב.',
@@ -108,7 +108,7 @@
     g.writeCalendar=id;localStorage.setItem(KEY_WRITE,id);
   }
   function isAllDay(ev){return !!ev.start?.date}
-  function dayEvents(d){if(g.loadedDate!==d)return [];return g.events.slice().sort((a,b)=>{
+  function dayEvents(d){if(g.loadedDate!==d)return [];return g.events.filter(e=>!db.tasks.some(t=>t.googleCalendar?.eventId===e.id&&t.googleCalendar?.calendarId===e._calendarId)).sort((a,b)=>{
       const sa=isAllDay(a)?'':(a.start?.dateTime||''),sb=isAllDay(b)?'':(b.start?.dateTime||'');
       return Number(!!sa)-Number(!!sb)||sa.localeCompare(sb);
     });
@@ -269,19 +269,19 @@
     if(token&&window.google?.accounts?.oauth2?.revoke)try{window.google.accounts.oauth2.revoke(token,()=>{})}catch{}
     g.error='';render();
   }
-  async function request(path,method='GET',body){
+  async function request(path,method='GET',body,etag){
     if(!readable()){g.token=null;throw Error(W('expired'))}
     const resp=await fetch(API+path,{
-      method,headers:{Authorization:'Bearer '+g.token,...(body?{'Content-Type':'application/json'}:{})},
+      method,headers:{Authorization:'Bearer '+g.token,...(etag?{'If-Match':etag}:{}),...(body?{'Content-Type':'application/json'}:{})},
       ...(body?{body:JSON.stringify(body)}:{})
     });
     if(resp.status===401){g.token=null;g.events=[];g.calendars=[];g.expiresAt=0;throw Error(W('expired'))}
     if(!resp.ok){
       let message='HTTP '+resp.status;
       try{const parsed=await resp.json();message=String(parsed.error?.message||message).slice(0,250)}catch{}
-      throw Error(message);
+      throw Object.assign(Error(message),{status:resp.status});
     }
-    return resp.json();
+    return resp.status===204?null:resp.json();
   }
   async function fetchCalendarList(){
     let items=[],page='';
@@ -303,6 +303,7 @@
   async function refreshEvents(date=ui.date,force=false){
     if(!readable()||!g.calendars.length)return;
     if(!force&&g.loadedDate===date&&!g.error)return;
+    if(!await syncLinkedTasks())return;
     const requestId=++g.requestId;
     g.loading=true;g.error='';
     if(!ui.modal)render();
@@ -334,6 +335,20 @@
       if(requestId===g.requestId){g.loading=false;if(!ui.modal)render()}
     }
   }
+  async function syncLinkedTasks(){
+    try{await window.MellowCalendarSync.sync({request,connected:readable,
+      hasCalendar:id=>g.calendars.some(c=>c.id===id),canWrite:id=>writable().some(c=>c.id===id),
+      readOnly:()=>W('calendarMissing'),
+      conflict:()=>toast(db.settings.lang==='he'?'שינוי מקומי נשמר כמשימה נפרדת כדי למנוע אובדן מידע.':'Local changes kept as a separate task to avoid losing information.')
+    });return true}catch(e){g.error=W('errorPrefix')+' '+e.message;toast(g.error);return false}
+  }
+  let syncTimer;
+  function scheduleSync(){clearTimeout(syncTimer);syncTimer=setTimeout(()=>{if(readable()&&!g.loading&&!g.busy&&!ui.modal)void refreshEvents(ui.date,true)},1000)}
+  document.addEventListener('submit',scheduleSync);
+  document.addEventListener('click',scheduleSync);
+  document.addEventListener('pointerup',scheduleSync);
+  setInterval(()=>{if(readable()&&!g.loading&&!g.busy&&!ui.modal&&!document.hidden)void refreshEvents(ui.date,true)},30000);
+  window.addEventListener('focus',()=>{if(readable()&&!g.loading&&!g.busy&&!ui.modal)void refreshEvents(ui.date,true)});
   async function createEvent({summary,date,time,minutes,calendarId,description='',place=''},task){
     if(g.busy)return;
     const start=localDateTime(date,time);
@@ -347,7 +362,7 @@
         start:{dateTime:start.toISOString()},end:{dateTime:end.toISOString()}
       });
       if(task&&response.id){
-        task.googleCalendar={eventId:response.id,calendarId,htmlLink:safeUrl(response.htmlLink)||'',syncedAt:Date.now()};
+        task.googleCalendar={eventId:response.id,calendarId,htmlLink:safeUrl(response.htmlLink)||'',syncedAt:Date.now(),syncBase:window.MellowCalendarSync.snapshot(task)};
         persist();
       }
       ui.modal=null;g.error='';toast(task?W('taskSent'):W('createSuccess'));render();

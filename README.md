@@ -33,3 +33,9 @@ Offline mode does not transmit task text. When Gemini mode is selected, the subm
 ## Developer notes
 
 This app has no build dependencies: `index.html`, `styles.css`, `app.js`, `sw.js`, `manifest.webmanifest`, and `assets/`. Static hosting only. No third-party JavaScript runtime dependencies. Interface icons come from the locally bundled Lucide Static SVG sprite (`lucide-static` 1.61.0, ISC license; see `assets/lucide/`). Interactions were exercised in a headless browser; Gemini was not tested with a live API key.
+
+## Linked Google Calendar synchronization
+
+Linked timed tasks synchronize title, notes, date, start time and duration in both directions. Local edits sync shortly after interactions; remote changes are checked every 30 seconds while the page is visible and connected, on focus, and on refresh. Individual linked-task deletion queues a durable Google deletion; cancelled Google events remove unchanged linked tasks. Removing a task from the schedule removes its Google event and retains the local task. Completion remains local.
+
+Google authentication is session-only: reconnect after reload or token expiry. Pending local edits/deletions survive offline periods. No background server or closed-app synchronization is provided. Concurrent edits preserve the local version as a separate unlinked task and accept the Google version on the linked task. Existing links without a synchronization baseline are reconciled conservatively, keeping a separate local copy if values differ. Google all-day conversions retain the task as an unlinked copy. Conditional writes use ETags; failed requests retain pending work. Bulk erase/remove-samples actions intentionally do not delete Google events.
