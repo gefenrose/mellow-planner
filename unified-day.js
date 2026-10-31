@@ -178,25 +178,30 @@
     const timed=items.filter(t=>t.start!=null&&!(t.kind==='event'&&t.allDay)&&Number.isFinite(t.start)&&t.start>=0&&t.start<1440);
     const allDay=items.filter(t=>t.kind==='event'&&t.allDay);
     const flexible=items.filter(t=>t.kind==='task'&&t.start==null);
-    const earliest=timed.length?Math.floor(Math.min(...timed.map(t=>t.start))/60):6;
-    const first=timed.length?Math.max(0,ui.date===today()?Math.min(earliest,Math.floor(minNow()/60)):earliest):6;
+    const range=window.MellowDayHours?.get?.()||{start:6,end:24};
+    const first=range.start,last=range.end;
+    const visible=timed.filter(t=>t.start>=first*60&&t.start<last*60);
+    const outside=timed.filter(t=>t.start<first*60||t.start>=last*60);
     const px=(window.innerWidth||390)<=700?74:88;
     let hours='';
-    for(let h=first;h<24;h++)hours+='<div class="hour" style="height:'+px+'px"><span>'+fmt(h*60)+'</span>'+
+    for(let h=first;h<last;h++)hours+='<div class="hour" style="height:'+px+'px"><span>'+fmt(h*60)+'</span>'+
       '<button class="hour-add" data-unified-add="hour" data-start="'+h*60+'" aria-label="'+L('add')+' '+fmt(h*60)+'">'+icon('plus',16)+'</button></div>';
-    const laidOut=allocate(timed,px);
+    const laidOut=allocate(visible,px);
     const blocks=laidOut.map(t=>hourBlock(t,first,px)).join('');
-    const totalHeight=Math.max((24-first)*px+5,...laidOut.map(t=>(t.displayTop??t.item.start*px/60)-first*px+t.height+16));
+    const totalHeight=Math.max((last-first)*px+5,...laidOut.map(t=>(t.displayTop??t.item.start*px/60)-first*px+t.height+16));
     const now=ui.date===today()?minNow():null;
-    const marker=now!=null&&now>=first*60?'<div class="nowline" style="top:'+((now-first*60)/60*px)+'px"><em>'+L('now')+'</em></div>':'';
+    const marker=now!=null&&now>=first*60&&now<last*60?'<div class="nowline" style="top:'+((now-first*60)/60*px)+'px"><em>'+L('now')+'</em></div>':'';
     return '<div class="hour-section">'+
       (allDay.length?'<section class="merged-all-day card"><div class="sectionbar"><h3>'+icon('calendar',17)+' '+L('dayEvents')+'</h3></div>'+allDay.map(eventVisual).join('')+'</section>':'')+
       '<div class="flex-header merged-anytime-heading"><h3>'+icon('clock',16)+' '+L('flexible')+' ('+flexible.length+')</h3><button class="part-add" data-unified-add="part" data-part="other">'+icon('plus',18)+'</button></div>'+
       '<div class="daytask-list card" data-drop-part="other">'+(flexible.length?flexible.map(taskVisual).join(''):'')+
       '<button class="part-empty" data-unified-add="part" data-part="other"><span>'+L('empty_other')+'</span><span class="part-empty-add">'+icon('plus',16)+'</span></button></div>'+
-      '<div class="sectionbar merged-planned-heading"><h3>'+icon('clock',16)+' '+L('scheduled')+' ('+timed.length+')</h3></div>'+
-      '<div class="card hourly-shell"><div class="agenda hourly-agenda merged-hourly-agenda" data-drop-hours="true" data-first-minute="'+first*60+'" data-hour-px="'+px+'" style="height:'+totalHeight+'px">'+hours+
-      '<div class="merged-hourly-overlay">'+blocks+'</div>'+marker+'</div></div></div>';
+      '<div class="sectionbar merged-planned-heading"><h3>'+icon('clock',16)+' '+L('scheduled')+' ('+visible.length+')</h3></div>'+
+      (window.MellowDayHours?.controls?.('hourly')||'')+
+      '<div class="card hourly-shell"><div class="agenda hourly-agenda merged-hourly-agenda" data-drop-hours="true" data-first-minute="'+first*60+'" data-last-minute="'+last*60+'" data-hour-px="'+px+'" style="height:'+totalHeight+'px">'+hours+
+      '<div class="merged-hourly-overlay">'+blocks+'</div>'+marker+
+      '<div class="timeline-end-line" style="top:'+((last-first)*px)+'px"><span>'+(last===24?'24:00':fmt(last*60))+'</span></div></div></div>'+
+      (outside.length?'<section class="day-sections outside-hours"><div class="outside-hours-head"><h3>'+icon('clock',16)+' '+(window.MellowDayHours?.label?.('outside')||'Outside chosen hours')+' ('+outside.length+')</h3><p>'+(window.MellowDayHours?.label?.('outsideHint')||'These items are still scheduled.')+'</p></div><div class="part-section"><div class="part-list">'+outside.sort(sorted).map(itemVisual).join('')+'</div></div></section>':'')+'</div>';
   }
   function legend(events){
     const c=window.MellowCalendar;
