@@ -187,10 +187,11 @@
       const rect=timeline.getBoundingClientRect();
       if(x<rect.left||x>rect.right||y<rect.top||y>rect.bottom)return null;
       const first=Number(timeline.dataset.firstMinute||0),px=Number(timeline.dataset.hourPx||61);
+      const last=Number(timeline.dataset.lastMinute||1440);
       const duration=active.kind==='task'?Math.min(480,active.minutes||25):Math.min(1440,active.minutes||25);
-      const max=active.kind==='task'?Math.max(0,1440-duration):1435;
+      const maxStart=active.kind==='task'?Math.max(first,last-duration):Math.max(first,last-15);
       const raw=first+(y-rect.top)*60/px;
-      const minute=clamp(Math.round(raw/15)*15,0,max);
+      const minute=clamp(Math.round(raw/15)*15,first,maxStart);
       return {kind:'hour',minute,element:timeline};
     }
     return null;
