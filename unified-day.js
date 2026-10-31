@@ -197,7 +197,6 @@
       '<div class="daytask-list card" data-drop-part="other">'+(flexible.length?flexible.map(taskVisual).join(''):'')+
       '<button class="part-empty" data-unified-add="part" data-part="other"><span>'+L('empty_other')+'</span><span class="part-empty-add">'+icon('plus',16)+'</span></button></div>'+
       '<div class="sectionbar merged-planned-heading"><h3>'+icon('clock',16)+' '+L('scheduled')+' ('+visible.length+')</h3></div>'+
-      (window.MellowDayHours?.controls?.('hourly')||'')+
       '<div class="card hourly-shell"><div class="agenda hourly-agenda merged-hourly-agenda" data-drop-hours="true" data-first-minute="'+first*60+'" data-last-minute="'+last*60+'" data-hour-px="'+px+'" style="height:'+totalHeight+'px">'+hours+
       '<div class="merged-hourly-overlay">'+blocks+'</div>'+marker+
       '<div class="timeline-end-line" style="top:'+((last-first)*px)+'px"><span>'+(last===24?'24:00':fmt(last*60))+'</span></div></div></div>'+

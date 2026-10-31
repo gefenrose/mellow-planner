@@ -2,8 +2,8 @@
 (() => {
   const language=()=>db.settings.lang==='he'?'he':'en';
   const copy={
-    en:{title:'Your day, your hours',description:'Choose the hours shown in the Hourly timeline. Tasks and Google events outside this range stay visible below the timeline.',start:'Day starts',end:'Day ends',range:'Timeline hours',ends:'End of displayed day',midnight:'Midnight (24:00)',outside:'Outside chosen hours',outsideHint:'These items are still scheduled. Change the hours above to see them on the timeline.',invalid:'The end time must be after the start time.',saved:'Timeline hours saved',small:'Change hours'},
-    he:{title:'השעות של היום שלך',description:'בחרי אילו שעות יוצגו בציר הזמן. משימות ואירועי Google מחוץ לטווח יישארו גלויים מתחתיו.',start:'תחילת היום',end:'סוף היום',range:'שעות ציר הזמן',ends:'סיום התצוגה',midnight:'חצות (24:00)',outside:'מחוץ לשעות שנבחרו',outsideHint:'הפריטים עדיין מתוזמנים. אפשר לשנות את השעות למעלה כדי להציג אותם בציר הזמן.',invalid:'שעת הסיום חייבת להיות מאוחרת משעת ההתחלה.',saved:'שעות ציר הזמן נשמרו',small:'שינוי שעות'}
+    en:{title:'Your day, your hours',description:'Choose the hours shown in the Hourly timeline. Tasks and Google events outside this range stay visible below the timeline.',start:'Day starts',end:'Day ends',range:'Timeline hours',ends:'End of displayed day',midnight:'Midnight (24:00)',outside:'Outside chosen hours',outsideHint:'These items are still scheduled. Change the hours in Settings to see them on the timeline.',invalid:'The end time must be after the start time.',saved:'Timeline hours saved',small:'Change hours'},
+    he:{title:'השעות של היום שלך',description:'בחרי אילו שעות יוצגו בציר הזמן. משימות ואירועי Google מחוץ לטווח יישארו גלויים מתחתיו.',start:'תחילת היום',end:'סוף היום',range:'שעות ציר הזמן',ends:'סיום התצוגה',midnight:'חצות (24:00)',outside:'מחוץ לשעות שנבחרו',outsideHint:'הפריטים עדיין מתוזמנים. אפשר לשנות את השעות בהגדרות כדי להציג אותם בציר הזמן.',invalid:'שעת הסיום חייבת להיות מאוחרת משעת ההתחלה.',saved:'שעות ציר הזמן נשמרו',small:'שינוי שעות'}
   };
   const L=k=>copy[language()][k]||k;
   const hour=n=>String(n).padStart(2,'0')+':00';
