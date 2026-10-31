@@ -37,16 +37,16 @@
     const events=findEvents();
     return {items:[...planned,...inbox,...events],tasks:planned,events};
   }
-  function taskVisual(t){
+  function taskVisual(t,showTime=true){
     const time=t.start!=null?fmt(t.start)+' · '+fmtLength(t.minutes):fmtLength(t.minutes);
     return '<div class="daytask unified-item unified-task '+(t.done?'completed':'')+'" data-drag-item="task" data-drag-id="'+esc(t.id)+'">'+
       '<button class="daytask-icon '+esc(t.category)+'" data-action="edit" data-id="'+esc(t.id)+'" aria-label="'+esc(L('task')+' '+t.title)+'">'+esc(t.emoji||'🌿')+'</button>'+
-      '<button class="daytask-body" data-action="edit" data-id="'+esc(t.id)+'"><strong>'+esc(t.title)+'</strong><small>'+esc(time)+'</small></button>'+
+      '<button class="daytask-body" data-action="edit" data-id="'+esc(t.id)+'"><strong>'+esc(t.title)+'</strong>'+(showTime?'<small>'+esc(time)+'</small>':'')+'</button>'+
       '<button class="check daytask-check '+(t.done?'checked':'')+'" data-action="done" data-id="'+esc(t.id)+'" aria-label="'+esc(t.title)+'">'+(t.done?icon('check',15):'')+'</button></div>';
   }
-  function eventVisual(e){
+  function eventVisual(e,showTime=true){
     const label=e.allDay?L('allDay'):e.timeLabel;
-    const text='<strong>'+esc(e.title)+'</strong><small>'+esc(label)+'</small>';
+    const text='<strong>'+esc(e.title)+'</strong>'+(showTime?'<small>'+esc(label)+'</small>':'');
     const detail=e.href?'<a class="daytask-body event-anchor" href="'+esc(e.href)+'" target="_blank" rel="noopener noreferrer" aria-label="'+esc(L('event')+': '+e.title)+'">'+text+'</a>':
       '<div class="daytask-body">'+text+'</div>';
     return '<div class="daytask unified-item unified-event" data-drag-item="event" data-drag-id="'+esc(e.id)+'" data-calendar-id="'+esc(e.calendarId)+'" data-all-day="'+e.allDay+'" style="--calendar-accent:'+esc(e.color)+'">'+
@@ -174,6 +174,13 @@
       (isEvent?'':'<button class="check hour-check '+(t.done?'checked':'')+'" data-action="done" data-id="'+esc(t.id)+'" aria-label="'+esc(t.title)+'">'+(t.done?icon('check',14):'')+'</button>')+
       '</div>';
   }
+  function gapDuration(minutes){
+    const hours=Math.floor(minutes/60),rest=minutes%60;
+    if(db.settings.lang!=='he')return hours?(hours+' '+(hours===1?'hour':'hours')+(rest?' and '+rest+' minutes':'')):minutes+' minutes';
+    if(!hours)return minutes+' דקות';
+    const label=hours===1?'שעה':hours===2?'שעתיים':hours+' שעות';
+    return label+(rest?' ו־'+rest+' דקות':'');
+  }
   function hourly(items){
     const timed=items.filter(t=>t.start!=null&&!(t.kind==='event'&&t.allDay)&&Number.isFinite(t.start)&&t.start>=0&&t.start<1440);
     const allDay=items.filter(t=>t.kind==='event'&&t.allDay);
@@ -188,16 +195,16 @@
       const end=t.start+Math.max(0,Number(t.minutes)||0);
       const gap=busyEnd==null?null:t.start-busyEnd;
       const he=db.settings.lang==='he';
-      const label=gap>0?(he?fmtLength(gap)+' זמן פנוי':fmtLength(gap)+' free'):
+      const label=gap>0?(he?gapDuration(gap)+' זמן פנוי':gapDuration(gap)+' free'):
         gap<0?(he?'חפיפה עם הפריט הקודם':'Overlaps an earlier item'):(he?'מיד לאחר מכן':'Immediately after');
       const connector=gap==null?'':'<li class="sequence-gap"'+(gap>0?' data-sequence-minute="'+busyEnd+'" data-sequence-end="'+t.start+'"':'')+'><span class="sequence-rail" aria-hidden="true"></span><span>'+esc(label)+'</span></li>';
       busyEnd=Math.max(busyEnd??0,end);
-      return connector+'<li class="sequence-row" data-sequence-minute="'+t.start+'"><div class="sequence-time"><time>'+fmt(t.start)+'</time><span>'+(end===1440?'24:00':fmt(end))+'</span></div><div class="sequence-card">'+itemVisual(t)+'</div></li>';
+      return connector+'<li class="sequence-row" data-sequence-minute="'+t.start+'"><div class="sequence-time"><time>'+fmt(t.start)+'</time><span>'+(end===1440?'24:00':fmt(end))+'</span></div><div class="sequence-card">'+(t.kind==='event'?eventVisual(t,false):taskVisual(t,false))+'</div></li>';
     }).join('');
     return '<div class="hour-section">'+
-      (allDay.length?'<section class="merged-all-day card"><div class="sectionbar"><h3>'+icon('calendar',17)+' '+L('dayEvents')+'</h3></div>'+allDay.map(eventVisual).join('')+'</section>':'')+
+      (allDay.length?'<section class="merged-all-day card"><div class="sectionbar"><h3>'+icon('calendar',17)+' '+L('dayEvents')+'</h3></div>'+allDay.map(t=>eventVisual(t)).join('')+'</section>':'')+
       '<div class="flex-header merged-anytime-heading"><h3>'+icon('clock',16)+' '+L('flexible')+' ('+flexible.length+')</h3><button class="part-add" data-unified-add="part" data-part="other">'+icon('plus',18)+'</button></div>'+
-      '<div class="daytask-list card" data-drop-part="other">'+(flexible.length?flexible.map(taskVisual).join(''):'')+
+      '<div class="daytask-list card" data-drop-part="other">'+(flexible.length?flexible.map(t=>taskVisual(t)).join(''):'')+
       '<button class="part-empty" data-unified-add="part" data-part="other"><span>'+L('empty_other')+'</span><span class="part-empty-add">'+icon('plus',16)+'</span></button></div>'+
       '<div class="sectionbar merged-planned-heading"><h3>'+icon('clock',16)+' '+L('scheduled')+' ('+visible.length+')</h3></div>'+
       '<ol class="day-sequence" data-sequence-root="true" data-first-minute="'+first*60+'" data-last-minute="'+last*60+'">'+sequence+'</ol>'+
