@@ -41,7 +41,7 @@ function samples(){const d=today();return [{title:'Slow morning & coffee',catego
 function seed(){if(db.seeded)return;db.tasks=samples();db.routines=[{id:uid(),name:'Gentle morning',emoji:'☀️',time:'08:30',days:[1,2,3,4,5],steps:[{id:uid(),title:'Drink some water',minutes:5},{id:uid(),title:'Freshen up',minutes:10},{id:uid(),title:'Breakfast & a moment of quiet',minutes:20}],demo:true}];db.seeded=true;persist()}
 seed();
 const findTask=id=>db.tasks.find(t=>t.id===id);
-// Localize only untouched built-in sample text; user-authored routines stay as entered.
+// Translate the known preset labels in either direction, including saved copies.
 const routineSampleCopy={
   'Gentle morning':'בוקר נעים',
   'Drink some water':'שתיית מים',
@@ -49,8 +49,11 @@ const routineSampleCopy={
   'Breakfast & a moment of quiet':'ארוחת בוקר ורגע של שקט'
 };
 function localizedRoutine(r){
-  if(!r?.demo)return r;
-  const translate=text=>db.settings.lang==='he'?(routineSampleCopy[text]||text):text;
+  if(!r)return r;
+  const translate=text=>{
+    const pair=Object.entries(routineSampleCopy).find(([en,he])=>text===en||text===he);
+    return pair?pair[db.settings.lang==='he'?1:0]:text;
+  };
   return {...r,name:translate(r.name),steps:r.steps.map(s=>({...s,title:translate(s.title)}))};
 }
 const findRoutine=id=>localizedRoutine(db.routines.find(r=>r.id===id));
