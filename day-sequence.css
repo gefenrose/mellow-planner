@@ -1,0 +1,16 @@
+/* Content-sized timeline, with logical properties for Hebrew and English. */
+.day-sequence{list-style:none;margin:0;padding:8px 0 0;--time-column:70px;--sequence-gap:18px}
+.sequence-row{display:grid;grid-template-columns:var(--time-column) minmax(0,1fr);gap:var(--sequence-gap);align-items:center;position:relative}
+.sequence-time{display:flex;flex-direction:column;align-items:center;gap:5px;font-variant-numeric:tabular-nums;direction:ltr;color:var(--ink);font-size:17px;font-weight:700}
+.sequence-time>span{font-size:13px;color:var(--muted);font-weight:400}
+.sequence-card{min-width:0;border:1px solid var(--border);border-radius:20px;background:var(--surface);padding:10px 15px;box-shadow:0 3px 12px #6e538508}
+.sequence-card .daytask{margin:0!important;border:0!important;min-height:66px!important;padding:5px 0!important;background:transparent!important}
+.sequence-card .daytask-body{min-width:0;white-space:normal!important}
+.sequence-card .daytask-body strong{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:anywhere;display:block!important;-webkit-line-clamp:unset!important;font-size:17px;line-height:1.5}
+.sequence-card .daytask-body small{font-size:14px;line-height:1.5}
+.sequence-gap{display:grid;grid-template-columns:var(--time-column) minmax(0,1fr);gap:var(--sequence-gap);align-items:center;min-height:62px;color:var(--muted);font-size:14px;position:relative}
+.sequence-rail{height:100%;min-height:62px;position:relative}
+.sequence-rail:after{content:'';position:absolute;inset-block:8px;inset-inline-start:50%;border-inline-start:2px dashed #c9bdd8}
+.sequence-add{margin:20px 0;width:100%}
+.sequence-row.dnd-drop-target .sequence-card,.sequence-gap.dnd-drop-target{outline:2px dashed var(--purple);outline-offset:3px}
+@media(max-width:600px){.day-sequence{--time-column:52px;--sequence-gap:10px}.sequence-card{padding:8px 10px;border-radius:16px}.sequence-time{font-size:15px}.sequence-card .daytask-body strong{font-size:16px}.sequence-gap{font-size:13px}}

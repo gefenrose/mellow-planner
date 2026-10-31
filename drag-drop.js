@@ -139,6 +139,14 @@
     }
     const timeline=target.element;
     if(!timeline){hideTimePreview();return}
+    if(timeline.matches('[data-sequence-minute],[data-sequence-root]')){
+      timeBadge.textContent=timeLabel(target.minute);
+      const rect=timeline.getBoundingClientRect();
+      timeBadge.style.left=clamp((active.x??rect.left)+16,8,window.innerWidth-90)+'px';
+      timeBadge.style.top=clamp((active.y??rect.top)-60,8,window.innerHeight-44)+'px';
+      timeBadge.classList.add('dnd-time-badge-visible');
+      timeGuide.classList.remove('dnd-time-guide-visible');return;
+    }
     if(timeGuide.parentNode!==timeline)timeline.appendChild(timeGuide);
     const minute=target.minute,first=Number(timeline.dataset.firstMinute||0);
     const px=Number(timeline.dataset.hourPx||61);
@@ -181,6 +189,15 @@
       const part=partEl.dataset.dropPart;
       if(active.kind==='event'&&part==='other')return null;
       return {kind:'part',part,element:partEl};
+    }
+    const sequence=el.closest('[data-sequence-minute]');
+    if(sequence){
+      const root=sequence.closest('[data-sequence-root]'),rect=sequence.getBoundingClientRect();
+      const start=Number(sequence.dataset.sequenceMinute),end=Number(sequence.dataset.sequenceEnd??start);
+      const raw=start+(end-start)*clamp((y-rect.top)/rect.height,0,1);
+      const first=Number(root.dataset.firstMinute),last=Number(root.dataset.lastMinute);
+      const latest=Math.max(first,Math.floor((last-(active.kind==='task'?(active.minutes||25):15))/15)*15);
+      return {kind:'hour',minute:clamp(Math.round(raw/15)*15,first,latest),element:sequence};
     }
     const timeline=el.closest('[data-drop-hours]')||document.querySelector('.merged-hourly-agenda[data-drop-hours]');
     if(timeline){
@@ -366,7 +383,7 @@
     } else if(keyboard.mode==='category'){
       t={kind:'category',category:CATS[keyboard.index],element:categoryDock?.querySelector('[data-drop-category="'+CATS[keyboard.index]+'"]')};
     } else {
-      t={kind:'hour',minute:keyboard.index*15,element:document.querySelector('[data-drop-hours]')};
+      t={kind:'hour',minute:keyboard.index*15,element:document.querySelector('[data-drop-hours],[data-sequence-root]')};
     }
     showTarget(t);
   }

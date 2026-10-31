@@ -11,7 +11,7 @@
       refresh:'Refresh',noEvent:'No calendar events',synced:'Linked to Google',legend:'In your plan',
       needGoogle:'Connect Google Calendar first to create an event.',
       linked:'Google linked',other:'Anytime',morning:'Morning',afternoon:'Afternoon',evening:'Evening',night:'Night',
-      partsView:'Day sections',hoursView:'Hourly',now:'Now',noTasks:'Add a task or event',dayEvents:'All-day events',
+      partsView:'Day sections',hoursView:'Timeline',now:'Now',noTasks:'Add a task or event',dayEvents:'All-day events',
       add:'Add',none:'Your day has room to breathe',calInfo:'Google events appear here once connected',empty_other:'Anytime today works',empty_morning:'A little room for the morning',empty_afternoon:'Leave a little space',empty_evening:'End the day your way',
       flexible:'Anytime',inbox:'Inbox'},
     he:{task:'משימה',event:'אירוע Google',allDay:'כל היום',scheduled:'מתוכנן',anytime:'בכל שעה',untimed:'ללא שעה',
@@ -22,7 +22,7 @@
       refresh:'רענון',noEvent:'אין אירועים ביומן',synced:'מקושר ליומן Google',legend:'בתוכנית שלך',
       needGoogle:'יש להתחבר ל-Google Calendar כדי ליצור אירוע.',
       linked:'מקושר ל-Google',other:'בכל שעה',morning:'בוקר',afternoon:'צהריים',evening:'ערב',night:'לילה',
-      partsView:'חלקי היום',hoursView:'לפי שעות',now:'עכשיו',noTasks:'הוספת משימה או אירוע',dayEvents:'אירועים לכל היום',
+      partsView:'חלקי היום',hoursView:'רצף היום',now:'עכשיו',noTasks:'הוספת משימה או אירוע',dayEvents:'אירועים לכל היום',
       add:'הוספה',none:'יש לך זמן פנוי היום',calInfo:'אירועי Google יופיעו כאן אחרי התחברות',empty_other:'יש מקום לכל מה שיתאים',empty_morning:'להתחיל את הבוקר בנחת',empty_afternoon:'להשאיר קצת מקום',empty_evening:'לסיים את היום בדרך שלך',
       flexible:'בכל שעה',inbox:'תיבת המשימות'}};
   const L=k=>tr[db.settings.lang==='he'?'he':'en'][k]||T(k);
@@ -182,24 +182,26 @@
     const first=range.start,last=range.end;
     const visible=timed.filter(t=>t.start>=first*60&&t.start<last*60);
     const outside=timed.filter(t=>t.start<first*60||t.start>=last*60);
-    const px=(window.innerWidth||390)<=700?74:88;
-    let hours='';
-    for(let h=first;h<last;h++)hours+='<div class="hour" style="height:'+px+'px"><span>'+fmt(h*60)+'</span>'+
-      '<button class="hour-add" data-unified-add="hour" data-start="'+h*60+'" aria-label="'+L('add')+' '+fmt(h*60)+'">'+icon('plus',16)+'</button></div>';
-    const laidOut=allocate(visible,px);
-    const blocks=laidOut.map(t=>hourBlock(t,first,px)).join('');
-    const totalHeight=Math.max((last-first)*px+5,...laidOut.map(t=>(t.displayTop??t.item.start*px/60)-first*px+t.height+16));
-    const now=ui.date===today()?minNow():null;
-    const marker=now!=null&&now>=first*60&&now<last*60?'<div class="nowline" style="top:'+((now-first*60)/60*px)+'px"><em>'+L('now')+'</em></div>':'';
+    let busyEnd=null;
+    const ordered=visible.slice().sort(sorted);
+    const sequence=ordered.map(t=>{
+      const end=t.start+Math.max(0,Number(t.minutes)||0);
+      const gap=busyEnd==null?null:t.start-busyEnd;
+      const he=db.settings.lang==='he';
+      const label=gap>0?(he?fmtLength(gap)+' זמן פנוי':fmtLength(gap)+' free'):
+        gap<0?(he?'חפיפה עם הפריט הקודם':'Overlaps an earlier item'):(he?'מיד לאחר מכן':'Immediately after');
+      const connector=gap==null?'':'<li class="sequence-gap"'+(gap>0?' data-sequence-minute="'+busyEnd+'" data-sequence-end="'+t.start+'"':'')+'><span class="sequence-rail" aria-hidden="true"></span><span>'+esc(label)+'</span></li>';
+      busyEnd=Math.max(busyEnd??0,end);
+      return connector+'<li class="sequence-row" data-sequence-minute="'+t.start+'"><div class="sequence-time"><time>'+fmt(t.start)+'</time><span>'+(end===1440?'24:00':fmt(end))+'</span></div><div class="sequence-card">'+itemVisual(t)+'</div></li>';
+    }).join('');
     return '<div class="hour-section">'+
       (allDay.length?'<section class="merged-all-day card"><div class="sectionbar"><h3>'+icon('calendar',17)+' '+L('dayEvents')+'</h3></div>'+allDay.map(eventVisual).join('')+'</section>':'')+
       '<div class="flex-header merged-anytime-heading"><h3>'+icon('clock',16)+' '+L('flexible')+' ('+flexible.length+')</h3><button class="part-add" data-unified-add="part" data-part="other">'+icon('plus',18)+'</button></div>'+
       '<div class="daytask-list card" data-drop-part="other">'+(flexible.length?flexible.map(taskVisual).join(''):'')+
       '<button class="part-empty" data-unified-add="part" data-part="other"><span>'+L('empty_other')+'</span><span class="part-empty-add">'+icon('plus',16)+'</span></button></div>'+
       '<div class="sectionbar merged-planned-heading"><h3>'+icon('clock',16)+' '+L('scheduled')+' ('+visible.length+')</h3></div>'+
-      '<div class="card hourly-shell"><div class="agenda hourly-agenda merged-hourly-agenda" data-drop-hours="true" data-first-minute="'+first*60+'" data-last-minute="'+last*60+'" data-hour-px="'+px+'" style="height:'+totalHeight+'px">'+hours+
-      '<div class="merged-hourly-overlay">'+blocks+'</div>'+marker+
-      '<div class="timeline-end-line" style="top:'+((last-first)*px)+'px"><span>'+(last===24?'24:00':fmt(last*60))+'</span></div></div></div>'+
+      '<ol class="day-sequence" data-sequence-root="true" data-first-minute="'+first*60+'" data-last-minute="'+last*60+'">'+sequence+'</ol>'+
+      '<button class="btn ghost sequence-add" data-unified-add="hour" data-start="'+Math.min(last*60-15,Math.max(first*60,busyEnd??first*60))+'">'+icon('plus',16)+' '+L('noTasks')+'</button>'+
       (outside.length?'<section class="day-sections outside-hours"><div class="outside-hours-head"><h3>'+icon('clock',16)+' '+(window.MellowDayHours?.label?.('outside')||'Outside chosen hours')+' ('+outside.length+')</h3><p>'+(window.MellowDayHours?.label?.('outsideHint')||'These items are still scheduled.')+'</p></div><div class="part-section"><div class="part-list">'+outside.sort(sorted).map(itemVisual).join('')+'</div></div></section>':'')+'</div>';
   }
   function legend(events){
