@@ -204,16 +204,26 @@
   }
   function autoScroll(){
     if(!active?.moved)return;
-    const shell=document.querySelector('.merged-day-view .hourly-shell');
-    if(shell){
-      const rect=shell.getBoundingClientRect(),x=active.x,y=active.y;
-      if(x>=rect.left&&x<=rect.right&&y>=rect.top&&y<=rect.bottom){
-        const margin=55;
-        const delta=y<rect.top+margin?-12:y>rect.bottom-margin?12:0;
+    // The hourly timeline follows the document, not an inner scrolling card.
+    // Keep scrolling the page while a held block approaches either screen edge.
+    const timeline=document.querySelector('.merged-day-view .hourly-shell');
+    if(timeline){
+      const rect=timeline.getBoundingClientRect();
+      const x=active.x,y=active.y;
+      const height=window.innerHeight||document.documentElement.clientHeight;
+      const bottomSafe=(window.innerWidth||390)<=700?104:28; // fixed iPhone tab bar
+      const upper=72,lower=height-bottomSafe;
+      const isOverCalendar=x>=rect.left-14&&x<=rect.right+14;
+      const isOverCategory=!!document.elementFromPoint(x,y)?.closest?.('[data-drop-category]');
+      if(isOverCalendar&&!isOverCategory){
+        const delta=y<upper?-Math.min(24,Math.ceil((upper-y)*0.35)):
+          y>lower-52?Math.min(24,Math.ceil((y-(lower-52))*0.35)):0;
         if(delta){
-          const before=shell.scrollTop;
-          shell.scrollTop+=delta;
-          if(shell.scrollTop!==before)showTarget(targetAt(active.x,active.y));
+          const scroller=document.scrollingElement||document.documentElement;
+          const oldScroll=scroller.scrollTop;
+          if(typeof window.scrollBy==='function')window.scrollBy(0,delta);
+          else scroller.scrollTop+=delta;
+          if(scroller.scrollTop!==oldScroll)showTarget(targetAt(active.x,active.y));
         }
       }
     }
