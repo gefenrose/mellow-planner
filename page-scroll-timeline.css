@@ -60,3 +60,7 @@
     padding-inline:7px;
   }
 }
+
+/* During a held drag, use immediate document scrolling so each 15-minute
+   snap indicator stays synchronized with the finger (no smooth-scroll lag). */
+html:has(body.dnd-active){scroll-behavior:auto!important}
