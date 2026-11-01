@@ -14,3 +14,5 @@
 .sequence-add{margin:20px 0;width:100%}
 .sequence-row.dnd-drop-target .sequence-card,.sequence-gap.dnd-drop-target{outline:2px dashed var(--purple);outline-offset:3px}
 @media(max-width:600px){.day-sequence{--time-column:52px;--sequence-gap:10px}.sequence-card{padding:5px 10px;border-radius:16px}.sequence-time{font-size:15px}.sequence-card .daytask-body strong{font-size:16px}.sequence-gap{font-size:13px}}
+
+.sequence-gap-content{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding-block:8px}.sequence-gap-add{min-height:44px!important;flex-shrink:0;white-space:nowrap}.sequence-gap-add:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
