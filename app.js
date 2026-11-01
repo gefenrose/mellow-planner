@@ -67,7 +67,27 @@ function setTheme(){const dark=db.settings.theme==='dark'||(db.settings.theme===
 function nav(){return Object.entries(icons).map(([k,v])=>`<button class="navbtn ${ui.tab===k?'active':''}" data-action="nav" data-tab="${k}" aria-current="${ui.tab===k?'page':'false'}"><span class="icon">${v}</span><span>${T(k)}</span></button>`).join('')}
 function bottomNav(){return Object.entries(icons).map(([k,v])=>`<button class="${ui.tab===k?'active':''}" data-action="nav" data-tab="${k}" aria-label="${esc(T(k))}"><span class="icon">${v}</span><span>${T(k)}</span></button>`).join('')}
 function sectionHead(title,desc,action=''){return `<div class="topbar"><div><div class="overline">MELLOW / ${esc(T(ui.tab))}</div><div class="page-heading-title"><h1>${esc(title)}</h1>${action}</div>${desc?`<p class="subtle" style="margin:10px 0 0">${esc(desc)}</p>`:''}</div><div class="head-actions"><span class="avatar" aria-hidden="true">${mellowIcon("smile",22)}</span></div></div>`}
-function render(){setTheme();$('#app').innerHTML=`<div class="layout"><aside class="sidebar"><div class="brand"><div class="brand-icon">${mellowIcon("sun",25)}</div><div class="brand-word">mellow<span style="color:var(--green)">.</span></div></div><nav aria-label="Main navigation" class="navlist">${nav()}</nav><div class="sidebar-footer">${T('offlineBadge')}<div class="small" style="margin-top:8px;color:var(--ink)">${T('welcomeSub')}</div></div></aside><main class="main">${({today:renderToday,tasks:renderTasks,routines:renderRoutines,settings:renderSettings})[ui.tab]()}</main><nav class="bottomnav" aria-label="Mobile navigation">${bottomNav()}</nav>${['today','tasks'].includes(ui.tab)?`<button class="floatadd" data-unified-add="fab" aria-label="${esc(T('newTask'))}">${mellowIcon('plus',25)}</button>`:''}${ui.modal?renderModal():''}</div>`}
+
+// Known sample labels follow the display language; edited/custom titles remain intact.
+const sampleTaskCopy={
+  'Slow morning & coffee':'בוקר רגוע וקפה',
+  'A little reading time':'קצת זמן לקריאה',
+  'Take a mindful break':'הפסקה לנשימה',
+  'Tidy one small corner':'סידור פינה קטנה',
+  'Something worth remembering':'משהו שכדאי לזכור',
+  'Drink some water':'שתיית מים',
+  'Freshen up':'התרעננות',
+  'Breakfast & a moment of quiet':'ארוחת בוקר ורגע של שקט'
+};
+function localizeTemplateTasks(){
+  for(const task of db.tasks){
+    if(!task.demo&&task.source!=='routine')continue;
+    const pair=Object.entries(sampleTaskCopy).find(([en,he])=>task.title===en||task.title===he);
+    if(pair)task.title=pair[db.settings.lang==='he'?1:0];
+  }
+}
+
+function render(){localizeTemplateTasks();setTheme();$('#app').innerHTML=`<div class="layout"><aside class="sidebar"><div class="brand"><div class="brand-icon">${mellowIcon("sun",25)}</div><div class="brand-word">mellow<span style="color:var(--green)">.</span></div></div><nav aria-label="Main navigation" class="navlist">${nav()}</nav><div class="sidebar-footer">${T('offlineBadge')}<div class="small" style="margin-top:8px;color:var(--ink)">${T('welcomeSub')}</div></div></aside><main class="main">${({today:renderToday,tasks:renderTasks,routines:renderRoutines,settings:renderSettings})[ui.tab]()}</main><nav class="bottomnav" aria-label="Mobile navigation">${bottomNav()}</nav>${['today','tasks'].includes(ui.tab)?`<button class="floatadd" data-unified-add="fab" aria-label="${esc(T('newTask'))}">${mellowIcon('plus',25)}</button>`:''}${ui.modal?renderModal():''}</div>`}
 function renderToday(){const all=scheduled(ui.date),done=all.filter(t=>t.done).length;const tasks=db.tasks.filter(t=>t.date===ui.date);let start=7*60,end=23*60;for(const t of all){start=Math.min(start,Math.floor(t.start/60)*60);end=Math.max(end,Math.ceil((t.start+t.minutes)/60)*60)}start=Math.max(0,start);end=Math.min(24*60,end);const height=(end-start)/60*61;
 let hours='';for(let h=start;h<=end;h+=60)hours+=`<div class="hour" style="height:61px"><span>${fmt(h)}</span></div>`;
 const overlap=all.reduce((r,t)=>{const conflicts=all.filter(x=>x.id!==t.id&&x.start<t.start+t.minutes&&t.start<x.start+x.minutes);r[t.id]=conflicts.length;return r},{});
