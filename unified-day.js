@@ -197,7 +197,9 @@
       const he=db.settings.lang==='he';
       const label=gap>0?(he?gapDuration(gap)+' זמן פנוי':gapDuration(gap)+' free'):
         gap<0?(he?'חפיפה עם הפריט הקודם':'Overlaps an earlier item'):(he?'מיד לאחר מכן':'Immediately after');
-      const connector=gap==null?'':'<li class="sequence-gap"'+(gap>0?' data-sequence-minute="'+busyEnd+'" data-sequence-end="'+t.start+'"':'')+'><span class="sequence-rail" aria-hidden="true"></span><span>'+esc(label)+'</span></li>';
+      const addAt=gap>0?Math.min(1439,busyEnd):t.start;
+      const addLabel=he?'הוספה בין הפריטים':'Add between items';
+      const connector=gap==null?'':'<li class="sequence-gap"'+(gap>0?' data-sequence-minute="'+busyEnd+'" data-sequence-end="'+t.start+'"':'')+'><span class="sequence-rail" aria-hidden="true"></span><div class="sequence-gap-content"><span>'+esc(label)+'</span><button type="button" class="btn ghost small sequence-gap-add" data-unified-add="hour" data-start="'+addAt+'" aria-label="'+esc(addLabel+' · '+fmt(addAt))+'">'+icon('plus',15)+' '+L('add')+'</button></div></li>';
       busyEnd=Math.max(busyEnd??0,end);
       return connector+'<li class="sequence-row" data-sequence-minute="'+t.start+'"><div class="sequence-time"><time>'+fmt(t.start)+'</time><span>'+(end===1440?'24:00':fmt(end))+'</span></div><div class="sequence-card">'+(t.kind==='event'?eventVisual(t,false):taskVisual(t,false))+'</div></li>';
     }).join('');
@@ -260,7 +262,7 @@
     if(kind==='task'){
       ui.newPart=context.part;ui.editId=null;ui.stepContext=null;ui.stepDraft=null;ui.stepCandidates=[];ui.modal='task';render();
       const date=document.querySelector('#taskDate');if(date)date.value=context.date;
-      if(context.start!=null){const start=document.querySelector('#taskStart');if(start)start.value=fmt(context.start)}
+      if(context.start!=null){const start=document.querySelector('#taskStart');if(start){start.value=fmt(context.start);const duration=document.querySelector('#taskMin'),end=document.querySelector('#taskEnd');const minutes=Math.min(Number(duration?.value)||25,1440-context.start);if(duration)duration.value=minutes;if(end)end.value=fmt(context.start+minutes)}}
       document.querySelector('#taskTitle')?.focus();
     }else if(kind==='event'){
       if(!window.MellowCalendar?.isConnected?.()){
