@@ -1,6 +1,6 @@
 /* Mellow Google Calendar — opt-in Google Identity Services OAuth.
    Client ID preference in local storage. Tokens and calendar events in memory only.
-   No Google password, client secret, refresh token or token storage. */
+   No Google password, client secret or refresh token storage. Short-lived access tokens are kept in sessionStorage for reload recovery. */
 (() => {
   const API='https://www.googleapis.com/calendar/v3';
   const SCOPES=['https://www.googleapis.com/auth/calendar.events','https://www.googleapis.com/auth/calendar.calendarlist.readonly'];
@@ -11,6 +11,22 @@
     loading:false,connecting:false,busy:false,error:'',requestId:0,
     visible:null,writeCalendar:localStorage.getItem(KEY_WRITE)||''
   };
+
+  const KEY_SESSION='mellow-google-session-v1';
+  function clearSession(){try{sessionStorage.removeItem(KEY_SESSION)}catch{}}
+  function saveSession(){
+    try{sessionStorage.setItem(KEY_SESSION,JSON.stringify({token:g.token,expiresAt:g.expiresAt,clientId:g.clientId}))}catch{}
+  }
+  function restoreSession(){
+    try{
+      const saved=JSON.parse(sessionStorage.getItem(KEY_SESSION)||'null');
+      if(saved&&typeof saved.token==='string'&&saved.token&&Number.isFinite(saved.expiresAt)&&saved.expiresAt>Date.now()&&saved.clientId===g.clientId){
+        g.token=saved.token;g.expiresAt=saved.expiresAt;return true;
+      }
+    }catch{}
+    clearSession();return false;
+  }
+
   const copy={
     en:{
       calendar:'Google Calendar',calendarIntro:'Google Calendar',setup:'Connect Google Calendar',
@@ -22,7 +38,7 @@
       origin:'In Google Cloud, enable the Calendar API, configure the OAuth consent screen, and create a Web application OAuth client with this Authorized JavaScript origin:',
       cloud:'Google Cloud credentials',guide:'Google setup guide',
       test:'If the consent screen is in Testing, add your Google account as a test user. Calendar access may require verification if published broadly.',
-      noPassword:'Google handles sign-in. Mellow never asks for your password, stores no Google access token, and does not upload your events to Mellow servers.',
+      noPassword:'Google handles sign-in. Mellow never asks for your password, keeps the temporary Google access token in this tab to survive refresh, and does not upload your events to Mellow servers.',
       privacy:'Linked task details are saved on this device; other calendar events stay in this browser session. Disconnecting leaves your Mellow tasks untouched.',
       refresh:'Refresh events',newEvent:'New Google event',title:'Event name',when:'Date',at:'Starts at',duration:'Duration (minutes)',
       location:'Location (optional)',description:'Notes (optional)',save:'Create Google event',chooseCalendar:'Save events to',visible:'Visible calendars',
@@ -35,7 +51,7 @@
       calendarMissing:'Choose a calendar you can edit.',notSaved:'This event is in Google Calendar; linked task changes sync while Mellow is open and connected.',
       primary:'Primary',readOnly:'View only',events:'Google events',timed:'Timed events',allDay:'All-day',
       noWritable:'You need a calendar with editing permission to create events.',
-      account:'Your calendar connection',notAutomatic:'Connection lasts for the current browser session. Reconnect after reloading.',
+      account:'Your calendar connection',notAutomatic:'Refreshing keeps this tab connected while Google authorization is valid. Reconnect when it expires.',
       errorPrefix:'Google Calendar:',nothing:'Nothing to show yet',
       timeInvalid:'Choose a valid start time and duration.',
       maxShown:'Up to eight visible calendars are loaded at once.',
@@ -51,7 +67,7 @@
       origin:'ב-Google Cloud יש להפעיל את Calendar API, להגדיר מסך הסכמה וליצור לקוח OAuth מסוג Web application עם הכתובת הבאה במקורות JavaScript מורשים:',
       cloud:'פרטי ההתחברות ב-Google Cloud',guide:'מדריך הגדרה של Google',
       test:'אם מסך ההסכמה נמצא במצב Testing, יש להוסיף את חשבון Google לרשימת משתמשי הבדיקה. לשימוש ציבורי נרחב עשוי להידרש תהליך אימות.',
-      noPassword:'ההתחברות מתבצעת דרך Google. Mellow לא מבקשת סיסמה ולא שומרת אסימוני גישה או מעבירה אירועים לשרתים שלה.',
+      noPassword:'ההתחברות מתבצעת דרך Google. Mellow לא מבקשת סיסמה. הרשאת הגישה הזמנית נשמרת בלשונית כדי לאפשר רענון, ואירועים לא מועברים לשרתים שלה.',
       privacy:'פרטי משימות מקושרות נשמרים במכשיר; יתר האירועים נשמרים בזיכרון הדפדפן בלבד. ניתוק Google לא מוחק משימות ב-Mellow.',
       refresh:'רענון אירועים',newEvent:'אירוע חדש ב-Google',title:'שם האירוע',when:'תאריך',at:'שעת התחלה',duration:'משך בדקות',
       location:'מיקום (לא חובה)',description:'הערות (לא חובה)',save:'יצירת אירוע',chooseCalendar:'שמירה ביומן',visible:'יומנים מוצגים',
@@ -64,7 +80,7 @@
       calendarMissing:'צריך לבחור יומן שניתן לערוך.',notSaved:'האירוע נוסף ל-Google. שינויים במשימה המקושרת מסתנכרנים כשהאפליקציה פתוחה ומחוברת.',
       primary:'ראשי',readOnly:'לצפייה בלבד',events:'אירועים מ-Google',timed:'אירועים עם שעה',allDay:'אירועים לאורך היום',
       noWritable:'כדי ליצור אירועים יש צורך ביומן עם הרשאות עריכה.',
-      account:'חיבור ליומן',notAutomatic:'החיבור תקף לסשן הדפדפן הנוכחי. לאחר טעינה מחדש צריך להתחבר שוב.',
+      account:'חיבור ליומן',notAutomatic:'רענון הדף שומר על החיבור בלשונית כל עוד הרשאת Google בתוקף. לאחר פקיעתה צריך להתחבר מחדש.',
       errorPrefix:'יומן Google:',nothing:'עדיין אין אירועים להצגה',
       timeInvalid:'יש לבחור שעה ומשך תקינים.',
       maxShown:'אפשר להציג עד שמונה יומנים בו־זמנית.',
@@ -252,7 +268,7 @@
           if(response.error||!response.access_token){setMessage(W('authFailed'));render();return}
           const hasScopes=window.google.accounts.oauth2.hasGrantedAllScopes;
           if(typeof hasScopes==='function'&&!hasScopes(response,...SCOPES)){setMessage(W('authFailed'));render();return}
-          g.token=response.access_token;g.expiresAt=Date.now()+Math.max(1,Number(response.expires_in||3300)-60)*1000;
+          g.token=response.access_token;g.expiresAt=Date.now()+Math.max(1,Number(response.expires_in||3300)-60)*1000;saveSession();
           g.error='';g.events=[];g.loadedDate=null;g.calendars=[];
           void loadCalendarsAndEvents();
           render();
@@ -264,18 +280,19 @@
     }catch(e){g.connecting=false;setMessage(W('popup'));console.warn(e);render()}
   }
   function disconnect(){
-    // Do not persist tokens or calendar events. Disconnect only the current session.
+    // Explicit disconnect clears reload recovery as well as in-memory state.
+    clearSession();
     const token=g.token;g.token=null;g.expiresAt=0;g.events=[];g.calendars=[];g.loadedDate=null;g.requestId++;
     if(token&&window.google?.accounts?.oauth2?.revoke)try{window.google.accounts.oauth2.revoke(token,()=>{})}catch{}
     g.error='';render();
   }
   async function request(path,method='GET',body,etag){
-    if(!readable()){g.token=null;throw Error(W('expired'))}
+    if(!readable()){clearSession();g.token=null;throw Error(W('expired'))}
     const resp=await fetch(API+path,{
       method,headers:{Authorization:'Bearer '+g.token,...(etag?{'If-Match':etag}:{}),...(body?{'Content-Type':'application/json'}:{})},
       ...(body?{body:JSON.stringify(body)}:{})
     });
-    if(resp.status===401){g.token=null;g.events=[];g.calendars=[];g.expiresAt=0;throw Error(W('expired'))}
+    if(resp.status===401){clearSession();g.token=null;g.events=[];g.calendars=[];g.expiresAt=0;throw Error(W('expired'))}
     if(!resp.ok){
       let message='HTTP '+resp.status;
       try{const parsed=await resp.json();message=String(parsed.error?.message||message).slice(0,250)}catch{}
@@ -394,7 +411,7 @@
       if(action==='save-client'){
         const id=document.querySelector('#gcalClient')?.value.trim()||'';
         if(!/^[\w-]+\.apps\.googleusercontent\.com$/.test(id)){toast(W('needClient'));return}
-        g.clientId=id;localStorage.setItem(KEY_CLIENT,id);toast(T('saved'));render();
+        if(id!==g.clientId)disconnect();g.clientId=id;localStorage.setItem(KEY_CLIENT,id);toast(T('saved'));render();
       }
       if(action==='disconnect')disconnect();
       if(action==='refresh')void refreshEvents(ui.date,true);
@@ -502,5 +519,7 @@
       partial:partial||failures.length>0,error:failures.length?String(failures[0].reason?.message||'Google search failed'):''};
   }
   window.MellowCalendar={refresh:()=>refreshEvents(ui.date,true),state:g,disconnect,dayItems,isConnected:readable,moveEvent,searchEvents,canMove:(calendarId,eventId)=>readable()&&writable().some(c=>c.id===calendarId)&&!!g.events.find(e=>e._calendarId===calendarId&&e.id===eventId&&!e.start?.date&&e.start?.dateTime&&e.end?.dateTime&&(!e.eventType||e.eventType==='default'))};
+  const restored=restoreSession();
   render();
+  if(restored)void loadCalendarsAndEvents();
 })();
