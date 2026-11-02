@@ -336,7 +336,7 @@
     const handle=e.target.closest?.('.dnd-grip');
     const item=handle?.closest('[data-drag-item]')||e.target.closest?.('[data-drag-item]');
     if(!item)return;
-    if(!handle&&e.target.closest?.('.daytask-check,.hour-check,.event-open'))return;
+    if(!handle&&e.target.closest?.('.daytask-check,.hour-check,.event-open,.home-subtasks'))return;
     if(!enter(item,e))return;
     if(handle){
       e.preventDefault();
