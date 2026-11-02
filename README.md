@@ -70,3 +70,7 @@ This is an interface refresh. Existing scheduling, task data, routines, AI API, 
 ### Selected date contrast and drag text selection (v46)
 
 In light mode the selected day in the Today week strip and date-jump calendar uses dark text on pale lavender. Dark mode retains its own selected-date colors. During day-view drag and task-list reordering, text selection and iOS touch callouts are disabled from gesture start through drag end/cancellation, then automatically restored; normal text input and selection outside dragging are unchanged.
+
+### Touch drag repair (v47)
+
+Touching a task title/icon in Today now initiates a drag on movement rather than native page scrolling. Tapping still opens the task. The visible drag grips are larger and have `touch-action: none`, including the dedicated grip on Tasks lists. The existing long-press fallback for other card areas has a shorter activation period and a more forgiving movement tolerance. A non-passive `touchmove` handler cancels page panning only for active drags, while the rest of the page and subtask controls remain scrollable. While dragging, edge auto-scroll works in both the day-sections and timeline views. Normal text-selection behavior returns on release.

@@ -569,6 +569,48 @@ body:is(.dnd-pressing,.dnd-active,.task-reorder-pressing,.task-reordering) *{
 }
 body:is(.dnd-active,.task-reordering){cursor:grabbing}
 
+/* Touch drag affordances: touching a task's primary editing surface should
+   move the task instead of scrolling the page; unrelated space keeps pan-y.
+   Checkboxes, subtasks, date controls and empty space retain normal scrolling. */
+@media(pointer:coarse){
+  .merged-day-view .dnd-ready .daytask-body,
+  .merged-day-view .dnd-ready .daytask-icon,
+  .merged-day-view .dnd-ready .hour-info,
+  .merged-day-view .dnd-ready .hour-emoji,
+  .merged-day-view .dnd-ready .dnd-grip,
+  .tasks-list .task-reorder-grip{
+    touch-action:none!important;
+    -webkit-touch-callout:none;
+  }
+  .merged-day-view .dnd-ready .dnd-grip{
+    width:42px;min-width:42px;height:46px;min-height:46px;
+    border-radius:12px;background:var(--surface2);
+    color:var(--green)
+  }
+  .merged-day-view .dnd-ready .dnd-grip svg{width:20px;height:20px}
+  .tasks-list .task-reorder-grip{
+    width:36px;min-width:36px;min-height:46px;
+    border-radius:11px;background:var(--surface2);color:var(--green);
+  }
+  .tasks-list .task-reorder-grip svg{width:18px;height:20px}
+  .tasks-list .task.task-card[data-task-reorder-id]{
+    grid-template-columns:36px 36px minmax(0,1fr) 28px!important;
+  }
+  .main:has(.task-page) .tasks-list .task.task-card[data-task-reorder-id]>.task-reorder-grip{
+    grid-column:1!important;
+  }
+}
+@media(max-width:380px) and (pointer:coarse){
+  .merged-day-view .dnd-ready .dnd-grip{
+    width:36px;min-width:36px;
+  }
+  .tasks-list .task.task-card[data-task-reorder-id]{
+    grid-template-columns:34px 32px minmax(0,1fr) 26px!important;
+    gap:7px;
+  }
+  .tasks-list .task-reorder-grip{width:34px;min-width:34px}
+}
+
 /* Keep background colors meaningful rather than decorative in high contrast. */
 @media(forced-colors:active){
   .btn,.day.active,.navbtn.active,.chip.selected,.bottomnav button.active{
