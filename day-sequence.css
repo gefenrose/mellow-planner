@@ -16,3 +16,30 @@
 @media(max-width:600px){.day-sequence{--time-column:52px;--sequence-gap:10px}.sequence-card{padding:5px 10px;border-radius:16px}.sequence-time{font-size:15px}.sequence-card .daytask-body strong{font-size:16px}.sequence-gap{font-size:13px}}
 
 .sequence-gap-content{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding-block:8px}.sequence-gap-add{min-height:44px!important;flex-shrink:0;white-space:nowrap}.sequence-gap-add:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
+
+
+/* Today checklists belong visually to their parent tasks, in both views. */
+.merged-day-view .daytask.has-home-steps{flex-wrap:wrap;align-content:start;row-gap:0}
+.merged-day-view .home-subtasks{flex:0 0 100%;min-width:0;max-width:100%;padding:11px 3px 3px;margin-top:7px;border-top:1px solid var(--border)}
+.home-steps-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:7px;color:var(--muted);font-size:12px;font-weight:700}
+.home-steps-progress{font-variant-numeric:tabular-nums;direction:ltr;white-space:nowrap}
+.home-steps-list{list-style:none;margin:0;padding:0;display:grid;gap:3px}
+.home-steps-list li{min-width:0}
+.home-step-label{display:flex;align-items:flex-start;gap:10px;padding:6px 2px;border-radius:9px;min-width:0;cursor:pointer}
+.home-step-label:hover{background:var(--surface2)}
+.home-step-toggle{flex:0 0 19px;width:19px;height:19px;min-height:19px;margin:2px 0 0;padding:0;accent-color:var(--green);cursor:pointer}
+.home-step-toggle:focus-visible{outline:2px solid var(--purple);outline-offset:3px}
+.home-step-title{min-width:0;flex:1;overflow-wrap:anywhere;font-size:14px;font-weight:500;line-height:1.5;color:var(--ink);text-align:start}
+.home-step-toggle:checked + .home-step-title{text-decoration:line-through;color:var(--muted)}
+/* Upcoming countdown lives directly beneath the Day Sequence heading. */
+.next-task-countdown{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0;margin:0 0 14px;padding:14px 17px;background:var(--surface);border:1px solid var(--border);border-radius:17px}
+.next-task-label{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:13px;font-weight:650}
+.next-task-countdown strong{font-size:21px;font-weight:750;line-height:1.35;font-variant-numeric:tabular-nums;color:var(--ink)}
+.next-task-detail{font-size:13px;line-height:1.5;color:var(--muted);overflow-wrap:anywhere}
+@media(max-width:600px){
+  .merged-day-view .home-subtasks{padding:9px 1px 2px}
+  .home-step-label{gap:8px}
+  .home-step-title{font-size:13px}
+  .next-task-countdown{padding:12px 14px}
+  .next-task-countdown strong{font-size:19px}
+}
