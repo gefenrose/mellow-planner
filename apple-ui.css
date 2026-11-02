@@ -896,3 +896,301 @@ body:is(.dnd-active,.task-reordering){cursor:grabbing}
   }
   .modal-bg .modal .formactions .buttonrow .btn{flex:1 1 0}
 }
+
+
+/* 10 · Screenshot-verified iPhone layout repairs (v49).
+   Applies to the task editor, AI date entry and global search. */
+
+/* Native Safari pickers sometimes overrun a flex field despite width:100%.
+   Put the visible border on a shrinkable shell and leave the iOS picker intact. */
+.native-picker-shell {
+  display:flex;
+  align-items:center;
+  box-sizing:border-box;
+  inline-size:100%;
+  width:100%;
+  max-inline-size:100%;
+  min-inline-size:0;
+  min-width:0;
+  min-height:47px;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  direction:ltr;
+}
+:is(.modal-bg .modal,.ai-journal-card) .native-picker-shell > input:is([type="date"],[type="time"]) {
+  display:block!important;
+  flex:1 1 0%!important;
+  box-sizing:border-box!important;
+  inline-size:100%!important;
+  width:100%!important;
+  max-inline-size:100%!important;
+  max-width:100%!important;
+  min-inline-size:0!important;
+  min-width:0!important;
+  min-height:45px!important;
+  margin:0!important;
+  padding:10px 11px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:var(--ink);
+  box-shadow:none!important;
+  outline:none!important;
+  position:static!important;
+  direction:ltr;
+  text-align:start;
+}
+.native-picker-shell:focus-within {
+  border-color:var(--apple-focus);
+  outline:3px solid color-mix(in srgb,var(--apple-focus) 75%,transparent);
+  outline-offset:2px;
+}
+.native-picker-shell > input::-webkit-date-and-time-value,
+.native-picker-shell > input::-webkit-datetime-edit{
+  min-width:0;
+  max-width:100%;
+  text-align:start;
+}
+
+/* The modal is a vertical stack, not one long scroll container:
+   title/close and action buttons stay outside the scrolling form content.
+   This stops emoji buttons peeking above the sticky header and the save
+   footer covering the last field on shorter iPhones. */
+.modal-bg > :is(.task-editor-modal,.routine-editor-modal) {
+  display:flex;
+  flex-direction:column;
+  box-sizing:border-box;
+  width:min(100%,550px);
+  max-width:100%;
+  max-height:calc(100dvh - 24px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));
+  min-height:0;
+  overflow:hidden!important;
+  overscroll-behavior:contain;
+}
+.modal-bg > :is(.task-editor-modal,.routine-editor-modal) > .modalheader {
+  display:flex;
+  flex:0 0 auto;
+  position:static!important;
+  top:auto!important;
+  bottom:auto!important;
+  z-index:auto!important;
+  margin:0 0 14px!important;
+  padding:0 0 15px!important;
+  border-bottom:1px solid var(--apple-separator);
+  border-radius:0;
+  background:var(--surface);
+  min-width:0;
+}
+.modal-bg > :is(.task-editor-modal,.routine-editor-modal) > .modalheader h2 {
+  min-width:0;
+  max-width:calc(100% - 60px);
+  font-size:clamp(23px,5vw,28px);
+  line-height:1.2;
+  overflow-wrap:anywhere;
+}
+.modal-bg > :is(.task-editor-modal,.routine-editor-modal) > form {
+  display:flex;
+  flex:1 1 auto;
+  flex-direction:column;
+  min-height:0;
+  min-width:0;
+  max-width:100%;
+  overflow:hidden;
+}
+.modal-bg > :is(.task-editor-modal,.routine-editor-modal) > form > .formgrid {
+  display:grid;
+  flex:1 1 auto;
+  min-height:0;
+  min-width:0;
+  max-width:100%;
+  margin:0;
+  padding:4px 2px 16px;
+  align-content:start;
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  scroll-padding-block:18px 26px;
+}
+.modal-bg > :is(.task-editor-modal,.routine-editor-modal) > form > .formactions {
+  flex:0 0 auto;
+  display:flex;
+  position:static!important;
+  top:auto!important;
+  bottom:auto!important;
+  z-index:auto!important;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:0!important;
+  padding:14px 0 0!important;
+  background:var(--surface);
+  border-top:1px solid var(--apple-separator);
+  min-width:0;
+}
+.modal-bg > :is(.task-editor-modal,.routine-editor-modal) > form > .formactions .buttonrow {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  min-width:0;
+  margin-inline-start:auto;
+}
+.modal-bg > :is(.task-editor-modal,.routine-editor-modal) > form > .formactions .btn {
+  min-height:44px;
+  white-space:nowrap;
+}
+/* Emoji options remain in the scrollable body; avoid hiding the top row behind
+   the editor chrome or stretching the native text/picker controls. */
+.task-editor-modal [role="group"][aria-label] {
+  max-width:100%;
+  min-width:0;
+}
+.task-editor-modal #taskEmoji {
+  flex:0 0 auto;
+}
+
+/* In the AI summary card, the date field gets its own grid track. A 100%
+   flex basis combined with width:100% previously pushed the date input
+   outside the left edge of the white card in RTL Safari. */
+.ai-journal-card > .ai-journal-heading{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(180px,240px);
+  align-items:center;
+  justify-items:stretch;
+  gap:12px 18px;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+}
+.ai-journal-card > .ai-journal-heading > h2 {
+  min-width:0;
+  max-width:100%;
+}
+.ai-journal-card > .ai-journal-heading > label.field {
+  display:flex;
+  flex-direction:column;
+  flex:initial!important;
+  box-sizing:border-box;
+  width:100%!important;
+  inline-size:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  margin:0!important;
+  align-self:stretch;
+  gap:7px;
+}
+.ai-journal-card > .ai-journal-heading > label.field > .native-picker-shell {
+  width:100%;
+  max-width:100%;
+}
+
+/* Search: the input sits inside the stroked container, so the input itself
+   must not receive another purple focus outline or a second border. */
+.jump-search-modal .jump-search-input {
+  display:flex;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  box-sizing:border-box;
+  padding:0 12px;
+  overflow:visible;
+}
+.jump-search-modal .jump-search-input input[type="search"] {
+  min-width:0!important;
+  width:0!important;
+  flex:1 1 0%!important;
+  padding:10px 0!important;
+  margin:0!important;
+  border:0!important;
+  border-radius:0!important;
+  outline:none!important;
+  box-shadow:none!important;
+  background:transparent!important;
+}
+.jump-search-modal .jump-search-input input[type="search"]:focus-visible {
+  outline:none!important;
+  outline-offset:0!important;
+  box-shadow:none!important;
+}
+.jump-search-modal .jump-search-input:focus-within {
+  border-color:var(--apple-focus);
+  outline:2px solid var(--apple-focus);
+  outline-offset:2px;
+  box-shadow:none!important;
+}
+.jump-search-modal .jump-search-filters {
+  display:flex;
+  flex-wrap:wrap;
+  max-width:100%;
+  min-width:0;
+}
+
+/* Search overlay was incorrectly centered by the later mobile .modal-bg
+   rule, leaving far less space for results when the keyboard is open. */
+.modal-bg.jump-overlay {
+  align-items:flex-start!important;
+  justify-content:center;
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  padding:max(18px,env(safe-area-inset-top,0px)) 10px max(18px,env(safe-area-inset-bottom,0px));
+}
+.modal-bg.jump-overlay > :is(.jump-search-modal,.jump-month-modal) {
+  box-sizing:border-box;
+  flex:0 1 auto;
+  max-width:100%;
+  min-width:0;
+  max-height:calc(100dvh - 42px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));
+  margin:0;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+}
+
+@media(max-width:700px) {
+  .ai-journal-card > .ai-journal-heading {
+    grid-template-columns:minmax(0,1fr);
+    gap:14px;
+  }
+  .ai-journal-card > .ai-journal-heading > label.field {
+    grid-column:1;
+    width:100%!important;
+    max-width:100%!important;
+    align-self:stretch;
+  }
+  .modal-bg > :is(.task-editor-modal,.routine-editor-modal) {
+    max-height:calc(100dvh - 20px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));
+    padding:17px 16px;
+  }
+  .modal-bg > :is(.task-editor-modal,.routine-editor-modal) > .modalheader{
+    margin-bottom:10px!important;
+    padding-bottom:12px!important;
+  }
+  .modal-bg > :is(.task-editor-modal,.routine-editor-modal) > form > .formactions{
+    padding:12px 0 0!important;
+  }
+  .modal-bg.jump-overlay{
+    padding-top:max(16px,env(safe-area-inset-top,0px));
+    padding-inline:10px;
+    align-items:flex-start!important;
+  }
+  .modal-bg.jump-overlay > :is(.jump-search-modal,.jump-month-modal) {
+    max-height:calc(100dvh - 34px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));
+  }
+}
+@media(max-width:380px){
+  .modal-bg > :is(.task-editor-modal,.routine-editor-modal) {
+    padding-inline:13px;
+  }
+  .modal-bg > :is(.task-editor-modal,.routine-editor-modal) > form > .formactions{
+    gap:7px;
+  }
+  .modal-bg > :is(.task-editor-modal,.routine-editor-modal) > form > .formactions .btn{
+    padding-inline:10px;
+    font-size:14px;
+  }
+}
