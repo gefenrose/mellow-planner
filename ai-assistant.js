@@ -77,7 +77,7 @@
     const entry=journal(ui.date),tasks=db.tasks.filter(t=>t.date===ui.date),done=tasks.filter(t=>t.done).length;
     return sectionHead(tx('AI & Writing','AI וכתיבה'),tx('Write, reflect, and take smaller steps.','לכתוב, לסכם ולחלק משימות לצעדים קטנים.'))+
       '<div class="ai-journal">'+
-      '<section class="card ai-journal-card"><div class="ai-journal-heading"><h2>'+tx('Daily summary','סיכום יום')+'</h2><label class="field"><span>'+tx('Date','תאריך')+'</span><input id="aiJournalDate" type="date" value="'+esc(ui.date)+'"></label></div>'+
+      '<section class="card ai-journal-card"><div class="ai-journal-heading"><h2>'+tx('Daily summary','סיכום יום')+'</h2><label class="field"><span>'+tx('Date','תאריך')+'</span><span class="native-picker-shell"><input id="aiJournalDate" type="date" value="'+esc(ui.date)+'"></span></label></div>'+
       '<p class="hint">'+tx('Generate a factual summary from this day’s task names and completion statuses only. No calendar events or task notes are sent.','הסיכום נוצר רק משמות המשימות וממצב הביצוע שלהן. אירועי יומן והערות לא נשלחים.')+'</p>'+
       '<div class="ai-journal-stats"><span>'+tasks.length+' '+tx('tasks','משימות')+'</span><span>'+done+' '+tx('done','הושלמו')+'</span><span>'+(tasks.length-done)+' '+tx('left','נותרו')+'</span></div>'+
       button(view.busy&&view.kind==='summary'?tx('Working…','יוצרת…'):tx('Generate summary','יצירת סיכום'),'summary')+
