@@ -15,3 +15,5 @@
 .ai-journal-text{font-size:15px;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere;unicode-bidi:plaintext}
 .ai-journal-link{border:none;background:transparent;color:var(--green);text-decoration:underline;font:inherit;cursor:pointer}
 @media(max-width:700px){.ai-journal{gap:13px}.ai-journal-card{padding:17px}.ai-journal-heading{align-items:start}.ai-journal-card .btn{max-width:100%;white-space:normal;text-align:center}}
+
+@media(max-width:700px){.bottomnav{grid-template-columns:repeat(5,minmax(0,1fr))}}
