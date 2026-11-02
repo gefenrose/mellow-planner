@@ -43,3 +43,16 @@
   .next-task-countdown{padding:12px 14px}
   .next-task-countdown strong{font-size:19px}
 }
+
+
+/* Accessible, compact chevron control for each task's checklist. */
+.home-steps-collapse{display:inline-flex;align-items:center;gap:7px;max-width:100%;min-height:32px;padding:4px 2px;border:0;border-radius:8px;background:transparent;color:var(--muted);font:inherit;font-weight:700;font-size:12px;text-align:start;cursor:pointer}
+.home-steps-collapse:hover{color:var(--ink);background:var(--surface2)}
+.home-steps-collapse:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+.home-steps-indicator{display:inline-flex;align-items:center;justify-content:center;flex:0 0 16px;transition:transform 150ms ease}
+.home-subtasks.is-collapsed .home-steps-indicator{transform:rotate(-90deg)}
+[dir="rtl"] .home-subtasks.is-collapsed .home-steps-indicator{transform:rotate(90deg)}
+.home-steps-list[hidden]{display:none!important}
+.home-subtasks.is-collapsed{padding-bottom:0}
+.home-subtasks.is-collapsed .home-steps-heading{margin-bottom:0}
+@media(prefers-reduced-motion:reduce){.home-steps-indicator{transition:none}}
