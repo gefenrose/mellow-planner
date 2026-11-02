@@ -422,3 +422,91 @@ body.dark .ai-journal-stats span{background:var(--surface2);color:var(--ink)}
 @media(prefers-reduced-motion:reduce){
   .routine,.card,.btn,.navbtn,.sequence-card{animation:none!important}
 }
+
+
+/* v52 · Higher-detail transparent sticker presentation.
+   Larger desktop placements make plush texture, stitching, petal veins and
+   satin highlights perceptible; touch hit targets remain unobstructed. */
+.brand-word::after{
+  width:29px;
+  height:29px;
+  vertical-align:middle;
+  filter:drop-shadow(0 2px 2px rgba(119,72,116,.11));
+}
+.main > .topbar{padding-inline-end:56px}
+.main > .topbar::after{
+  width:53px;
+  height:53px;
+  opacity:1;
+  filter:drop-shadow(0 2px 2px rgba(164,106,147,.10));
+}
+.day-nav-card::after{
+  width:51px;
+  height:51px;
+  top:-22px;
+  filter:drop-shadow(0 2px 2px rgba(164,106,147,.13));
+}
+.task-page-title{padding-inline-end:86px}
+.task-page-title::after{
+  width:80px;
+  height:80px;
+  top:-20px;
+  filter:drop-shadow(0 3px 3px rgba(133,88,108,.16));
+}
+.next-task-countdown{
+  padding-inline-end:91px;
+}
+.next-task-countdown::after{
+  width:89px;
+  height:89px;
+  bottom:2px;
+  filter:drop-shadow(0 3px 3px rgba(124,86,107,.15));
+}
+.routinegrid .routine::after{
+  width:54px;
+  height:54px;
+  top:-17px;
+  filter:drop-shadow(0 2px 2px rgba(137,94,124,.13));
+}
+.settingsgrid .card::after,
+.ai-journal-card::before{
+  width:50px;
+  height:50px;
+  top:-18px;
+  filter:drop-shadow(0 2px 2px rgba(154,113,142,.10));
+}
+.empty::before{
+  width:100px;
+  height:100px;
+}
+body.dark :where(.task-page-title,.next-task-countdown,.routine,.ai-journal-card)::after,
+body.dark .ai-journal-card::before{
+  filter:drop-shadow(0 3px 4px rgba(0,0,0,.27));
+}
+@media(max-width:700px){
+  .main > .topbar{padding-inline-end:42px}
+  .main > .topbar::after{width:39px;height:39px}
+  .day-nav-card::after{width:39px;height:39px;top:-15px}
+  .task-page-title{padding-inline-end:55px}
+  .task-page-title::after{width:53px;height:53px;top:-8px}
+  .next-task-countdown{padding-inline-end:65px}
+  .next-task-countdown::after{width:63px;height:63px}
+  .routinegrid .routine::after,
+  .settingsgrid .card::after,
+  .ai-journal-card::before{width:37px;height:37px}
+  .empty::before{width:82px;height:82px}
+}
+@media(max-width:370px){
+  .task-page-title{padding-inline-end:46px}
+  .task-page-title::after{width:43px;height:43px;top:0}
+  .next-task-countdown{padding-inline-end:53px}
+  .next-task-countdown::after{width:50px;height:50px}
+}
+/* Decorative images may never intercept task or form interaction. */
+.brand-word::after,.main > .topbar::after,.day-nav-card::after,
+.task-page-title::after,.next-task-countdown::after,
+.routinegrid .routine::after,.settingsgrid .card::after,
+.ai-journal-card::before,.empty::before{
+  pointer-events:none!important;
+  -webkit-user-drag:none;
+}

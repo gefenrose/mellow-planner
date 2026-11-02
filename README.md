@@ -101,3 +101,10 @@ Month-jump and Today week navigation chevrons now reflect RTL semantics in Hebre
 - The five sticker files are cached for offline use by the PWA, versioned with the app shell (v51).
 
 The stickers are original software-generated illustrations, not photographs of manufactured plush toys. This is a visual makeover only: persisted task, calendar, routine, AI and subtasks data are unchanged.
+
+
+### Higher-detail transparent kawaii stickers (v52)
+
+Replaced all five decorative PNGs in place with newly drawn, higher-resolution (224×224) transparent illustrations. The bunny and bear now use layered shading, fur-fiber texture, embroidered facial features, sewn seams and dimensional fabric bows; the standalone bow and ribbon show satin folds and reflected highlights; and the flower features detailed layered petals, botanical leaves and centers. These are original textured **illustrations**, not actual plush-toy photographs.
+
+Decorative placements are slightly larger where space permits and remain small at iPhone widths. No interactive control has a sticker overlay; no task, calendar, AI, storage or DnD logic was changed. Asset query versions and service worker cache were bumped to v52.
