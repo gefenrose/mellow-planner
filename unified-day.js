@@ -37,12 +37,28 @@
     const events=findEvents();
     return {items:[...planned,...inbox,...events],tasks:planned,events};
   }
+  // Keep each checklist within its own task card in both Today layouts.
+  function visibleSteps(task){
+    return Array.isArray(task.steps)?task.steps.filter(step=>step&&typeof step.title==='string'&&step.title.trim()).slice(0,20):[];
+  }
+  function homeSteps(task){
+    const steps=visibleSteps(task);
+    if(!steps.length)return '';
+    const done=steps.filter(step=>step.done).length;
+    const count=done+' / '+steps.length;
+    const label=db.settings.lang==='he'?'תתי־משימות':'Subtasks';
+    return '<div class="home-subtasks" data-home-steps-for="'+esc(task.id)+'" role="group" aria-label="'+esc(label+' · '+task.title)+'">'+
+      '<div class="home-steps-heading"><span>'+esc(label)+'</span><span class="home-steps-progress" aria-label="'+esc(count)+'">'+count+'</span></div>'+
+      '<ul class="home-steps-list">'+steps.map(step=>
+        '<li><label class="home-step-label"><input type="checkbox" class="home-step-toggle" data-step-task="'+esc(task.id)+'" data-step-id="'+esc(step.id)+'"'+(step.done?' checked':'')+'><span class="home-step-title">'+esc(step.title)+'</span></label></li>'
+      ).join('')+'</ul></div>';
+  }
   function taskVisual(t,showTime=true){
     const time=t.start!=null?fmt(t.start)+' · '+fmtLength(t.minutes):fmtLength(t.minutes);
-    return '<div class="daytask unified-item unified-task '+(t.done?'completed':'')+'" data-drag-item="task" data-drag-id="'+esc(t.id)+'">'+
+    return '<div class="daytask unified-item unified-task '+(t.done?'completed':'')+(visibleSteps(t).length?' has-home-steps':'')+'" data-drag-item="task" data-drag-id="'+esc(t.id)+'">'+
       '<button class="daytask-icon '+esc(t.category)+'" data-action="edit" data-id="'+esc(t.id)+'" aria-label="'+esc(L('task')+' '+t.title)+'">'+esc(t.emoji||'🌿')+'</button>'+
       '<button class="daytask-body" data-action="edit" data-id="'+esc(t.id)+'"><strong>'+esc(t.title)+'</strong>'+(showTime?'<small>'+esc(time)+'</small>':'')+'</button>'+
-      '<button class="check daytask-check '+(t.done?'checked':'')+'" data-action="done" data-id="'+esc(t.id)+'" aria-label="'+esc(t.title)+'">'+(t.done?icon('check',15):'')+'</button></div>';
+      '<button class="check daytask-check '+(t.done?'checked':'')+'" data-action="done" data-id="'+esc(t.id)+'" aria-label="'+esc(t.title)+'">'+(t.done?icon('check',15):'')+'</button>'+homeSteps(t)+'</div>';
   }
   function eventVisual(e,showTime=true){
     const label=e.allDay?L('allDay'):e.timeLabel;
@@ -181,6 +197,81 @@
     const label=hours===1?'שעה':hours===2?'שעתיים':hours+' שעות';
     return label+(rest?' ו־'+rest+' דקות':'');
   }
+  // The next future scheduled Mellow task, even when it falls on another day.
+  // Calendar events, unscheduled tasks and completed tasks are not candidates.
+  function nextScheduledTask(now=Date.now()){
+    let closest=null;
+    for(const task of db.tasks){
+      if(task.done||typeof task.date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(task.date))continue;
+      const minute=Number(task.start);
+      if(task.start==null||!Number.isInteger(minute)||minute<0||minute>=1440)continue;
+      const [year,month,day]=task.date.split('-').map(Number);
+      const when=new Date(year,month-1,day,Math.floor(minute/60),minute%60);
+      if(when.getFullYear()!==year||when.getMonth()!==month-1||when.getDate()!==day)continue;
+      const timestamp=when.getTime();
+      if(timestamp<=now||closest&&timestamp>=closest.timestamp)continue;
+      closest={task,timestamp};
+    }
+    return closest;
+  }
+  function countdownLength(ms){
+    const minutes=Math.max(1,Math.ceil(ms/60000));
+    const days=Math.floor(minutes/1440),hours=Math.floor(minutes%1440/60),rest=minutes%60;
+    if(db.settings.lang==='he'){
+      const units=[];
+      if(days)units.push(days===1?'יום':days===2?'יומיים':days+' ימים');
+      if(hours)units.push(hours===1?'שעה':hours===2?'שעתיים':hours+' שעות');
+      if(rest||!units.length)units.push(rest===1?'דקה':rest+' דקות');
+      return 'בעוד '+units.join(' ו־');
+    }
+    const units=[];
+    if(days)units.push(days+' '+(days===1?'day':'days'));
+    if(hours)units.push(hours+' '+(hours===1?'hour':'hours'));
+    if(rest||!units.length)units.push(rest+' '+(rest===1?'minute':'minutes'));
+    return 'In '+units.join(', ');
+  }
+  function countdownData(now=Date.now()){
+    const next=nextScheduledTask(now),he=db.settings.lang==='he';
+    if(!next)return {remaining:he?'אין משימות מתוזמנות בהמשך':'No upcoming scheduled tasks',detail:''};
+    const task=next.task,when=new Date(next.timestamp);
+    const key=dayKey(when),todayKey=today();
+    const tomorrow=new Date();tomorrow.setDate(tomorrow.getDate()+1);
+    const date=key===todayKey?(he?'היום':'Today'):key===dayKey(tomorrow)?(he?'מחר':'Tomorrow'):dt(key,{day:'numeric',month:'short'});
+    return {remaining:countdownLength(next.timestamp-now),detail:task.title+' · '+date+' '+fmt(task.start)};
+  }
+  function nextTaskMarkup(){
+    const info=countdownData();
+    const label=db.settings.lang==='he'?'עד למשימה הבאה':'Until your next task';
+    return '<section class="next-task-countdown" data-next-task-countdown="true" aria-label="'+label+'">'+
+      '<span class="next-task-label">'+icon('clock',17)+' '+label+'</span>'+
+      '<strong data-next-task-remaining="true">'+esc(info.remaining)+'</strong>'+
+      '<span class="next-task-detail" data-next-task-detail="true">'+esc(info.detail)+'</span></section>';
+  }
+  function updateNextTaskCountdown(){
+    const root=document.querySelector('[data-next-task-countdown]');
+    if(!root)return;
+    const info=countdownData();
+    const remaining=root.querySelector('[data-next-task-remaining]'),detail=root.querySelector('[data-next-task-detail]');
+    if(remaining&&remaining.textContent!==info.remaining)remaining.textContent=info.remaining;
+    if(detail&&detail.textContent!==info.detail)detail.textContent=info.detail;
+  }
+  // Update text in place rather than rerendering the planner while the user works.
+  setInterval(updateNextTaskCountdown,15000);
+  window.addEventListener('focus',updateNextTaskCountdown);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateNextTaskCountdown()});
+  document.addEventListener('change',event=>{
+    const input=event.target;
+    if(!input.matches?.('.home-step-toggle[data-step-task]'))return;
+    // app.js persists the checkbox state in the existing task model.
+    const task=findTask(input.dataset.stepTask);
+    const section=input.closest('.home-subtasks');
+    const progress=section?.querySelector('.home-steps-progress');
+    if(task&&progress){
+      const steps=visibleSteps(task);
+      const completed=steps.filter(step=>step.done).length;
+      progress.textContent=completed+' / '+steps.length;
+    }
+  });
   function hourly(items){
     const timed=items.filter(t=>t.start!=null&&!(t.kind==='event'&&t.allDay)&&Number.isFinite(t.start)&&t.start>=0&&t.start<1440);
     const allDay=items.filter(t=>t.kind==='event'&&t.allDay);
@@ -209,6 +300,7 @@
       '<div class="daytask-list card" data-drop-part="other">'+(flexible.length?flexible.map(t=>taskVisual(t)).join(''):'')+
       '<button class="part-empty" data-unified-add="part" data-part="other"><span>'+L('empty_other')+'</span><span class="part-empty-add">'+icon('plus',16)+'</span></button></div>'+
       '<div class="sectionbar merged-planned-heading"><h3>'+icon('clock',16)+' '+L('scheduled')+' ('+visible.length+')</h3></div>'+
+      nextTaskMarkup()+
       '<ol class="day-sequence" data-sequence-root="true" data-first-minute="'+first*60+'" data-last-minute="'+last*60+'">'+sequence+'</ol>'+
       '<button class="btn ghost sequence-add" data-unified-add="hour" data-start="'+Math.min(last*60-15,Math.max(first*60,busyEnd??first*60))+'">'+icon('plus',16)+' '+L('noTasks')+'</button>'+
       (outside.length?'<section class="day-sections outside-hours"><div class="outside-hours-head"><h3>'+icon('clock',16)+' '+(window.MellowDayHours?.label?.('outside')||'Outside chosen hours')+' ('+outside.length+')</h3><p>'+(window.MellowDayHours?.label?.('outsideHint')||'These items are still scheduled.')+'</p></div><div class="part-section"><div class="part-list">'+outside.sort(sorted).map(itemVisual).join('')+'</div></div></section>':'')+'</div>';
