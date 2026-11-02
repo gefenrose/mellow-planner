@@ -46,10 +46,14 @@
     if(!steps.length)return '';
     const done=steps.filter(step=>step.done).length;
     const count=done+' / '+steps.length;
-    const label=db.settings.lang==='he'?'תתי־משימות':'Subtasks';
-    return '<div class="home-subtasks" data-home-steps-for="'+esc(task.id)+'" role="group" aria-label="'+esc(label+' · '+task.title)+'">'+
-      '<div class="home-steps-heading"><span>'+esc(label)+'</span><span class="home-steps-progress" aria-label="'+esc(count)+'">'+count+'</span></div>'+
-      '<ul class="home-steps-list">'+steps.map(step=>
+    const collapsed=!!db.settings.homeSubtasksCollapsed?.[task.id];
+    const listId='home-steps-list-'+task.id;
+    const he=db.settings.lang==='he';
+    const label=he?'תתי־משימות':'Subtasks';
+    const toggleLabel=(collapsed?(he?'הצגת':'Show'):(he?'הסתרת':'Hide'))+' '+(he?'תתי־המשימות של ':'subtasks for ')+task.title;
+    return '<div class="home-subtasks'+(collapsed?' is-collapsed':'')+'" data-home-steps-for="'+esc(task.id)+'" role="group" aria-label="'+esc(label+' · '+task.title)+'">'+
+      '<div class="home-steps-heading"><button type="button" class="home-steps-collapse" data-home-steps-toggle="'+esc(task.id)+'" aria-controls="'+esc(listId)+'" aria-expanded="'+(!collapsed)+'" aria-label="'+esc(toggleLabel)+'"><span class="home-steps-indicator" aria-hidden="true">'+icon('chevronDown',14)+'</span><span>'+esc(label)+'</span></button><span class="home-steps-progress" aria-label="'+esc(count)+'">'+count+'</span></div>'+
+      '<ul id="'+esc(listId)+'" class="home-steps-list"'+(collapsed?' hidden':'')+'>'+steps.map(step=>
         '<li><label class="home-step-label"><input type="checkbox" class="home-step-toggle" data-step-task="'+esc(task.id)+'" data-step-id="'+esc(step.id)+'"'+(step.done?' checked':'')+'><span class="home-step-title">'+esc(step.title)+'</span></label></li>'
       ).join('')+'</ul></div>';
   }
@@ -259,6 +263,29 @@
   setInterval(updateNextTaskCountdown,15000);
   window.addEventListener('focus',updateNextTaskCountdown);
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateNextTaskCountdown()});
+  // Expand/collapse without rerendering the day (preserves focus and scroll).
+  // Save per-task preferences alongside planner settings so they survive refresh.
+  document.addEventListener('click',event=>{
+    const button=event.target.closest?.('[data-home-steps-toggle]');
+    if(!button)return;
+    event.preventDefault();
+    const id=button.dataset.homeStepsToggle;
+    const wrapper=button.closest('.home-subtasks');
+    const list=wrapper?.querySelector('.home-steps-list');
+    if(!wrapper||!list)return;
+    if(!db.settings.homeSubtasksCollapsed||typeof db.settings.homeSubtasksCollapsed!=='object'){
+      db.settings.homeSubtasksCollapsed={};
+    }
+    const collapsed=button.getAttribute('aria-expanded')==='true';
+    if(collapsed)db.settings.homeSubtasksCollapsed[id]=true;
+    else delete db.settings.homeSubtasksCollapsed[id];
+    wrapper.classList.toggle('is-collapsed',collapsed);
+    list.hidden=collapsed;
+    button.setAttribute('aria-expanded',String(!collapsed));
+    const task=findTask(id),he=db.settings.lang==='he';
+    button.setAttribute('aria-label',(collapsed?(he?'הצגת':'Show'):(he?'הסתרת':'Hide'))+' '+(he?'תתי־המשימות של ':'subtasks for ')+(task?.title||''));
+    persist();
+  });
   document.addEventListener('change',event=>{
     const input=event.target;
     if(!input.matches?.('.home-step-toggle[data-step-task]'))return;

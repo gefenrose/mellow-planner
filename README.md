@@ -49,3 +49,7 @@ Open **Settings → AI provider**, select **Google Gemini**, **Groq**, or **Open
 ## Today checklists and next-task countdown
 
 The **Today** page displays saved task subtasks directly inside their parent cards in both Day sections and Day sequence, with completion checkboxes linked to the existing local task data. A compact progress count updates when steps are checked. The **Day sequence** shows a live, localized countdown to the next future *incomplete* scheduled Mellow task, including tasks on upcoming dates; Google events and unscheduled tasks are excluded. The countdown updates in-place every 15 seconds and on returning to the tab. Drag-and-drop ignores subtask interactions.
+
+### Collapsible subtasks on Today
+
+Every Today task checklist has a small chevron next to its Subtasks label. Select it to collapse or reopen that checklist; the completed/total count stays visible. Each task's collapse preference is saved in `db.settings.homeSubtasksCollapsed` and survives rerenders and reloads, with checkboxes still editable when expanded. The control is keyboard-accessible, labels are localized in English and Hebrew, and no full page redraw is needed for toggling.
