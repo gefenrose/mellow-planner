@@ -43,12 +43,13 @@
     event.preventDefault();
     const section=list.closest('[data-priority-group]');
     drag={pointerId:event.pointerId,card,sourceList:list,targetList:list,sourcePriority:section?.dataset.priorityGroup||null,targetPriority:section?.dataset.priorityGroup||null,targetSection:section||null,grip,startX:event.clientX,startY:event.clientY,moved:false,original:cardsIn(list).map(item=>item.dataset.taskReorderId)};
+    document.body.classList.add('task-reorder-pressing');
     try{grip.setPointerCapture(event.pointerId)}catch{}
   },true);
   document.addEventListener('pointermove',event=>{
     if(!drag||drag.pointerId!==event.pointerId)return;
     if(!drag.moved&&Math.hypot(event.clientX-drag.startX,event.clientY-drag.startY)<5)return;
-    drag.moved=true;document.body.classList.add('task-reordering');drag.card.classList.add('task-reorder-moving');
+    drag.moved=true;document.getSelection()?.removeAllRanges();document.body.classList.add('task-reordering');drag.card.classList.add('task-reorder-moving');
     event.preventDefault();
     const point=document.elementFromPoint(event.clientX,event.clientY);
     const sourceGroup=drag.sourceList.closest('.task-group');
@@ -84,7 +85,7 @@
   function finish(event,canceled=false){
     if(!drag||event.pointerId!==drag.pointerId)return;
     const state=drag;drag=null;
-    document.body.classList.remove('task-reordering');
+    document.body.classList.remove('task-reorder-pressing','task-reordering');
     clearTargets();
     state.card.classList.remove('task-reorder-moving');
     if(!state.moved)return;
@@ -104,6 +105,9 @@
     persist();render();
     toast(priorityChanged?(db.settings.lang==='he'?'החשיבות עודכנה':'Priority updated'):(db.settings.lang==='he'?'הסדר נשמר':'Order saved'));
   }
+  document.addEventListener('selectstart',event=>{
+    if(document.body.classList.contains('task-reorder-pressing')||document.body.classList.contains('task-reordering'))event.preventDefault();
+  },true);
   document.addEventListener('pointerup',event=>finish(event),true);
   document.addEventListener('pointercancel',event=>finish(event,true),true);
   document.addEventListener('keydown',event=>{
