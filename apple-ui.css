@@ -752,6 +752,9 @@ body:is(.dnd-active,.task-reordering){cursor:grabbing}
   min-inline-size:0;
   grid-template-columns:28px minmax(0,1fr) auto;
 }
+.modal-bg .modal .steps-editor .step-candidate{
+  grid-template-columns:28px minmax(0,1fr);
+}
 .modal-bg .modal .steps-editor .step-manual-row > *,
 .modal-bg .modal .steps-editor .step-candidate > *{
   min-inline-size:0;
