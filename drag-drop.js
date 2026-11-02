@@ -227,13 +227,13 @@
     // The hourly timeline follows the document, not an inner scrolling card.
     // Keep scrolling the page while a held block approaches either screen edge.
     const timeline=document.querySelector('.merged-day-view .hourly-shell');
-    if(timeline){
-      const rect=timeline.getBoundingClientRect();
+    {
+      const rect=timeline?.getBoundingClientRect();
       const x=active.x,y=active.y;
       const height=window.innerHeight||document.documentElement.clientHeight;
       const bottomSafe=(window.innerWidth||390)<=700?104:28; // fixed iPhone tab bar
       const upper=72,lower=height-bottomSafe;
-      const isOverCalendar=x>=rect.left-14&&x<=rect.right+14;
+      const isOverCalendar=!rect||(x>=rect.left-14&&x<=rect.right+14);
       const isOverCategory=!!document.elementFromPoint(x,y)?.closest?.('[data-drop-category]');
       if(isOverCalendar&&!isOverCategory){
         const delta=y<upper?-Math.min(24,Math.ceil((upper-y)*0.35)):
@@ -251,7 +251,7 @@
   }
   function move(e){
     if(press&&press.pointerId===e.pointerId&&!press.ready){
-      if(Math.hypot(e.clientX-press.x,e.clientY-press.y)>9){clearPress();active=null}
+      if(Math.hypot(e.clientX-press.x,e.clientY-press.y)>14){clearPress();active=null}
       return;
     }
     if(!active||active.pointerId!==e.pointerId)return;
@@ -340,24 +340,34 @@
     if(!handle&&e.target.closest?.('.daytask-check,.hour-check,.event-open,.home-subtasks'))return;
     if(!enter(item,e))return;
     document.body.classList.add('dnd-pressing');
+    // These task surfaces opt out of native touch panning in CSS, so a
+    // deliberate movement starts dragging immediately; a tap still edits.
+    const directSurface=!!e.target.closest?.('.daytask-body,.daytask-icon,.hour-info,.hour-emoji');
     if(handle){
       e.preventDefault();
       try{handle.setPointerCapture(e.pointerId)}catch{}
       return;
     }
-    if(e.pointerType==='touch'||e.pointerType==='pen'){
+    if((e.pointerType==='touch'||e.pointerType==='pen')&&!directSurface){
       press={pointerId:e.pointerId,item,x:e.clientX,y:e.clientY,ready:false};
       pressTimer=setTimeout(()=>{
         if(press?.pointerId===e.pointerId&&active?.pointerId===e.pointerId){
           press.ready=true;begin();
         }
-      },320);
+      },220);
     }
   },true);
   // Stop browser text highlighting or touch callouts while grabbing a task.
   document.addEventListener('selectstart',e=>{
     if(document.body.classList.contains('dnd-pressing')||document.body.classList.contains('dnd-active'))e.preventDefault();
   },true);
+  // iOS Safari may otherwise begin document panning on the first move.
+  // Cancel only the currently captured drag; allow normal touch scrolling
+  // when a non-drag area is touched or a long-press has not activated.
+  document.addEventListener('touchmove',event=>{
+    if(!event.cancelable||!active||event.touches.length!==1)return;
+    if(active.moved||(!press&&document.body.classList.contains('dnd-pressing'))||press?.ready)event.preventDefault();
+  },{passive:false,capture:true});
   document.addEventListener('pointermove',move,{passive:false,capture:true});
   document.addEventListener('pointerup',e=>{if(press?.pointerId===e.pointerId)clearPress();release(e)},true);
   document.addEventListener('pointercancel',e=>{if(press?.pointerId===e.pointerId)clearPress();release(e,true)},true);
