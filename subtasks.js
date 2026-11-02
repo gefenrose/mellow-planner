@@ -10,9 +10,9 @@
       addSelected: 'Add selected steps', noSelected: 'Select at least one suggestion.',
       limit: 'Each task can have up to 20 steps.', done: 'steps done',
       up: 'Move step up', down: 'Move step down', delete: 'Remove step',
-      aiBusy: 'Thinking of helpful steps…', aiFallback: 'Gemini unavailable. Showing offline suggestions instead.',
-      offlineNote: 'For real AI-generated steps, select Gemini and add a key in Settings. Offline suggestions stay free.',
-      privacyNote: 'Gemini receives only this task’s title and notes when you request suggestions.',
+      aiBusy: 'Thinking of helpful steps…', aiFallback: 'AI provider unavailable. Showing offline suggestions instead.',
+      offlineNote: 'For AI-generated steps, choose a provider and add a key in Settings. Offline suggestions remain free.',
+      privacyNote: 'Your selected provider receives this task’s title and notes when you request steps.',
       duplicate: 'Those steps are already in your checklist.', saveHint: 'Use Save to keep your checklist changes.'
     },
     he: {
@@ -23,9 +23,9 @@
       addSelected: 'הוספת הצעדים שנבחרו', noSelected: 'יש לבחור לפחות צעד אחד.',
       limit: 'אפשר להוסיף עד 20 צעדים למשימה.', done: 'צעדים הושלמו',
       up: 'העברת צעד למעלה', down: 'העברת צעד למטה', delete: 'מחיקת צעד',
-      aiBusy: 'יוצרת צעדים קטנים…', aiFallback: 'Gemini לא זמין, לכן מוצגות הצעות מקומיות.',
-      offlineNote: 'לצעדים מבוססי AI יש לבחור Gemini ולהגדיר מפתח בהגדרות. ההצעות המקומיות חינמיות.',
-      privacyNote: 'רק שם המשימה וההערות יישלחו ל-Gemini לאחר לחיצה על יצירת הצעות.',
+      aiBusy: 'יוצרת צעדים קטנים…', aiFallback: 'ספק ה-AI לא זמין, לכן מוצגות הצעות מקומיות.',
+      offlineNote: 'לצעדים מבוססי AI יש לבחור ספק ולהגדיר מפתח בהגדרות. ההצעות המקומיות חינמיות.',
+      privacyNote: 'שם המשימה וההערות יישלחו לספק ה-AI הנבחר רק בלחיצה על יצירת הצעות.',
       duplicate: 'הצעדים האלה כבר נמצאים ברשימה.', saveHint: 'יש ללחוץ על שמירה כדי לשמור את השינויים.'
     }
   };
@@ -61,7 +61,7 @@
     if (!ui.stepCandidates?.length) return '';
     return '<div class="step-preview"><div class="step-preview-heading"><strong>' +
       icon('sparkles',18)+' '+W('suggestions')+'</strong><span class="step-source">'+
-      (ui.stepMode === 'gemini' ? W('aiMode') : W('offline'))+'</span></div>'+
+      (ui.stepMode !== 'offline' ? ui.stepMode.toUpperCase() : W('offline'))+'</span></div>'+
       '<p class="hint">'+W('preview')+'</p><div class="step-candidates">' +
       ui.stepCandidates.map((s,i) =>
         '<div class="step-candidate"><label class="step-select" aria-label="'+W('suggestions')+'"><input type="checkbox" data-step-candidate="'+i+'" '+(s.selected?'checked':'')+'></label>'+
@@ -85,8 +85,8 @@
       '<div class="step-entry"><input id="stepNewTitle" maxlength="160" type="text" placeholder="'+W('placeholder')+'" aria-label="'+W('manual')+'">'+
       '<button type="button" class="btn secondary small" data-step-action="add">'+icon('plus',16)+' '+W('manual')+'</button></div>'+
       '<div class="step-suggest-row"><button type="button" class="btn ghost small" data-step-action="suggest" '+(ui.stepBusy?'disabled':'')+'>'+icon('sparkles',17)+' '+(ui.stepBusy?W('aiBusy'):W('breakDown'))+'</button>'+
-      '<span class="step-source">'+(db.settings.aiMode==='gemini' && sessionStorage.getItem('mellow-gemini-key') ? W('aiMode') : W('offline'))+'</span></div>'+
-      (db.settings.aiMode==='gemini' && sessionStorage.getItem('mellow-gemini-key') ? '<p class="hint">'+W('privacyNote')+'</p>' : '<p class="hint">'+W('offlineNote')+'</p>')+
+      '<span class="step-source">'+(db.settings.aiMode!=='offline' && window.MellowAI?.hasKey() ? db.settings.aiMode.toUpperCase() : W('offline'))+'</span></div>'+
+      (db.settings.aiMode!=='offline' && window.MellowAI?.hasKey() ? '<p class="hint">'+W('privacyNote')+'</p>' : '<p class="hint">'+W('offlineNote')+'</p>')+
       previewPanel()+
       '<textarea id="taskSteps" class="hidden" aria-hidden="true" tabindex="-1">'+encodedText()+'</textarea>'+
       '<p class="hint">'+W('saveHint')+'</p>';
@@ -163,29 +163,6 @@
     };
     return plans[he?'he':'en'][key];
   }
-  async function geminiBreakdown(title,notes) {
-    const key=sessionStorage.getItem('mellow-gemini-key');
-    if(!key) throw Error('No API key');
-    const lang=db.settings.lang==='he'?'Hebrew':'English';
-    const prompt='You help users who struggle with executive function. Break exactly ONE task into 3 to 7 concrete, kind, very small actionable steps. Respond in '+lang+'. Each step should start with an action and be achievable. Avoid invented facts, appointments, or medical instructions. Return ONLY JSON in form {"steps":["..."]}. Task: '+JSON.stringify({title:title.slice(0,160),notes:notes.slice(0,1200)});
-    const controller=new AbortController();
-    const timer=setTimeout(()=>controller.abort(),22000);
-    try {
-      const resp=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',{
-        method:'POST',
-        headers:{'Content-Type':'application/json','x-goog-api-key':key},
-        body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{responseMimeType:'application/json',temperature:0.35}}),
-        signal:controller.signal
-      });
-      if(!resp.ok) throw Error('Gemini '+resp.status);
-      const body=await resp.json();
-      const content=body.candidates?.[0]?.content?.parts?.map(x=>x.text||'').join('')||'';
-      const parsed=JSON.parse(content);
-      const safe=safeSuggestions(parsed.steps);
-      if(!safe.length) throw Error('Empty step breakdown');
-      return safe;
-    } finally {clearTimeout(timer)}
-  }
   async function suggestSteps() {
     ensureSteps();
     if(ui.stepBusy) return;
@@ -195,10 +172,10 @@
     ui.stepBusy=true;
     renderStepEditor();
     let list=null,mode='offline',fallback=false;
-    const useAI=db.settings.aiMode==='gemini' && !!sessionStorage.getItem('mellow-gemini-key');
+    const useAI=db.settings.aiMode!=='offline' && !!window.MellowAI?.hasKey();
     if(useAI){
-      try {list=await geminiBreakdown(title,notes);mode='gemini'}
-      catch(error){console.warn('Gemini steps unavailable',error);fallback=true}
+      try {list=await window.MellowAI.breakdown(title,notes);mode=db.settings.aiMode}
+      catch(error){console.warn('AI steps unavailable',error);fallback=true}
     }
     if(!list?.length){list=safeSuggestions(offlineBreakdown(title,notes));mode='offline'}
     if(ui.stepContext!==context||ui.modal!=='task')return;
