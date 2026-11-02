@@ -538,6 +538,37 @@ body.dark .task-priority-pill.low{background:#323e54;color:#b6d3ff}
 }
 @media(min-width:701px){.bottomnav{display:none}}
 
+/* Light appearance: keep selected dates readable, including the month picker.
+   Pair dark numbers with a light lavender selection rather than dark-on-purple. */
+body:not(.dark) .day.active{
+  background:#ebe7f8!important;
+  color:#191720!important;
+  border:1px solid #9386c4!important;
+  box-shadow:none!important;
+}
+body:not(.dark) .day.active span,
+body:not(.dark) .day.active b{
+  color:#191720!important;
+}
+body:not(.dark) .jump-date.selected{
+  background:#ebe7f8!important;
+  color:#191720!important;
+  border:1px solid #9386c4!important;
+}
+body:not(.dark) .jump-date.selected :is(span,b,strong){
+  color:#191720!important;
+}
+
+/* Block accidental highlight/callout only while a drag gesture is held or active.
+   Both Today (dnd-*) and Tasks priority/reordering use the same behavior. */
+body:is(.dnd-pressing,.dnd-active,.task-reorder-pressing,.task-reordering),
+body:is(.dnd-pressing,.dnd-active,.task-reorder-pressing,.task-reordering) *{
+  user-select:none!important;
+  -webkit-user-select:none!important;
+  -webkit-touch-callout:none!important;
+}
+body:is(.dnd-active,.task-reordering){cursor:grabbing}
+
 /* Keep background colors meaningful rather than decorative in high contrast. */
 @media(forced-colors:active){
   .btn,.day.active,.navbtn.active,.chip.selected,.bottomnav button.active{
