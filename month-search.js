@@ -87,13 +87,14 @@
   };
   function monthModal(){
     monthShown=monthShown||firstOf(ui.date);
+    const rtl=db.settings.lang==='he';
     return '<div class="modal-bg jump-overlay" data-planner-dismiss="month">'+
       '<section class="modal jump-month-modal" role="dialog" aria-modal="true" aria-labelledby="jumpMonthTitle">'+
       '<div class="jump-modal-header"><div><p class="jump-eyebrow">MELLOW</p><h2 id="jumpMonthTitle">'+W('monthTitle')+'</h2></div>'+
       '<button type="button" class="jump-close" data-planner-close="true" aria-label="'+W('close')+'">'+i('plus',19)+'</button></div>'+
-      '<div class="jump-month-toolbar"><button type="button" data-planner-shift="-1" aria-label="'+W('previous')+'">'+i('chevronLeft',19)+'</button>'+
+      '<div class="jump-month-toolbar"><button type="button" data-planner-shift="-1" aria-label="'+W('previous')+'">'+i(rtl?'chevronRight':'chevronLeft',19)+'</button>'+
       '<h3>'+esc(dt(monthShown,{month:'long',year:'numeric'}))+'</h3>'+
-      '<button type="button" data-planner-shift="1" aria-label="'+W('next')+'">'+i('chevronRight',19)+'</button></div>'+
+      '<button type="button" data-planner-shift="1" aria-label="'+W('next')+'">'+i(rtl?'chevronLeft':'chevronRight',19)+'</button></div>'+
       '<div id="jumpMonthGrid">'+monthGrid()+'</div>'+
       '<div class="jump-bottom"><span class="jump-help">'+W('dayHint')+'</span>'+
       '<button type="button" class="btn secondary small" data-planner-date="'+today()+'">'+W('today')+'</button></div>'+
