@@ -74,3 +74,7 @@ In light mode the selected day in the Today week strip and date-jump calendar us
 ### Touch drag repair (v47)
 
 Touching a task title/icon in Today now initiates a drag on movement rather than native page scrolling. Tapping still opens the task. The visible drag grips are larger and have `touch-action: none`, including the dedicated grip on Tasks lists. The existing long-press fallback for other card areas has a shorter activation period and a more forgiving movement tolerance. A non-passive `touchmove` handler cancels page panning only for active drags, while the rest of the page and subtask controls remain scrollable. While dragging, edge auto-scroll works in both the day-sections and timeline views. Normal text-selection behavior returns on release.
+
+### Field alignment and containment (v48)
+
+Fixed forms and inputs that could run beyond their cards, appear shifted to one side or stretch unexpectedly after the site-wide design refresh. In particular, the 80px task emoji field stays compact, nested search input sits flush inside its search container, subtask editing fields fit their rows, iOS date/time inputs are allowed to shrink within their grid column, and Google Calendar/Settings fields and action groups wrap inside cards. The fixes use logical inline sizing for Hebrew RTL and English LTR and preserve native input behavior. On narrow devices, editor columns stack and all text-like fields stay within the available dialog width; checkboxes and drag affordances retain their distinct dimensions.
