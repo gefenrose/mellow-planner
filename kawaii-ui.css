@@ -1,0 +1,424 @@
+/*
+ * Mellow Kawaii — original pastel plushie design system (v51)
+ *
+ * Loaded after apple-ui.css; preserves layout, calendar controls, DnD touch
+ * actions, form containment, RTL direction, and readable system typography.
+ * All stickers are local transparent PNG assets, not remote requests.
+ */
+
+/* Creamy lavender, strawberry milk, and a little mint. */
+:root{
+  --bg:#fdf5fc;
+  --surface:#fffcff;
+  --surface2:#f5eaf4;
+  --ink:#34263a;
+  --muted:#726377;
+  --border:#ead8e8;
+  --green:#7652aa;
+  --lightgreen:#f1e4fc;
+  --purple:#7652aa;
+  --lav:#f1e5fb;
+  --pink:#fce9f2;
+  --peach:#edc4cf;
+  --blue:#7663a9;
+  --sky:#efeaff;
+  --shadow:0 5px 22px rgba(157,107,149,.07);
+  --radius:21px;
+  --kawaii-rose:#e8a4c0;
+  --kawaii-lilac:#c3afe8;
+  --kawaii-cream:#fff3de;
+  --kawaii-mint:#dfefe7;
+  --kawaii-stroke:#e9cce0;
+  --kawaii-bunny:url("./assets/kawaii-bunny.png");
+  --kawaii-bear:url("./assets/kawaii-bear.png");
+  --kawaii-bow:url("./assets/kawaii-bow.png");
+  --kawaii-flower:url("./assets/kawaii-flower.png");
+  --kawaii-ribbon:url("./assets/kawaii-ribbon.png");
+}
+body.dark{
+  --bg:#211b2a;
+  --surface:#2e2535;
+  --surface2:#40334a;
+  --ink:#faf0fc;
+  --muted:#d2c0d6;
+  --border:#58465e;
+  --green:#d8baf4;
+  --purple:#d8baf4;
+  --lightgreen:#463753;
+  --lav:#41334e;
+  --pink:#483444;
+  --peach:#6b485f;
+  --blue:#c8b4f5;
+  --sky:#39324f;
+  --shadow:0 6px 25px #0b071b28;
+  --kawaii-stroke:#5e4862;
+}
+body{
+  background:var(--bg);
+  background-image:
+    radial-gradient(ellipse at 9% 0%,rgba(241,202,235,.35) 0%,transparent 37%),
+    radial-gradient(ellipse at 100% 25%,rgba(216,203,252,.30) 0%,transparent 42%),
+    radial-gradient(ellipse at 50% 100%,rgba(252,232,205,.20) 0%,transparent 45%);
+  color:var(--ink);
+}
+body.dark{
+  background-image:
+    radial-gradient(ellipse at 0% 0%,rgba(142,98,156,.17) 0%,transparent 40%),
+    radial-gradient(ellipse at 100% 45%,rgba(95,78,139,.20) 0%,transparent 40%);
+}
+::selection{background:#f5c5e0;color:#33263d}
+
+/* Rounded, softly outlined content; no decorative overlay absorbs input. */
+.card,.day-nav-card,.stat,.greeting,.sequence-card,.tasks-list.card,
+.hourly-shell,.ai-journal-output,.gcal-today-panel.card,.gcal-settings-card{
+  border-color:var(--border);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+}
+.card,.sequence-card,.tasks-list.card,.day-nav-card{
+  background:var(--surface);
+}
+.card,.greeting,.day-nav-card,.task-priority-section,.routine,.ai-journal-card,
+.settingsgrid .card,.mellow-day-view,.topbar,.task-page-title,.empty{
+  position:relative;
+}
+:where(.card,.greeting,.day-nav-card,.topbar,.routine,.task-page-title)::before,
+:where(.card,.greeting,.day-nav-card,.topbar,.routine,.task-page-title)::after{
+  pointer-events:none!important;
+}
+h1,h2,h3,.brand-word,.task-page-title h1{
+  color:var(--ink);
+}
+.overline{color:#865b9c;letter-spacing:.08em}
+body.dark .overline{color:#d7baf6}
+.subtle,.hint,.footnote{color:var(--muted)}
+.page-heading-title h1,.mellow-title-line h1,.task-page-title h1{
+  letter-spacing:-.045em;
+}
+
+/* Sidebar & tab bar: like a frosted pastel stationery tray. */
+.sidebar{
+  background:linear-gradient(174deg,#fff7fc 0%,#f5edfd 52%,#fff3f7 100%)!important;
+  border-inline-end:1px solid var(--kawaii-stroke);
+}
+body.dark .sidebar{background:linear-gradient(170deg,#33263c,#2a2232 70%,#392b3a)!important}
+.brand-icon{
+  background:#f8dff0;
+  color:#8352a7;
+  border:1px solid #eccce5;
+  border-radius:15px;
+  box-shadow:0 3px 8px #b181a017;
+}
+.brand-word{letter-spacing:-.055em}
+.brand-word::after{
+  content:"";
+  display:inline-block;
+  width:24px;height:24px;
+  margin-inline-start:3px;
+  background:var(--kawaii-bow) center/contain no-repeat;
+  vertical-align:middle;
+  pointer-events:none;
+}
+.navbtn{border:1px solid transparent;border-radius:14px}
+.navbtn.active{
+  background:#f2e1f6;
+  border-color:#eacbea;
+  box-shadow:0 2px 8px #ac85ae10;
+  color:#6a3d91;
+}
+.navbtn:hover:not(.active){background:#fffcffae}
+body.dark .navbtn.active{background:var(--lightgreen);border-color:var(--border);color:var(--green)}
+.sidebar-footer{border-color:var(--border);color:var(--muted)}
+.bottomnav{
+  background:color-mix(in srgb,var(--surface) 90%,#fce0f1)!important;
+  border-top:1px solid var(--kawaii-stroke);
+}
+.bottomnav button.active{color:var(--green)}
+.bottomnav button.active .icon{
+  background:#f2dff8;
+  color:#6b4294;
+  border-radius:12px;
+}
+body.dark .bottomnav button.active .icon{background:var(--lightgreen);color:var(--green)}
+.floatadd{
+  background:#8864bd;
+  border:2px solid #ffe6fa;
+  color:#fff;
+  box-shadow:0 8px 24px #b089c45b;
+}
+body.dark .floatadd{background:#bba0de;color:#2c2037}
+
+/* Subtle kawaii corner stickers on page headings; keep text unobscured. */
+.main > .topbar{padding-inline-end:50px}
+.main > .topbar::after{
+  content:"";
+  position:absolute;
+  top:0;
+  inset-inline-end:0;
+  width:49px;height:49px;
+  background:var(--kawaii-flower) center/contain no-repeat;
+  opacity:.9;
+}
+.mellow-day-heading{position:relative}
+.mellow-title-line .btn{border-radius:14px}
+.mellow-day-heading .overline::before{
+  content:"♡";
+  display:inline-block;
+  padding-inline-end:6px;
+  color:#d995b5;
+  font-weight:700;
+}
+
+/* The week card, date picker & task lists look like little stationery cards. */
+.day-nav-card{
+  background:linear-gradient(135deg,var(--surface),#fdf4fd);
+  border:1px solid var(--kawaii-stroke);
+  box-shadow:0 6px 22px rgba(162,122,167,.09);
+}
+body.dark .day-nav-card{background:var(--surface)}
+.day-nav-card::after{
+  content:"";
+  position:absolute;
+  inset-inline-end:4px;
+  top:-17px;
+  width:44px;height:44px;
+  background:var(--kawaii-bow) center/contain no-repeat;
+  z-index:0;
+}
+.day-nav-card > *{position:relative;z-index:1}
+.day.active,.jump-date.selected{
+  border-radius:13px;
+}
+body:not(.dark) .day.active,
+body:not(.dark) .jump-date.selected{
+  background:#eadaf6!important;
+  color:#30213c!important;
+  border:1px solid #ae8fd1!important;
+}
+body:not(.dark) .day.active :is(span,b),
+body:not(.dark) .jump-date.selected :is(span,b,strong){color:#30213c!important}
+.planner-view-toggle{background:#f3e8f7;border:1px solid #eddbf1}
+.planner-view-toggle button.selected{background:#fffafd;color:#69418b;box-shadow:0 1px 5px #bea5be25}
+body.dark .planner-view-toggle{background:var(--surface2);border-color:var(--border)}
+body.dark .planner-view-toggle button.selected{background:var(--surface);color:var(--ink)}
+
+/* Timeline treats task times as tiny lavender stamps. */
+.sequence-card,.daytask,.unified-item,.mellow-day-block{
+  box-shadow:0 3px 14px #bb94b315;
+}
+.sequence-time{color:#77549a}
+body.dark .sequence-time{color:#dac3f0}
+.sequence-gap,.sequence-gap-content{color:var(--muted)}
+.sequence-gap-add{
+  border-radius:14px;
+  border-color:var(--kawaii-stroke);
+}
+.next-task-countdown{
+  position:relative;
+  background:linear-gradient(112deg,#f5e7fc,#fff3f6);
+  border:1px solid #edcfe8;
+  border-radius:20px;
+  padding-inline-end:75px;
+  color:var(--ink);
+}
+body.dark .next-task-countdown{background:linear-gradient(112deg,#43314f,#3b2c42);border-color:var(--border)}
+.next-task-countdown::after{
+  content:"";position:absolute;
+  inset-inline-end:8px;bottom:4px;
+  width:72px;height:72px;
+  background:var(--kawaii-bunny) center/contain no-repeat;
+  pointer-events:none;
+}
+.home-subtasks{border-color:var(--kawaii-stroke)}
+.home-steps-collapse{color:var(--green)}
+
+/* Buttons and interactive controls: soft satin pills with strong focus. */
+.btn{border-radius:14px;background:var(--green);color:#fff;font-weight:700}
+.btn.secondary,.page-title-add,.task-group-add,.task-priority-add,
+.part-add,.iconbtn,.jump-close,.task-suggestions-refresh,.task-suggestion-add{
+  background:var(--lightgreen);
+  color:var(--green);
+  border-radius:13px;
+}
+.btn.ghost{
+  border-color:#e7d4e8;
+  background:var(--surface);
+}
+.chip,.task-filter-menu summary{border-radius:13px}
+.chip.selected{background:#efdcf9;color:#6c438e;border-color:#d7b6ef}
+.task-priority-pill{border-radius:14px}
+.task-priority-pill.high{background:#ffebf1;color:#9b3d5d}
+.task-priority-pill.med{background:#fff3e4;color:#8a5b31}
+.task-priority-pill.low{background:#eaf1ff;color:#3f608f}
+body.dark .task-priority-pill.high{background:#553544;color:#ffb4cf}
+body.dark .task-priority-pill.med{background:#564332;color:#fbe1b0}
+body.dark .task-priority-pill.low{background:#343f56;color:#b4ccfc}
+:where(input,textarea,select):focus-visible{outline-color:var(--green)}
+:where(input,textarea,select):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]){
+  border-color:var(--border);
+  border-radius:13px;
+}
+:where(.field label,.field span){color:var(--ink)}
+
+/* A small, original flower/bow sticker accents every content family. */
+.task-page-title{min-height:52px;padding-inline-end:65px}
+.task-page-title::after{
+  content:"";
+  position:absolute;top:-15px;inset-inline-end:0;
+  width:66px;height:66px;
+  background:var(--kawaii-bear) center/contain no-repeat;
+}
+.task-priority-row .task-priority-add{background:#f5e8fb}
+.tasks-list.card{border:1px solid var(--kawaii-stroke)}
+.tasks-list .task.task-card{
+  border-bottom-color:#f1e2ed!important;
+  background:transparent;
+}
+body.dark .tasks-list .task.task-card{border-bottom-color:var(--border)!important}
+.tasks-list .task-emoji{background:#f8effa}
+.task-list-empty{padding-top:24px}
+.empty::before{
+  content:"";
+  width:80px;height:80px;
+  display:block;
+  margin:0 auto 8px;
+  background:var(--kawaii-bunny) center/contain no-repeat;
+}
+.empty .big{opacity:.75}
+.task-priority-empty{border-color:#edcfe7;background:#fffbff}
+
+/* Routines look like a collection of little decorated note cards. */
+.routinegrid{gap:17px}
+.routinegrid .routine{
+  border-color:var(--kawaii-stroke);
+  background:linear-gradient(150deg,var(--surface),color-mix(in srgb,var(--surface) 80%,#f2d8ea));
+  padding-top:24px;
+}
+.routinegrid .routine::after{
+  content:"";
+  position:absolute;
+  inset-inline-end:9px;top:-11px;
+  width:44px;height:44px;
+  background:var(--kawaii-ribbon) center/contain no-repeat;
+}
+.routine-icon{background:#f3e2f6;color:#8d5aae}
+.routine-actions{border-color:var(--kawaii-stroke)}
+.steps li{color:var(--ink)}
+body.dark .routinegrid .routine{background:var(--surface)}
+
+/* AI writing: cozy notebook corners, but writing stays clean and legible. */
+.ai-journal-card{
+  border-color:var(--kawaii-stroke);
+  background:var(--surface);
+}
+.ai-journal-card::before{
+  content:"";
+  position:absolute;
+  top:-15px;inset-inline-end:9px;
+  width:46px;height:46px;
+  background:var(--kawaii-bow) center/contain no-repeat;
+}
+.ai-journal-card:first-child{border-top:3px solid #edbada}
+.ai-journal-card:nth-child(2){border-top:3px solid #ceb9ee}
+.ai-journal-card textarea{background:#fffafd;color:var(--ink)}
+body.dark .ai-journal-card textarea{background:var(--surface)}
+.ai-journal-output{background:var(--lightgreen);border-color:var(--border)}
+.ai-journal-stats span{background:#f6e9fa;color:#5f427b}
+body.dark .ai-journal-stats span{background:var(--surface2);color:var(--ink)}
+.ai-journal-actions .btn{border-radius:15px}
+
+/* Settings cards: little blossom stickers, never on inputs themselves. */
+.settingsgrid .card{border-color:var(--kawaii-stroke);background:var(--surface)}
+.settingsgrid .card::after{
+  content:"";position:absolute;
+  top:-14px;inset-inline-end:12px;
+  width:41px;height:41px;
+  background:var(--kawaii-flower) center/contain no-repeat;
+}
+.gcal-settings-card{border-color:var(--kawaii-stroke)}
+.gcal-guide,.notice{background:var(--lightgreen);border-color:var(--border)}
+.day-hours-hourly{background:var(--lightgreen);border-color:var(--border)}
+
+/* Editors & search popups: bows on the stationary header, NOT on form fields. */
+.modal-bg > :is(.task-editor-modal,.routine-editor-modal){
+  background:var(--surface);
+  border:1px solid var(--kawaii-stroke);
+  box-shadow:0 18px 56px #5d355a40;
+  border-radius:24px;
+}
+.modal-bg > :is(.task-editor-modal,.routine-editor-modal) > .modalheader{position:relative}
+.modal-bg > :is(.task-editor-modal,.routine-editor-modal) > .modalheader::after{
+  content:"";
+  position:absolute;
+  inset-inline-end:0;
+  top:-10px;
+  width:40px;height:40px;
+  background:var(--kawaii-bow) center/contain no-repeat;
+  pointer-events:none;
+}
+/* Header-close control sits at its existing end; decoration stays outside hit target. */
+.modal-bg > :is(.task-editor-modal,.routine-editor-modal) > .modalheader::after{
+  opacity:.52;
+  transform:translateY(-21px);
+}
+.modal-bg > :is(.task-editor-modal,.routine-editor-modal) > .modalheader .iconbtn{
+  position:relative;z-index:1;
+}
+.jump-month-modal,.jump-search-modal,.create-choice-modal{
+  border:1px solid var(--kawaii-stroke);
+  border-radius:23px;
+  background:var(--surface);
+}
+.jump-modal-header{position:relative}
+.jump-modal-header::after{
+  content:"";
+  position:absolute;
+  inset-inline-end:53px;
+  top:-8px;width:42px;height:42px;
+  background:var(--kawaii-flower) center/contain no-repeat;
+  pointer-events:none;
+}
+.jump-search-input{border-radius:16px;border-color:#d9b9e2;background:var(--surface)}
+.jump-search-filters button.selected{background:var(--lightgreen);color:var(--green)}
+.jump-date.is-today{border-color:#bda0e1}
+.choice-card{border-color:var(--kawaii-stroke);border-radius:17px}
+.choice-card:hover{background:var(--lightgreen)}
+#toast{border-radius:15px}
+
+/* Avoid collision on mobile, and preserve the earlier form width fixes. */
+@media(max-width:700px){
+  .main > .topbar{padding-inline-end:44px}
+  .main > .topbar::after{width:39px;height:39px}
+  .task-page-title{padding-inline-end:52px}
+  .task-page-title::after{width:52px;height:52px;top:-8px}
+  .day-nav-card::after{width:35px;height:35px;top:-14px}
+  .settingsgrid .card::after,.routinegrid .routine::after{width:35px;height:35px}
+  .next-task-countdown{padding-inline-end:62px}
+  .next-task-countdown::after{width:62px;height:62px;bottom:5px;inset-inline-end:4px}
+  .ai-journal-card::before{width:34px;height:34px;top:-12px}
+  .ai-journal-card > .ai-journal-heading{min-width:0;max-width:100%}
+  .modal-bg > :is(.task-editor-modal,.routine-editor-modal) > .modalheader::after{width:30px;height:30px}
+  .jump-modal-header::after{width:34px;height:34px}
+}
+@media(max-width:370px){
+  .main > .topbar{padding-inline-end:33px}
+  .main > .topbar::after{width:30px;height:30px}
+  .task-page-title{padding-inline-end:46px}
+  .task-page-title::after{width:42px;height:42px;top:0}
+  .next-task-countdown::after{width:51px;height:51px}
+  .next-task-countdown{padding-inline-end:52px}
+}
+/* Preserve access, readability and performance. */
+@media(prefers-contrast:more){
+  .card,.day-nav-card,.sequence-card,.tasks-list.card{box-shadow:none}
+  .navbtn.active,.btn.secondary{border:1px solid currentColor}
+}
+@media(forced-colors:active){
+  .card,.day-nav-card,.sequence-card,.tasks-list.card,.routine{border:1px solid CanvasText}
+  .btn,.day.active,.navbtn.active{forced-color-adjust:auto}
+  .main > .topbar::after,.day-nav-card::after,.task-page-title::after,
+  .routine::after,.settingsgrid .card::after,.ai-journal-card::before{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .routine,.card,.btn,.navbtn,.sequence-card{animation:none!important}
+}
