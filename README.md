@@ -53,3 +53,16 @@ The **Today** page displays saved task subtasks directly inside their parent car
 ### Collapsible subtasks on Today
 
 Every Today task checklist has a small chevron next to its Subtasks label. Select it to collapse or reopen that checklist; the completed/total count stays visible. Each task's collapse preference is saved in `db.settings.homeSubtasksCollapsed` and survives rerenders and reloads, with checkboxes still editable when expanded. The control is keyboard-accessible, labels are localized in English and Hebrew, and no full page redraw is needed for toggling.
+
+## Site-wide visual system (v45)
+
+Mellow has an original, Apple-inspired **grouped-list** interface designed to feel familiar alongside Reminders and Notes, without copying proprietary Apple components or assets. The site-wide `apple-ui.css` is loaded last and applies a single visual system throughout Today, Tasks, Routines, AI & Writing, Settings, Google Calendar, date search, editors and dialogs:
+
+- Native Apple system font stacks where available, clearer headings and readable secondary text
+- Quiet white/inset grouped surfaces, subtle separators and very limited shadows
+- Lavender action color, category and priority cues that remain recognizable by text/icons
+- Consistent interactive targets (typically at least 44px), safe-area-aware five-tab mobile navigation and mobile-first forms
+- Light and dark schemes, `prefers-reduced-motion`, increased-contrast and forced-colors accommodations
+- A keyboard skip link, translated navigation landmarks, selected-tab state and modal focus containment
+
+This is an interface refresh. Existing scheduling, task data, routines, AI API, syncing, drag-and-drop and persistence behavior are not intentionally changed.
