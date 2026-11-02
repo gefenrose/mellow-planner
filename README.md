@@ -78,3 +78,11 @@ Touching a task title/icon in Today now initiates a drag on movement rather than
 ### Field alignment and containment (v48)
 
 Fixed forms and inputs that could run beyond their cards, appear shifted to one side or stretch unexpectedly after the site-wide design refresh. In particular, the 80px task emoji field stays compact, nested search input sits flush inside its search container, subtask editing fields fit their rows, iOS date/time inputs are allowed to shrink within their grid column, and Google Calendar/Settings fields and action groups wrap inside cards. The fixes use logical inline sizing for Hebrew RTL and English LTR and preserve native input behavior. On narrow devices, editor columns stack and all text-like fields stay within the available dialog width; checkboxes and drag affordances retain their distinct dimensions.
+
+### iPhone screenshot visual repairs (v49)
+
+- Task and routine editors have separate, independently scrollable form contents; headers and action footers no longer overlay and hide rows while scrolling.
+- Native iOS date/time inputs in task, routine and AI journal editors are contained by a dedicated full-width field shell with a visible outer focus ring.
+- AI Daily Summary date field uses a predictable mobile single-column / desktop two-column grid, respecting card padding and Hebrew RTL layout.
+- Global Search has a single accessible focus ring rather than a second inset purple outline. Search and month jump overlays align to the top of the screen and remain scrollable even when the keyboard appears.
+- Existing task, calendar, data-storage and drag functionality is unchanged.
