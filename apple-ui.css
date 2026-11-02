@@ -618,3 +618,281 @@ body:is(.dnd-active,.task-reordering){cursor:grabbing}
   }
   .skip-link{forced-color-adjust:auto}
 }
+
+
+/* 09 · Field containment and alignment: iOS/RTL responsive repair.
+   This layer overrides broad app-wide input styles only in the controls
+   whose own layout requires it. Never fix overflow by hiding the field. */
+
+/* Grid and flex descendants may otherwise keep a native min-content width,
+   especially for iOS date/time controls, long option text and Hebrew labels. */
+:where(.main,.modal,.jump-month-modal,.jump-search-modal,
+  .settingsgrid,.settingsgrid .card,.ai-journal,.ai-journal-card,
+  .gcal-settings-card,.gcal-event-form,.day-hours-controls,
+  .formgrid,.steps-editor,.step-preview,.step-entry,
+  .jump-search-input,.jump-search-filters,.gcal-client-row,
+  .task-page,.day-nav-card,.mellow-day-view){
+  min-inline-size:0;
+  max-inline-size:100%;
+}
+:is(.modal .formgrid,.gcal-event-form,.settingsgrid,.ai-journal,.day-hours-controls)
+  > :is(.field,label,.card,section,div){
+  min-inline-size:0;
+  max-inline-size:100%;
+}
+:is(.modal .field,.settingsgrid .field,.ai-journal-card .field,
+  .gcal-settings-card .field,.gcal-event-form .field){
+  box-sizing:border-box;
+  min-inline-size:0;
+  max-inline-size:100%;
+  inline-size:100%;
+  margin-inline:0;
+}
+:is(.modal .field,.settingsgrid .field,.ai-journal-card .field,
+  .gcal-settings-card .field,.gcal-event-form .field)
+  > :is(label,span,.hint){
+  min-inline-size:0;
+  max-inline-size:100%;
+  overflow-wrap:anywhere;
+}
+/* Only text-like fields expand to the column. Keep checkboxes, radio controls,
+   emoji swatches, and task-completion buttons at their intended size. */
+:is(.modal,.settingsgrid,.ai-journal-card,.gcal-settings-card,
+  .gcal-event-form,.day-hours-controls)
+  input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]),
+:is(.modal,.settingsgrid,.ai-journal-card,.gcal-settings-card,
+  .gcal-event-form,.day-hours-controls)
+  :is(select,textarea){
+  box-sizing:border-box;
+  inline-size:100%;
+  max-inline-size:100%;
+  min-inline-size:0;
+  margin-inline:0;
+  position:relative;
+  inset-inline-start:auto;
+  inset-inline-end:auto;
+}
+/* Emoji entry is deliberately small. Older .modal input width:100% rules
+   overrode the editor's inline 80px width, displacing adjacent controls. */
+.modal-bg .modal input#taskEmoji{
+  box-sizing:border-box;
+  inline-size:80px!important;
+  width:80px!important;
+  max-inline-size:100%;
+  min-inline-size:0;
+  flex:none;
+  align-self:flex-start;
+  text-align:center;
+}
+/* WebKit's editable date/time contents need to be allowed to shrink instead of
+   imposing an intrinsic width on two-column layouts. */
+.modal-bg .modal input:is([type="date"],[type="time"]),
+.ai-journal-card input[type="date"]{
+  inline-size:100%;
+  max-inline-size:100%;
+  min-inline-size:0;
+  box-sizing:border-box;
+  direction:ltr;
+  text-align:start;
+}
+.modal-bg .modal input:is([type="date"],[type="time"])::-webkit-date-and-time-value,
+.ai-journal-card input[type="date"]::-webkit-date-and-time-value{
+  min-inline-size:0;
+  text-align:start;
+}
+.modal-bg .modal input:is([type="date"],[type="time"])::-webkit-datetime-edit,
+.ai-journal-card input[type="date"]::-webkit-datetime-edit{
+  min-inline-size:0;
+}
+
+/* The search input lives *inside* a styled search box. Generic input border
+   and padding won specificity in the new theme, producing a double inset. */
+.jump-search-modal .jump-search-input{
+  display:flex;
+  align-items:center;
+  box-sizing:border-box;
+  inline-size:100%;
+  max-inline-size:100%;
+  min-inline-size:0;
+  padding-inline:12px;
+  gap:8px;
+}
+.jump-search-modal .jump-search-input input[type="search"]{
+  box-sizing:border-box;
+  flex:1 1 0%;
+  inline-size:0;
+  width:0;
+  max-inline-size:100%;
+  min-inline-size:0;
+  margin:0;
+  padding:8px 0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  outline-offset:0;
+}
+.jump-search-modal .jump-search-input input[type="search"]:focus{
+  border:0;
+  box-shadow:none;
+}
+/* Only the outer search field should show a focus ring. */
+.jump-search-modal .jump-search-input:focus-within{
+  border-color:var(--apple-focus);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--purple) 17%,transparent);
+}
+
+/* Subtask inline textboxes have their own minimal inset treatment. A broad
+   input rule made them taller/wider than their list rows after the redesign. */
+.modal-bg .modal .steps-editor .step-manual-row,
+.modal-bg .modal .steps-editor .step-candidate{
+  box-sizing:border-box;
+  inline-size:100%;
+  max-inline-size:100%;
+  min-inline-size:0;
+  grid-template-columns:28px minmax(0,1fr) auto;
+}
+.modal-bg .modal .steps-editor .step-candidate{
+  grid-template-columns:28px minmax(0,1fr);
+}
+.modal-bg .modal .steps-editor .step-manual-row > *,
+.modal-bg .modal .steps-editor .step-candidate > *{
+  min-inline-size:0;
+  max-inline-size:100%;
+}
+.modal-bg .modal .steps-editor :is(
+  input.step-manual-title,
+  .step-candidate input[type="text"]
+){
+  box-sizing:border-box;
+  inline-size:100%;
+  max-inline-size:100%;
+  min-inline-size:0;
+  margin:0;
+  padding:7px 6px;
+  border-color:transparent;
+  background:transparent;
+  font-size:16px;
+  line-height:1.4;
+}
+.modal-bg .modal .steps-editor :is(
+  input.step-manual-title,
+  .step-candidate input[type="text"]
+):focus{
+  border-color:var(--apple-focus);
+  background:var(--surface);
+}
+.steps-editor .step-row-controls{
+  display:flex;
+  align-items:center;
+  min-inline-size:0;
+  max-inline-size:100%;
+}
+.steps-editor .step-row-controls .step-iconbtn{flex-shrink:0}
+
+/* Prevent controls in settings, Google connection and editor footers from
+   pushing flex siblings past the card edge. Long text wraps naturally. */
+.settingsgrid .card > *,
+.ai-journal-card > *,
+.gcal-settings-card > *,
+.gcal-setup > *,
+.gcal-calendar-picker > *{
+  min-inline-size:0;
+  max-inline-size:100%;
+}
+.settingsgrid .card :is(.buttonrow,.ai-journal-actions),
+.ai-journal-card :is(.buttonrow,.ai-journal-actions),
+.modal-bg .modal :is(.buttonrow,.formactions){
+  min-inline-size:0;
+  max-inline-size:100%;
+}
+.modal-bg .modal .formactions .buttonrow{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:8px;
+  margin-inline-start:auto;
+}
+.modal-bg .modal .formactions .btn{
+  max-inline-size:100%;
+  min-inline-size:0;
+  white-space:normal;
+  text-align:center;
+  overflow-wrap:anywhere;
+}
+.gcal-settings-card .gcal-client-row{
+  display:flex;
+  flex-wrap:wrap;
+  min-inline-size:0;
+  max-inline-size:100%;
+}
+.gcal-settings-card .gcal-client-row input{
+  flex:1 1 190px;
+  min-inline-size:0;
+  max-inline-size:100%;
+}
+.gcal-settings-card .gcal-client-row button{
+  flex:0 1 auto;
+  min-inline-size:0;
+  max-inline-size:100%;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+.ai-journal-heading{
+  min-inline-size:0;
+  max-inline-size:100%;
+  gap:12px;
+}
+.ai-journal-heading > h2{min-inline-size:0;overflow-wrap:anywhere}
+.ai-journal-heading .field{
+  inline-size:min(100%,210px);
+  max-inline-size:100%;
+  min-inline-size:0;
+  flex:0 1 210px;
+}
+.gcal-today-prompt > span,
+.gcal-panel-title > h3,
+.settingsgrid .card h3{
+  min-inline-size:0;
+  overflow-wrap:anywhere;
+}
+
+/* Narrow iPhones: make date and time fields full-width and leave room for
+   native picker affordances without expanding the overall dialog. */
+@media(max-width:700px){
+  .modal-bg>.modal,
+  .jump-overlay>.jump-month-modal,
+  .jump-overlay>.jump-search-modal{
+    box-sizing:border-box;
+    max-inline-size:100%;
+  }
+  .modal-bg .modal .formgrid{
+    grid-template-columns:minmax(0,1fr);
+    inline-size:100%;
+  }
+  .modal-bg .modal .formgrid > .full{grid-column:1/-1}
+  .ai-journal-heading{flex-wrap:wrap;align-items:stretch}
+  .ai-journal-heading .field{flex:1 1 100%;inline-size:100%}
+  .gcal-settings-card .gcal-client-row input,
+  .gcal-settings-card .gcal-client-row button{
+    flex:1 1 100%;
+    inline-size:100%;
+  }
+  .modal-bg .modal .steps-editor .step-manual-row{
+    grid-template-columns:24px minmax(0,1fr) auto;
+    gap:3px;
+  }
+  .modal-bg .modal .steps-editor .step-row-controls .step-iconbtn{
+    width:33px;
+    min-width:33px;
+    height:40px;
+  }
+}
+@media(max-width:360px){
+  .modal-bg .modal .formactions .buttonrow{
+    inline-size:100%;
+    justify-content:stretch;
+    margin-inline-start:0;
+  }
+  .modal-bg .modal .formactions .buttonrow .btn{flex:1 1 0}
+}
