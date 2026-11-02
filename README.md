@@ -86,3 +86,7 @@ Fixed forms and inputs that could run beyond their cards, appear shifted to one 
 - AI Daily Summary date field uses a predictable mobile single-column / desktop two-column grid, respecting card padding and Hebrew RTL layout.
 - Global Search has a single accessible focus ring rather than a second inset purple outline. Search and month jump overlays align to the top of the screen and remain scrollable even when the keyboard appears.
 - Existing task, calendar, data-storage and drag functionality is unchanged.
+
+### Hebrew month/week arrows (v50)
+
+Month-jump and Today week navigation chevrons now reflect RTL semantics in Hebrew: previous points right and next points left. English keeps the LTR left/right appearance. The previous/next date offsets remain unchanged, and the week buttons use localized screen-reader labels. Refreshed asset versions and PWA cache for reliable update delivery.
