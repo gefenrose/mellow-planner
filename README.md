@@ -90,3 +90,14 @@ Fixed forms and inputs that could run beyond their cards, appear shifted to one 
 ### Hebrew month/week arrows (v50)
 
 Month-jump and Today week navigation chevrons now reflect RTL semantics in Hebrew: previous points right and next points left. English keeps the LTR left/right appearance. The previous/next date offsets remain unchanged, and the week buttons use localized screen-reader labels. Refreshed asset versions and PWA cache for reliable update delivery.
+
+
+## Kawaii plushie design refresh (v51)
+
+- The original Mellow app now uses a pastel kawaii theme with lavender, strawberry-pink, cream, gentle mint, pill controls, satin-like surfaces and subtle decoration.
+- \`kawaii-ui.css\` loads **after** \`apple-ui.css\`, keeping the layout and accessibility fixes while changing the visual presentation throughout Today, Tasks, Routines, AI & Writing, Settings, calendar, date search and editors.
+- Five transparent original **PNG** sticker assets are in \`assets/\`: \`kawaii-bunny.png\`, \`kawaii-bear.png\`, \`kawaii-bow.png\`, \`kawaii-flower.png\`, and \`kawaii-ribbon.png\`. Decorative stickers use CSS pseudo-elements with \`pointer-events:none\` and do not interfere with tapping, form input, or dragging.
+- Responsive mobile and Hebrew RTL layout is supported. Dark mode, reduced-motion, increased contrast and forced-colors accommodations remain available.
+- The five sticker files are cached for offline use by the PWA, versioned with the app shell (v51).
+
+The stickers are original software-generated illustrations, not photographs of manufactured plush toys. This is a visual makeover only: persisted task, calendar, routine, AI and subtasks data are unchanged.
