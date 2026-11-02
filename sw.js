@@ -1,4 +1,4 @@
-const CACHE='mellow-offline-v46';
+const CACHE='mellow-offline-v47';
 const CORE=['./','./index.html','./app.js','./ai-assistant.js','./ai-assistant.css','./timeline-view.js','./subtasks.js','./google-calendar.js','./calendar-sync.js','./day-hours.js','./unified-day.js','./drag-drop.js','./task-reorder.js','./month-search.js','./styles.css','./day-layout.css','./subtasks.css','./motion.css','./google-calendar.css','./unified-day.css','./compact-navigation.css','./purple-theme.css','./pastel-accents.css','./drag-drop.css','./roomy-timeline.css','./month-search.css','./readable-task-list.css','./readable-day-sections.css','./soft-ui.css','./mobile-form-fixes.css','./task-reordering.css','./page-scroll-timeline.css','./day-hours.css','./day-sequence.css','./apple-ui.css','./manifest.webmanifest','./assets/mellow-icon-180.png','./assets/mellow-icon-192.png','./assets/mellow-icon-512.png','./assets/mellow-icon-maskable.svg','./assets/lucide-sprite.svg'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
