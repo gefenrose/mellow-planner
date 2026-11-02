@@ -66,3 +66,7 @@ Mellow has an original, Apple-inspired **grouped-list** interface designed to fe
 - A keyboard skip link, translated navigation landmarks, selected-tab state and modal focus containment
 
 This is an interface refresh. Existing scheduling, task data, routines, AI API, syncing, drag-and-drop and persistence behavior are not intentionally changed.
+
+### Selected date contrast and drag text selection (v46)
+
+In light mode the selected day in the Today week strip and date-jump calendar uses dark text on pale lavender. Dark mode retains its own selected-date colors. During day-view drag and task-list reordering, text selection and iOS touch callouts are disabled from gesture start through drag end/cancellation, then automatically restored; normal text input and selection outside dragging are unchanged.
