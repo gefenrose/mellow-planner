@@ -118,3 +118,4 @@ Decorative placements are slightly larger where space permits and remain small a
 - Habits support create, edit, delete, weekday recurrence, daily completion, seven-day progress, local persistence, import/export, and additive backwards-compatible `habits` / `habitLog` fields in the existing version-1 data schema.
 - Decorative artwork was replaced with original high-detail transparent PNG renderings: plush bunny and teddy, satin bow and ribbon, flowers, and a cozy books/cup/candle/cat-lamp still life. Functional Lucide SVG icons remain for accessible controls.
 - The app shell and offline cache were refreshed to v53. Existing tasks, routines, Google Calendar links, drag-and-drop, AI settings, and older version-1 backups remain supported.
+- v54 corrects the mobile Habits pane mapping so the rituals tab opens the editable habit list, while preserving the desktop three-column order.

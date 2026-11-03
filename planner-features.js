@@ -78,15 +78,15 @@
     return '<div class="planner-mobile-tabs" role="tablist" aria-label="'+esc(F('dayPlan'))+'">'+[['calendar',F('monthOverview'),'calendar'],['day',F('dayPlan'),'tasks'],['habits',F('dailyRituals'),'target']].map(([pane,label,icon])=>'<button type="button" role="tab" data-planner="pane" data-pane="'+pane+'" aria-selected="'+(active===pane)+'" class="'+(active===pane?'active':'')+'">'+mellowIcon(icon,17)+' '+esc(label)+'</button>').join('')+'</div>';
   }
   function paneFor(fallback){return ui.mobilePanes[ui.tab]||fallback}
-  function threeColumns(center,centerClass,fallback='day',right=habitsForDay(ui.date)){
+  function threeColumns(center,centerClass,fallback='day',right=habitsForDay(ui.date),centerPane='day',rightPane='habits'){
     const active=paneFor(fallback);
-    return mobileTabs(active)+'<div class="planner-three-column" data-active-pane="'+active+'"><aside class="planner-side planner-calendar-side '+(active==='calendar'?'mobile-active':'')+'" data-mobile-pane="calendar">'+calendarMonth(true)+'</aside><section class="planner-center '+centerClass+' '+(active==='day'?'mobile-active':'')+'" data-mobile-pane="day">'+center+'</section><aside class="planner-side planner-habit-side '+(active==='habits'?'mobile-active':'')+'" data-mobile-pane="habits">'+right+'</aside></div>';
+    return mobileTabs(active)+'<div class="planner-three-column" data-active-pane="'+active+'"><aside class="planner-side planner-calendar-side '+(active==='calendar'?'mobile-active':'')+'" data-mobile-pane="calendar">'+calendarMonth(true)+'</aside><section class="planner-center '+centerClass+' '+(active===centerPane?'mobile-active':'')+'" data-mobile-pane="'+centerPane+'">'+center+'</section><aside class="planner-side planner-habit-side '+(active===rightPane?'mobile-active':'')+'" data-mobile-pane="'+rightPane+'">'+right+'</aside></div>';
   }
 
   const originalToday=renderToday;
   renderToday=function(){return threeColumns(originalToday(),'planner-today-center','day',habitsForDay(ui.date)+recentSummary())};
   renderCalendar=function(){return sectionHead(F('calendar'),F('calendarHint'),'<button type="button" class="page-title-add" data-unified-add="calendar-head" aria-label="'+esc(T('newTask'))+'">'+mellowIcon('plus',18)+'</button>')+threeColumns(dayDetails(),'planner-calendar-center','calendar')};
-  renderHabits=function(){return sectionHead(F('habits'),F('habitDataText'),'<button type="button" class="page-title-add" data-planner="habit-new" aria-label="'+esc(F('newHabit'))+'">'+mellowIcon('plus',18)+'</button>')+threeColumns(habitsForDay(ui.date,true),'planner-habits-center','habits',recentSummary())};
+  renderHabits=function(){return sectionHead(F('habits'),F('habitDataText'),'<button type="button" class="page-title-add" data-planner="habit-new" aria-label="'+esc(F('newHabit'))+'">'+mellowIcon('plus',18)+'</button>')+threeColumns(habitsForDay(ui.date,true),'planner-habits-center','habits',recentSummary(),'habits','day')};
 
   const originalSettings=renderSettings;
   renderSettings=function(){
