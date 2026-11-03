@@ -1,6 +1,7 @@
 # Design QA
 
 - Source visual: `/var/folders/dm/1zj9mnz53yx2kh46_c7k4xtw0000gn/T/codex-clipboard-7e12381a-ab36-4704-8b2a-6926b49fbcde.png`
+- Latest correction reference: `/var/folders/dm/1zj9mnz53yx2kh46_c7k4xtw0000gn/T/TemporaryItems/NSIRD_screencaptureui_lkoIBu/Screenshot 2026-11-03 at 7.30.37.png`
 - Implementation checked at: `http://127.0.0.1:4175/`
 - Desktop comparison viewport: 1536 × 1024
 - Mobile comparison viewports: 390 × 844 and 412 × 915
@@ -9,7 +10,7 @@
 
 - Pass: blush/cream palette, soft glass cards, rounded radii, lavender actions, Hebrew RTL typography, and the left/center/right desktop composition match the supplied dashboard closely.
 - Pass: the sidebar uses a tighter bunny-mark/Mellow lockup, four-item navigation, and a smaller plush bunny reserved below the controls; the redundant bow stickers are absent.
-- Pass: Today uses a static weekday/date below the cherry branch on desktop, with no redundant Today button; the teddy peeks above the weekday card and the view switch remains directly below the next-task hero.
+- Pass: Today uses a static weekday/date without a translucent chip below the cherry branch on desktop, with no redundant Today button. The teddy now rests on the top edge of the next-task card, whose text is offset far enough right to stay clear of the tea/books/candle artwork.
 - Pass: the right rail contains a navigable month, live task progress, interactive habit tiles, and the cat-lamp/books/hydrangea scene.
 - Pass: decorative placements use physical left/right positioning so RTL text does not mirror the teddy, tea still life, bow, or logo incorrectly.
 - Pass: mobile reduces Today to two large pane tabs, retains four safe-area-aware navigation items, has no horizontal overflow at 390px or 412px, and keeps dialogs and timeline content within the viewport.
@@ -24,7 +25,7 @@
 - Pass: the habit form's embedded AI/offline action converted “לשתות יותר מים” into a reviewable water habit without saving it automatically.
 - Pass: Settings no longer contains the Habit data card.
 - Pass: browser console contained no errors or warnings during desktop and mobile flows.
-- Pass: all 57 service-worker core files exist and the cache version is `mellow-offline-v57`.
+- Pass: all 57 service-worker core files exist and the cache version is `mellow-offline-v58`.
 
 ## Resolved findings
 

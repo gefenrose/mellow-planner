@@ -144,3 +144,10 @@ Decorative placements are slightly larger where space permits and remain small a
 - The sidebar bunny is smaller and reserved below navigation, the logo lockup is tighter, and the extra bow sticker was removed.
 - A consistent teddy peeks over the page-header card on Today, Tasks, Habits and Settings. Task empty states now use the plush bunny instead of the leaf icon.
 - The PWA cache is `mellow-offline-v57`.
+
+### Today header alignment polish (v58)
+
+- The teddy is anchored to and peeks over the next-task card instead of floating above the weekday.
+- The weekday/date has no translucent chip; the cherry branch sits in its own space directly above it.
+- Next-task text starts farther to the right so the tea/books/candle artwork cannot cover it.
+- The PWA cache is `mellow-offline-v58`.
