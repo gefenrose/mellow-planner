@@ -208,6 +208,11 @@ body{min-height:100dvh;background-attachment:fixed}
   .floatadd{bottom:calc(82px + env(safe-area-inset-bottom));width:55px;height:55px;border-radius:18px}
   .task-routine-library>header{align-items:flex-start}.task-routine-library>header p{font-size:13px}.task-routine-grid{grid-template-columns:1fr}.task-routine-empty{display:grid;text-align:center;justify-items:center}.task-routine-empty img{width:160px}
   .modal-bg{padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom))}.create-choice-modal{max-height:calc(100dvh - 16px);overflow:auto}.choice-card{min-height:76px}
+  .part-add{width:44px!important;height:44px!important;min-width:44px;min-height:44px}
+  .daytask-body{min-height:44px}
+  .daytask-icon,.daytask-check{position:relative;overflow:visible}
+  .daytask-icon::after,.daytask-check::after{content:"";position:absolute;border-radius:inherit}
+  .daytask-icon::after{inset:-5px}.daytask-check::after{inset:-9px}
 }
 
 @media(max-width:390px){

@@ -26,7 +26,7 @@
 ## Resolved findings
 
 - P1 resolved: decorative images initially mirrored with RTL and placed the teddy/tea opposite the source visual; switched those assets to physical positioning.
-- P2 resolved: the mobile calendar Today control measured 40px high; raised it to a 44px touch target.
+- P2 resolved: the mobile calendar Today control measured 40px high, and compact task icon/check controls had narrow hit areas; raised the calendar control to 44px and expanded task hit areas without enlarging their visual glyphs.
 - P2 accepted: dynamic task and habit counts intentionally reflect the user's real data instead of copying the source visual's example values.
 
 final result: passed
