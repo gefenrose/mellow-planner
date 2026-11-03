@@ -4,8 +4,9 @@
   const icon=(name,size=17)=>mellowIcon(name,size);
   const tr={
     en:{task:'Task',event:'Google event',allDay:'All day',scheduled:'Planned',anytime:'Anytime',untimed:'Without a time',
-      choose:'What would you like to add?',chooseSub:'Create a Mellow task or a Google Calendar event.',
+      choose:'What would you like to add?',chooseSub:'Create a task, save a reusable routine, or add a Google Calendar event.',
       makeTask:'Mellow task',makeTaskSub:'Checklist, reminders and focus',
+      makeRoutine:'Routine',makeRoutineSub:'A reusable sequence for any day',
       makeEvent:'Calendar event',makeEventSub:'Appears in Google Calendar',
       connected:'Google connected',disconnected:'Connect Google to show events',
       refresh:'Refresh',noEvent:'No calendar events',synced:'Linked to Google',legend:'In your plan',
@@ -15,8 +16,9 @@
       add:'Add',none:'Your day has room to breathe',calInfo:'Google events appear here once connected',empty_other:'Anytime today works',empty_morning:'A little room for the morning',empty_afternoon:'Leave a little space',empty_evening:'End the day your way',
       flexible:'Anytime',inbox:'Inbox'},
     he:{task:'משימה',event:'אירוע Google',allDay:'כל היום',scheduled:'מתוכנן',anytime:'בכל שעה',untimed:'ללא שעה',
-      choose:'מה תרצי להוסיף?',chooseSub:'משימה ב-Mellow או אירוע ביומן Google.',
+      choose:'מה תרצי להוסיף?',chooseSub:'משימה, שגרה לשימוש חוזר או אירוע ביומן Google.',
       makeTask:'משימה ב-Mellow',makeTaskSub:'רשימות, צעדים וריכוז',
+      makeRoutine:'שגרה',makeRoutineSub:'רצף צעדים שאפשר להוסיף לכל יום',
       makeEvent:'אירוע ביומן',makeEventSub:'נוסף ל-Google Calendar',
       connected:'Google מחובר',disconnected:'יש להתחבר ל-Google כדי לראות אירועים',
       refresh:'רענון',noEvent:'אין אירועים ביומן',synced:'מקושר ליומן Google',legend:'בתוכנית שלך',
@@ -363,6 +365,8 @@
       '<button type="button" class="iconbtn" data-unified-choice="cancel" aria-label="'+T('close')+'">'+icon('plus',20)+'</button></div>'+
       '<div class="choice-grid"><button class="choice-card choice-task" type="button" data-unified-choice="task"><span class="choice-symbol">'+icon('tasks',26)+'</span>'+
       '<span class="choice-text"><strong>'+L('makeTask')+'</strong><small>'+L('makeTaskSub')+'</small></span>'+icon('chevronRight',18)+'</button>'+
+      '<button class="choice-card choice-routine" type="button" data-unified-choice="routine"><span class="choice-symbol">'+icon('repeat',26)+'</span>'+
+      '<span class="choice-text"><strong>'+L('makeRoutine')+'</strong><small>'+L('makeRoutineSub')+'</small></span>'+icon('chevronRight',18)+'</button>'+
       '<button class="choice-card choice-calendar" type="button" data-unified-choice="event"><span class="choice-symbol">'+icon('calendar',26)+'</span>'+
       '<span class="choice-text"><strong>'+L('makeEvent')+'</strong><small>'+L('makeEventSub')+'</small></span>'+icon('chevronRight',18)+'</button></div></section></div>';
   }
@@ -384,6 +388,8 @@
       const date=document.querySelector('#taskDate');if(date)date.value=context.date;
       if(context.start!=null){const start=document.querySelector('#taskStart');if(start){start.value=fmt(context.start);const duration=document.querySelector('#taskMin'),end=document.querySelector('#taskEnd');const minutes=Math.min(Number(duration?.value)||25,1440-context.start);if(duration)duration.value=minutes;if(end)end.value=fmt(context.start+minutes)}}
       document.querySelector('#taskTitle')?.focus();
+    }else if(kind==='routine'){
+      ui.editId=null;ui.modal='routine';render();document.querySelector('#routineName')?.focus();
     }else if(kind==='event'){
       if(!window.MellowCalendar?.isConnected?.()){
         ui.modal=null;ui.tab='settings';render();window.scrollTo({top:0,behavior:'instant'});toast(L('needGoogle'));return;

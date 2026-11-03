@@ -37,7 +37,7 @@
   ui.calendarMonth=monthKey();
   ui.mobilePanes=ui.mobilePanes||{};
 
-  const reordered={today:icons.today,calendar:mellowIcon('calendar'),habits:mellowIcon('target'),tasks:icons.tasks,routines:icons.routines,ai:icons.ai,settings:icons.settings};
+  const reordered={today:icons.today,calendar:mellowIcon('calendar'),tasks:icons.tasks,habits:mellowIcon('target'),ai:icons.ai,settings:icons.settings};
   Object.keys(icons).forEach(key=>delete icons[key]);
   Object.assign(icons,reordered);
 
@@ -66,8 +66,17 @@
   }
   function recentSummary(){
     const dates=Array.from({length:7},(_,i)=>{const d=dayDate(ui.date);d.setDate(d.getDate()-(6-i));return dayKey(d)}),count=dates.reduce((sum,key)=>sum+db.habits.filter(h=>marked(h,key)).length,0);
-    return '<section class="card habit-summary"><span class="planner-eyebrow">'+esc(F('weekProgress'))+'</span><strong>'+count+'</strong><span>'+esc(F('streak'))+'</span><div class="habit-week-dots">'+dates.map(key=>'<span class="'+(db.habits.some(h=>marked(h,key))?'filled':'')+'" title="'+esc(dt(key,{day:'numeric',month:'short'}))+'"></span>').join('')+'</div><img src="./assets/kawaii-cozy.png" alt="" class="cozy-still-life"></section>';
+    return '<section class="card habit-summary"><span class="planner-eyebrow">'+esc(F('weekProgress'))+'</span><strong>'+count+'</strong><span>'+esc(F('streak'))+'</span><div class="habit-week-dots">'+dates.map(key=>'<span class="'+(db.habits.some(h=>marked(h,key))?'filled':'')+'" title="'+esc(dt(key,{day:'numeric',month:'short'}))+'"></span>').join('')+'</div><img src="./assets/kawaii-cat-lamp-scene.png" alt="" class="cozy-still-life"></section>';
   }
+  function taskSummary(){
+    const tasks=db.tasks.filter(t=>t.date===ui.date),done=tasks.filter(t=>t.done).length,total=tasks.length;
+    return '<section class="card dashboard-task-summary"><span class="dashboard-summary-check">'+mellowIcon('check',23)+'</span><div><h2>'+(db.settings.lang==='he'?'משימות היום':"Today's tasks")+'</h2><p>'+done+' '+(db.settings.lang==='he'?'מתוך':'of')+' '+total+'</p><div class="dashboard-progress" aria-label="'+done+' '+F('doneToday')+'"><span style="width:'+(total?Math.round(done/total*100):0)+'%"></span></div></div></section>';
+  }
+  function habitTiles(){
+    const habits=dueHabits(ui.date).slice(0,5),done=habits.filter(h=>marked(h,ui.date)).length;
+    return '<section class="card dashboard-habits"><header><h2>'+esc(F('habits'))+'</h2><span>'+done+'/'+habits.length+'</span></header><div class="dashboard-habit-tiles">'+(habits.length?habits.map(h=>'<button type="button" class="dashboard-habit-tile '+(marked(h,ui.date)?'is-done':'')+'" data-planner="habit-toggle" data-id="'+esc(h.id)+'" data-date="'+ui.date+'" aria-pressed="'+marked(h,ui.date)+'" aria-label="'+esc(habitName(h))+'"><span aria-hidden="true">'+esc(h.emoji)+'</span><small>'+esc(habitName(h))+'</small></button>').join(''):'<button type="button" class="dashboard-habit-empty" data-planner="habit-new">'+mellowIcon('plus',20)+' '+esc(F('newHabit'))+'</button>')+'</div></section>';
+  }
+  function cozyScene(){return '<figure class="dashboard-cozy-scene"><img src="./assets/kawaii-cat-lamp-scene.png" alt=""></figure>'}
   function dayDetails(){
     const tasks=db.tasks.filter(t=>t.date===ui.date).sort((a,b)=>(a.start??1440)-(b.start??1440)),events=window.MellowCalendar?.dayItems?.(ui.date)||[];
     const taskHtml=tasks.map(t=>'<article class="calendar-agenda-item '+(t.done?'done':'')+'"><button class="check '+(t.done?'checked':'')+'" data-action="done" data-id="'+esc(t.id)+'" aria-label="'+esc(t.title)+'">'+(t.done?mellowIcon('check',14):'')+'</button><span class="agenda-accent task"></span><button type="button" class="calendar-agenda-copy" data-action="edit" data-id="'+esc(t.id)+'"><strong>'+esc(t.title)+'</strong><small>'+esc(F('taskLabel'))+(t.start!=null?' · '+fmt(t.start):'')+'</small></button></article>').join('');
@@ -82,9 +91,13 @@
     const active=paneFor(fallback);
     return mobileTabs(active)+'<div class="planner-three-column" data-active-pane="'+active+'"><aside class="planner-side planner-calendar-side '+(active==='calendar'?'mobile-active':'')+'" data-mobile-pane="calendar">'+calendarMonth(true)+'</aside><section class="planner-center '+centerClass+' '+(active===centerPane?'mobile-active':'')+'" data-mobile-pane="'+centerPane+'">'+center+'</section><aside class="planner-side planner-habit-side '+(active===rightPane?'mobile-active':'')+'" data-mobile-pane="'+rightPane+'">'+right+'</aside></div>';
   }
+  function dashboardColumns(center){
+    const active=paneFor('day');
+    return mobileTabs(active)+'<div class="planner-dashboard" data-active-pane="'+active+'"><section class="planner-center planner-today-center '+(active==='day'?'mobile-active':'')+'" data-mobile-pane="day">'+center+'</section><aside class="planner-dashboard-side"><div class="dashboard-calendar-pane '+(active==='calendar'?'mobile-active':'')+'" data-mobile-pane="calendar">'+calendarMonth(true)+'</div><div class="dashboard-habits-pane '+(active==='habits'?'mobile-active':'')+'" data-mobile-pane="habits">'+taskSummary()+habitTiles()+cozyScene()+'</div></aside></div>';
+  }
 
   const originalToday=renderToday;
-  renderToday=function(){return threeColumns(originalToday(),'planner-today-center','day',habitsForDay(ui.date)+recentSummary())};
+  renderToday=function(){return dashboardColumns(originalToday())};
   renderCalendar=function(){return sectionHead(F('calendar'),F('calendarHint'),'<button type="button" class="page-title-add" data-unified-add="calendar-head" aria-label="'+esc(T('newTask'))+'">'+mellowIcon('plus',18)+'</button>')+threeColumns(dayDetails(),'planner-calendar-center','calendar')};
   renderHabits=function(){return sectionHead(F('habits'),F('habitDataText'),'<button type="button" class="page-title-add" data-planner="habit-new" aria-label="'+esc(F('newHabit'))+'">'+mellowIcon('plus',18)+'</button>')+threeColumns(habitsForDay(ui.date,true),'planner-habits-center','habits',recentSummary(),'habits','day')};
 

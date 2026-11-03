@@ -1,18 +1,32 @@
 # Design QA
 
+- Source visual: `/var/folders/dm/1zj9mnz53yx2kh46_c7k4xtw0000gn/T/codex-clipboard-7e12381a-ab36-4704-8b2a-6926b49fbcde.png`
+- Implementation checked at: `http://127.0.0.1:4175/`
+- Desktop comparison viewport: 1536 × 1024
+- Mobile comparison viewports: 390 × 844 and 412 × 915
+
+## Visual comparison
+
+- Pass: blush/cream palette, soft glass cards, rounded radii, lavender actions, Hebrew RTL typography, and the left/center/right desktop composition match the supplied dashboard closely.
+- Pass: the sidebar contains the satin bow, bunny mark, Mellow wordmark, six-item navigation, flowers, and a large plush bunny without blocking controls.
+- Pass: the center uses the cherry branch, peeking teddy, tea/books/candle hero, live next-task data, and functional timeline rather than a static mock.
+- Pass: the right rail contains a navigable month, live task progress, interactive habit tiles, and the cat-lamp/books/hydrangea scene.
+- Pass: decorative placements use physical left/right positioning so RTL text does not mirror the teddy, tea still life, bow, or logo incorrectly.
+- Pass: mobile reduces Today to three large pane tabs, retains six safe-area-aware navigation items, has no horizontal overflow at 390px or 412px, and keeps dialogs and timeline content within the viewport.
+
+## Functional comparison
+
+- Pass: Hebrew previous/next month controls moved November 2026 → December 2026 → November 2026.
+- Pass: a habit completion persisted after a page reload.
+- Pass: Routines are absent from top-level navigation, present inside Tasks, and available from the main add chooser.
+- Pass: choosing Routine from Add opens the existing editable routine form.
+- Pass: browser console contained no errors or warnings during desktop and mobile flows.
+- Pass: all 57 service-worker core files exist and the cache version is `mellow-offline-v55`.
+
+## Resolved findings
+
+- P1 resolved: decorative images initially mirrored with RTL and placed the teddy/tea opposite the source visual; switched those assets to physical positioning.
+- P2 resolved: the mobile calendar Today control measured 40px high; raised it to a 44px touch target.
+- P2 accepted: dynamic task and habit counts intentionally reflect the user's real data instead of copying the source visual's example values.
+
 final result: passed
-
-Target basis: the kawaii pastel three-column planner brief and the existing Mellow visual language. The original generated mockup image was not recoverable from the referenced chat, so this is a brief-based visual match rather than a pixel-difference comparison.
-
-- Reviewed the local app in Safari and the deployed Vercel app at desktop and 390 × 844 mobile sizes.
-- Confirmed the desktop month / day / habits composition, Hebrew RTL order and arrow semantics, responsive mobile pane tabs, horizontally scrollable seven-item bottom navigation, and no unintended horizontal page overflow.
-- Confirmed 44 × 44 minimum month-navigation and habit-marking controls; mobile calendar dates render at 48px high.
-- Confirmed all decorative PNGs render with transparency and no failed images: plush bunny and teddy, satin bow and ribbon, flowers, and the cozy still life.
-- Created and edited a recurring habit locally, reloaded, and confirmed both the habit and an existing daily mark persisted. Delete controls and the confirmation-backed deletion path are present; destructive deletion was not exercised in UI automation.
-- On production, created a scheduled task, confirmed it in the selected-day agenda and the selected month cell, reloaded, and confirmed it persisted.
-- On production, marked a habit, reloaded, and confirmed the mark persisted. A mobile-pane mapping issue found during the first pass was corrected and reverified.
-- Confirmed the Settings habit-data card, import/export schema additions, and Hebrew/English switching. Existing version-1 backups without habit fields continue to receive empty additive defaults.
-- JavaScript syntax checks, `git diff --check`, the 50-resource offline shell check, Vercel status, live v54 app-shell/service-worker checks, and exact hashes for all six deployed PNGs passed.
-- Production browser console verification reported no warnings or errors.
-
-Qualified limits: Google Calendar was verified in the disconnected state and through the existing loaded-event integration path; no live Google account or AI provider key was used. Drag-and-drop and routine/AI internals were preserved and smoke-reviewed, not exhaustively re-run. No physical iPhone or installed-PWA offline session was tested in this pass.

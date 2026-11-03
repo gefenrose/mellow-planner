@@ -119,3 +119,12 @@ Decorative placements are slightly larger where space permits and remain small a
 - Decorative artwork was replaced with original high-detail transparent PNG renderings: plush bunny and teddy, satin bow and ribbon, flowers, and a cozy books/cup/candle/cat-lamp still life. Functional Lucide SVG icons remain for accessible controls.
 - The app shell and offline cache were refreshed to v53. Existing tasks, routines, Google Calendar links, drag-and-drop, AI settings, and older version-1 backups remain supported.
 - v54 corrects the mobile Habits pane mapping so the rituals tab opens the editable habit list, while preserving the desktop three-column order.
+
+### Photorealistic mockup-fidelity dashboard (v55)
+
+- Rebuilt Today as a close functional interpretation of the supplied blush-pastel three-column mockup: a decorated left navigation rail, central next-task/timeline area, and a right calendar, task-progress, habits, and cozy-scene rail.
+- Added original high-detail raster artwork for the peeking teddy, floral tea still life, cherry branch, bunny logo, and cat-lamp/books scene. Decorative art uses PNG; functional controls keep accessible Lucide icons.
+- Removed Routines from top-level navigation. Saved routines now live inside Tasks, and every main add-task control opens a chooser for a task, reusable routine, or Google Calendar event.
+- Mobile uses a six-item safe-area-aware bottom navigation plus three large Today-pane tabs. The 390px iPhone and 412px Android breakpoints preserve touch targets, RTL order, scrolling, and modal containment.
+- Existing version-1 local data remains compatible. Tasks, habits, routines, Google Calendar links, AI/BYOK settings, backups, drag-and-drop, and offline support continue to use the existing storage model.
+- The PWA shell and decorative assets are cached as `mellow-offline-v55`.

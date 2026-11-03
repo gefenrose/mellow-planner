@@ -14,7 +14,7 @@ function mellowIcon(name,size=20){const slug=LUCIDE_ICON_NAMES[name]||'sparkles'
 function priorityMarker(priority,size=14){const glyph=mellowIcon(priority==='med'?'circle':'triangle',size);return glyph.replace('class="m-icon lucide','class="m-icon task-priority-icon task-priority-icon-'+priority+' lucide')}
 
 const mellowCategoryIcons={work:'briefcase',home:'home',self:'book',health:'heart',social:'users',errands:'basket'};
-const icons={today:mellowIcon('sun'),tasks:mellowIcon('tasks'),routines:mellowIcon('repeat'),ai:mellowIcon('sparkles'),settings:mellowIcon('settings')};
+const icons={today:mellowIcon('sun'),tasks:mellowIcon('tasks'),ai:mellowIcon('sparkles'),settings:mellowIcon('settings')};
 const categories=['work','home','self','health','social','errands'];
 const E={
  work:'Work',home:'Home',self:'Personal',health:'Wellness',social:'Social',errands:'Errands',active:'Active',
@@ -29,9 +29,10 @@ H.routinePlaceholder='10 | התעוררות\n5 | שתיית מים\n20 | ארו�
 const T=k=>(db.settings.lang==='he'?H:E)[k]||k;
 const locale=()=>db.settings.lang==='he'?'he-IL':'en-US';
 const dt=(date,opt={weekday:'long',month:'long',day:'numeric'})=>new Intl.DateTimeFormat(locale(),opt).format(fromKey(date));
-const defaults=()=>({version:1,tasks:[],routines:[],habits:[],habitLog:{},sessions:[],settings:{lang:'en',theme:'light',aiMode:'offline'},focus:{taskId:'',duration:25*60,remaining:25*60,running:false,endsAt:null},seeded:false});
+const defaults=()=>({version:1,tasks:[],routines:[],habits:[],habitLog:{},sessions:[],settings:{lang:'en',theme:'light',aiMode:'offline',todayView:'hours'},focus:{taskId:'',duration:25*60,remaining:25*60,running:false,endsAt:null},seeded:false});
 let db;try{db=Object.assign(defaults(),JSON.parse(localStorage.getItem('mellow-app-v1')||'{}'));if(!Array.isArray(db.tasks)||!Array.isArray(db.routines))throw Error()}catch{db=defaults()}
 if(!db.settings)db.settings=defaults().settings;
+if(!['parts','hours'].includes(db.settings.todayView))db.settings.todayView='hours';
 if(!Array.isArray(db.habits))db.habits=[];
 if(!db.habitLog||typeof db.habitLog!=='object'||Array.isArray(db.habitLog))db.habitLog={};
 // Apply the new light purple theme once for previous automatic-theme users.
@@ -90,7 +91,7 @@ function localizeTemplateTasks(){
 }
 
 let renderCalendar=()=>'',renderHabits=()=>'';
-function render(){localizeTemplateTasks();setTheme();$('#app').innerHTML=`<a href="#mellow-main" class="skip-link">${db.settings.lang==='he'?'דילוג לתוכן הראשי':'Skip to main content'}</a><div class="layout"><aside class="sidebar"><div class="brand"><div class="brand-icon">${mellowIcon("sun",25)}</div><div class="brand-word">mellow<span style="color:var(--green)">.</span></div></div><nav aria-label="${db.settings.lang==='he'?'ניווט ראשי':'Main navigation'}" class="navlist">${nav()}</nav><div class="sidebar-footer">${T('offlineBadge')}<div class="small" style="margin-top:8px;color:var(--ink)">${T('welcomeSub')}</div></div></aside><main class="main" id="mellow-main" tabindex="-1">${({today:renderToday,calendar:renderCalendar,habits:renderHabits,tasks:renderTasks,routines:renderRoutines,ai:window.renderMellowAI||renderToday,settings:renderSettings})[ui.tab]()}</main><nav class="bottomnav" aria-label="${db.settings.lang==='he'?'ניווט בנייד':'Mobile navigation'}">${bottomNav()}</nav>${['today','tasks','calendar'].includes(ui.tab)?`<button class="floatadd" data-unified-add="fab" aria-label="${esc(T('newTask'))}">${mellowIcon('plus',25)}</button>`:ui.tab==='habits'?`<button class="floatadd" data-planner="habit-new" aria-label="${esc(T('newHabit'))}">${mellowIcon('plus',25)}</button>`:''}${ui.modal?renderModal():''}</div>`}
+function render(){localizeTemplateTasks();setTheme();$('#app').innerHTML=`<a href="#mellow-main" class="skip-link">${db.settings.lang==='he'?'דילוג לתוכן הראשי':'Skip to main content'}</a><div class="layout"><aside class="sidebar"><div class="brand"><div class="brand-icon">${mellowIcon("smile",25)}</div><div class="brand-word">Mellow</div></div><nav aria-label="${db.settings.lang==='he'?'ניווט ראשי':'Main navigation'}" class="navlist">${nav()}</nav><div class="sidebar-footer">${T('offlineBadge')}<div class="small" style="margin-top:8px;color:var(--ink)">${T('welcomeSub')}</div></div></aside><main class="main" id="mellow-main" tabindex="-1">${({today:renderToday,calendar:renderCalendar,habits:renderHabits,tasks:renderTasks,routines:renderRoutines,ai:window.renderMellowAI||renderToday,settings:renderSettings})[ui.tab]()}</main><nav class="bottomnav" aria-label="${db.settings.lang==='he'?'ניווט בנייד':'Mobile navigation'}">${bottomNav()}</nav>${['today','tasks','calendar'].includes(ui.tab)?`<button class="floatadd" data-unified-add="fab" aria-label="${esc(T('newTask'))}">${mellowIcon('plus',25)}</button>`:ui.tab==='habits'?`<button class="floatadd" data-planner="habit-new" aria-label="${esc(T('newHabit'))}">${mellowIcon('plus',25)}</button>`:''}${ui.modal?renderModal():''}</div>`}
 function renderToday(){const all=scheduled(ui.date),done=all.filter(t=>t.done).length;const tasks=db.tasks.filter(t=>t.date===ui.date);let start=7*60,end=23*60;for(const t of all){start=Math.min(start,Math.floor(t.start/60)*60);end=Math.max(end,Math.ceil((t.start+t.minutes)/60)*60)}start=Math.max(0,start);end=Math.min(24*60,end);const height=(end-start)/60*61;
 let hours='';for(let h=start;h<=end;h+=60)hours+=`<div class="hour" style="height:61px"><span>${fmt(h)}</span></div>`;
 const overlap=all.reduce((r,t)=>{const conflicts=all.filter(x=>x.id!==t.id&&x.start<t.start+t.minutes&&t.start<x.start+x.minutes);r[t.id]=conflicts.length;return r},{});

@@ -69,6 +69,7 @@
 .choice-card:active{transform:scale(.98)}
 .choice-card .choice-symbol{height:47px;width:47px;display:grid;place-items:center;border-radius:13px;flex-shrink:0}
 .choice-task .choice-symbol{background:var(--lightgreen);color:var(--green)}
+.choice-routine .choice-symbol{background:#f7e7ed;color:#9d607d}
 .choice-calendar .choice-symbol{background:var(--lav);color:var(--purple)}
 .choice-card .choice-text{min-width:0;flex:1;display:flex;flex-direction:column;gap:4px}
 .choice-text strong{font-size:16px;font-weight:700}
