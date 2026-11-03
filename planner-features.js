@@ -1,8 +1,8 @@
 /* Mellow calendar + habits. Additive v1 data fields keep existing backups valid. */
 (()=>{
   const copy={
-    en:{calendar:'Calendar',habits:'Habits',newHabit:'New habit',editHabit:'Edit habit',habitName:'Habit name',habitSchedule:'Repeat on',habitStart:'Start date',habitColor:'Color',todayHabits:"Today's habits",noHabits:'A little room for a new ritual',noHabitsSub:'Create a habit and choose the days it should appear.',doneToday:'done today',selectedDay:'Selected day',monthOverview:'Month overview',dayPlan:'Day plan',dailyRituals:'Daily rituals',allHabits:'All habits',weekProgress:'Last 7 days',habitData:'Habit data',habitDataText:'Habits and daily marks are saved locally with your tasks and included in backups.',openHabits:'Manage habits',noDayItems:'Nothing planned for this day yet.',taskLabel:'Task',eventLabel:'Google event',everyDay:'Every day',streak:'recent completions',schedule:'Schedule',calendarHint:'Tasks are shown across the month. Connected Google events appear for the selected day.',pink:'Blush',lavender:'Lavender',mint:'Mint',peach:'Peach'},
-    he:{calendar:'לוח שנה',habits:'הרגלים',newHabit:'הרגל חדש',editHabit:'עריכת הרגל',habitName:'שם ההרגל',habitSchedule:'חזרה בימים',habitStart:'תאריך התחלה',habitColor:'צבע',todayHabits:'ההרגלים של היום',noHabits:'קצת מקום לטקס חדש',noHabitsSub:'אפשר ליצור הרגל ולבחור באילו ימים הוא יופיע.',doneToday:'הושלמו היום',selectedDay:'היום שנבחר',monthOverview:'תצוגת חודש',dayPlan:'תכנון יומי',dailyRituals:'טקסים יומיים',allHabits:'כל ההרגלים',weekProgress:'7 הימים האחרונים',habitData:'נתוני הרגלים',habitDataText:'הרגלים וסימונים יומיים נשמרים מקומית יחד עם המשימות ונכללים בגיבוי.',openHabits:'ניהול הרגלים',noDayItems:'אין עדיין משימות או אירועים ליום הזה.',taskLabel:'משימה',eventLabel:'אירוע Google',everyDay:'כל יום',streak:'השלמות אחרונות',schedule:'תדירות',calendarHint:'משימות מוצגות לאורך החודש. אירועי Google מחוברים מופיעים ביום שנבחר.',pink:'ורוד',lavender:'לבנדר',mint:'מנטה',peach:'אפרסק'}
+    en:{calendar:'Calendar',habits:'Habits',newHabit:'New habit',editHabit:'Edit habit',habitName:'Habit name',habitSchedule:'Repeat on',habitStart:'Start date',habitColor:'Color',todayHabits:"Today's habits",noHabits:'A little room for a new ritual',noHabitsSub:'Create a habit and choose the days it should appear.',doneToday:'done today',selectedDay:'Selected day',dayPlan:'Day plan',dailyRituals:'Daily rituals',allHabits:'All habits',weekProgress:'Last 7 days',openHabits:'Manage habits',noDayItems:'Nothing planned for this day yet.',taskLabel:'Task',eventLabel:'Google event',everyDay:'Every day',streak:'recent completions',schedule:'Schedule',calendarHint:'Tasks are shown across the month. Connected Google events appear for the selected day.',pink:'Blush',lavender:'Lavender',mint:'Mint',peach:'Peach'},
+    he:{calendar:'לוח שנה',habits:'הרגלים',newHabit:'הרגל חדש',editHabit:'עריכת הרגל',habitName:'שם ההרגל',habitSchedule:'חזרה בימים',habitStart:'תאריך התחלה',habitColor:'צבע',todayHabits:'ההרגלים של היום',noHabits:'קצת מקום לטקס חדש',noHabitsSub:'אפשר ליצור הרגל ולבחור באילו ימים הוא יופיע.',doneToday:'הושלמו היום',selectedDay:'היום שנבחר',dayPlan:'תכנון יומי',dailyRituals:'טקסים יומיים',allHabits:'כל ההרגלים',weekProgress:'7 הימים האחרונים',openHabits:'ניהול הרגלים',noDayItems:'אין עדיין משימות או אירועים ליום הזה.',taskLabel:'משימה',eventLabel:'אירוע Google',everyDay:'כל יום',streak:'השלמות אחרונות',schedule:'תדירות',calendarHint:'משימות מוצגות לאורך החודש. אירועי Google מחוברים מופיעים ביום שנבחר.',pink:'ורוד',lavender:'לבנדר',mint:'מנטה',peach:'אפרסק'}
   };
   const F=key=>(db.settings.lang==='he'?copy.he:copy.en)[key]||key;
   Object.assign(E,{calendar:copy.en.calendar,habits:copy.en.habits,newHabit:copy.en.newHabit});
@@ -37,7 +37,7 @@
   ui.calendarMonth=monthKey();
   ui.mobilePanes=ui.mobilePanes||{};
 
-  const reordered={today:icons.today,calendar:mellowIcon('calendar'),tasks:icons.tasks,habits:mellowIcon('target'),ai:icons.ai,settings:icons.settings};
+  const reordered={today:icons.today,tasks:icons.tasks,habits:mellowIcon('target'),settings:icons.settings};
   Object.keys(icons).forEach(key=>delete icons[key]);
   Object.assign(icons,reordered);
 
@@ -84,9 +84,9 @@
     return '<section class="card calendar-day-detail"><header><span class="planner-eyebrow">'+esc(F('selectedDay'))+'</span><h2>'+esc(dt(ui.date,{weekday:'long',day:'numeric',month:'long'}))+'</h2><p>'+esc(F('calendarHint'))+'</p></header><div class="calendar-agenda-list">'+(taskHtml+eventHtml||'<div class="calendar-empty"><img src="./assets/kawaii-bear.png" alt=""><p>'+esc(F('noDayItems'))+'</p></div>')+'</div><button type="button" class="btn secondary" data-unified-add="calendar">'+mellowIcon('plus',16)+' '+T('newTask')+'</button></section>';
   }
   function mobileTabs(active){
-    return '<div class="planner-mobile-tabs" role="tablist" aria-label="'+esc(F('dayPlan'))+'">'+[['calendar',F('monthOverview'),'calendar'],['day',F('dayPlan'),'tasks'],['habits',F('dailyRituals'),'target']].map(([pane,label,icon])=>'<button type="button" role="tab" data-planner="pane" data-pane="'+pane+'" aria-selected="'+(active===pane)+'" class="'+(active===pane?'active':'')+'">'+mellowIcon(icon,17)+' '+esc(label)+'</button>').join('')+'</div>';
+    return '<div class="planner-mobile-tabs" role="tablist" aria-label="'+esc(F('dayPlan'))+'">'+[['day',F('dayPlan'),'tasks'],['habits',F('dailyRituals'),'target']].map(([pane,label,icon])=>'<button type="button" role="tab" data-planner="pane" data-pane="'+pane+'" aria-selected="'+(active===pane)+'" class="'+(active===pane?'active':'')+'">'+mellowIcon(icon,17)+' '+esc(label)+'</button>').join('')+'</div>';
   }
-  function paneFor(fallback){return ui.mobilePanes[ui.tab]||fallback}
+  function paneFor(fallback){const pane=ui.mobilePanes[ui.tab];return ['day','habits'].includes(pane)?pane:fallback}
   function threeColumns(center,centerClass,fallback='day',right=habitsForDay(ui.date),centerPane='day',rightPane='habits'){
     const active=paneFor(fallback);
     return mobileTabs(active)+'<div class="planner-three-column" data-active-pane="'+active+'"><aside class="planner-side planner-calendar-side '+(active==='calendar'?'mobile-active':'')+'" data-mobile-pane="calendar">'+calendarMonth(true)+'</aside><section class="planner-center '+centerClass+' '+(active===centerPane?'mobile-active':'')+'" data-mobile-pane="'+centerPane+'">'+center+'</section><aside class="planner-side planner-habit-side '+(active===rightPane?'mobile-active':'')+'" data-mobile-pane="'+rightPane+'">'+right+'</aside></div>';
@@ -99,17 +99,40 @@
   const originalToday=renderToday;
   renderToday=function(){return dashboardColumns(originalToday())};
   renderCalendar=function(){return sectionHead(F('calendar'),F('calendarHint'),'<button type="button" class="page-title-add" data-unified-add="calendar-head" aria-label="'+esc(T('newTask'))+'">'+mellowIcon('plus',18)+'</button>')+threeColumns(dayDetails(),'planner-calendar-center','calendar')};
-  renderHabits=function(){return sectionHead(F('habits'),F('habitDataText'),'<button type="button" class="page-title-add" data-planner="habit-new" aria-label="'+esc(F('newHabit'))+'">'+mellowIcon('plus',18)+'</button>')+threeColumns(habitsForDay(ui.date,true),'planner-habits-center','habits',recentSummary(),'habits','day')};
-
-  const originalSettings=renderSettings;
-  renderSettings=function(){
-    const html=originalSettings(),at=html.lastIndexOf('</div>');
-    const card='<section class="card habit-settings-card"><h3>'+mellowIcon('target',18)+' '+esc(F('habitData'))+'</h3><p>'+esc(F('habitDataText'))+'</p><strong>'+db.habits.length+' '+esc(F('habits'))+'</strong><button type="button" class="btn secondary" data-planner="open-habits">'+esc(F('openHabits'))+'</button></section>';
-    return at<0?html+card:html.slice(0,at)+card+html.slice(at);
+  renderHabits=function(){
+    const dateLabel=esc(dt(ui.date,{day:'numeric',month:'long',year:'numeric'})),weekday=esc(dt(ui.date,{weekday:'long'}));
+    return sectionHead(F('habits'),'', '<button type="button" class="page-title-add" data-planner="habit-new" aria-label="'+esc(F('newHabit'))+'">'+mellowIcon('plus',18)+'</button>')+
+      '<button type="button" class="habit-page-date" data-planner-nav="month" aria-label="'+esc((db.settings.lang==='he'?'פתיחת לוח חודשי, ':'Open monthly calendar, ')+dt(ui.date,{weekday:'long',day:'numeric',month:'long',year:'numeric'}))+'"><span>'+weekday+'</span><strong>'+dateLabel+'</strong>'+mellowIcon('chevronDown',18)+'</button>'+
+      '<div class="planner-habits-layout"><section class="planner-habits-center">'+habitsForDay(ui.date,true)+'</section><aside class="planner-habits-art">'+recentSummary()+'</aside></div>';
   };
+
+  function offlineHabit(intent){
+    const he=db.settings.lang==='he',text=String(intent||'').toLocaleLowerCase();
+    if(/water|drink|שת|מים/.test(text))return {name:he?'לשתות כוס מים':'Drink a glass of water',emoji:'💧',color:'mint',days:[0,1,2,3,4,5,6]};
+    if(/read|book|קריא|ספר/.test(text))return {name:he?'עשר דקות קריאה':'Read for ten minutes',emoji:'📖',color:'lavender',days:[0,1,2,3,4,5,6]};
+    if(/walk|move|exercise|הליכ|תנועה|כושר/.test(text))return {name:he?'הליכה קצרה ונעימה':'Take a short gentle walk',emoji:'🌿',color:'pink',days:[0,2,4,6]};
+    if(/sleep|bed|שינה|לישון/.test(text))return {name:he?'להתכונן לשינה ברוגע':'Wind down gently for sleep',emoji:'🌙',color:'lavender',days:[0,1,2,3,4,5,6]};
+    return {name:he?'צעד קטן אחד בכל יום':'One small step each day',emoji:'✨',color:'peach',days:[0,1,2,3,4,5,6]};
+  }
+  function applyHabitSuggestion(suggestion){
+    const name=document.querySelector('#habitName'),emoji=document.querySelector('#habitEmoji'),color=document.querySelector('#habitColor');
+    if(name)name.value=suggestion.name||'';if(emoji)emoji.value=suggestion.emoji||'🌷';if(color)color.value=suggestion.color||'lavender';
+    document.querySelectorAll('input[name="habitDay"]').forEach(input=>{input.checked=(suggestion.days||[]).includes(Number(input.value))});
+  }
+  async function suggestHabit(button){
+    const field=document.querySelector('#habitAIIntent'),intent=field?.value.trim()||document.querySelector('#habitName')?.value.trim();
+    if(!intent){toast(db.settings.lang==='he'?'כתבי מה היית רוצה להפוך להרגל.':'Describe what you want to turn into a habit.');field?.focus();return}
+    button.disabled=true;button.dataset.original=button.innerHTML;button.textContent=db.settings.lang==='he'?'חושבת…':'Thinking…';
+    try{
+      const useAI=db.settings.aiMode!=='offline'&&window.MellowAI?.hasKey?.();
+      const suggestion=useAI?await window.MellowAI.habit(intent):offlineHabit(intent);
+      applyHabitSuggestion(suggestion);toast(db.settings.lang==='he'?'ההצעה מוכנה לבדיקה.':'Suggestion ready to review.');
+    }catch(error){console.warn('AI habit suggestion unavailable',error);applyHabitSuggestion(offlineHabit(intent));toast(db.settings.lang==='he'?'הוצגה הצעה מקומית במקום.':'Showing an offline suggestion instead.');}
+    finally{if(button.isConnected){button.disabled=false;button.innerHTML=button.dataset.original||''}}
+  }
   function habitModal(){
     const h=normalizeHabit(db.habits.find(x=>x.id===ui.editId)||{name:'',days:[0,1,2,3,4,5,6],startDate:ui.date});
-    return '<div class="modal-bg"><section class="modal habit-modal" role="dialog" aria-modal="true" aria-labelledby="habitModalTitle"><div class="modalheader"><h2 id="habitModalTitle">'+esc(F(ui.editId?'editHabit':'newHabit'))+'</h2><button type="button" class="iconbtn" data-action="close" aria-label="'+T('close')+'">'+mellowIcon('x',18)+'</button></div><form id="habitForm"><div class="formgrid"><label class="field full">'+esc(F('habitName'))+'<input id="habitName" required maxlength="100" value="'+esc(habitName(h))+'"></label><label class="field">Emoji<input id="habitEmoji" maxlength="16" value="'+esc(h.emoji)+'"></label><label class="field">'+esc(F('habitStart'))+'<input id="habitStart" type="date" value="'+esc(h.startDate)+'"></label><div class="field full"><span>'+esc(F('habitSchedule'))+'</span><div class="habit-day-options">'+weekdayLabels().map((label,i)=>'<label><input type="checkbox" name="habitDay" value="'+i+'" '+(h.days.includes(i)?'checked':'')+'><span>'+esc(label)+'</span></label>').join('')+'</div></div><label class="field full">'+esc(F('habitColor'))+'<select id="habitColor">'+colors.map(color=>'<option value="'+color+'" '+(h.color===color?'selected':'')+'>'+esc(F(color))+'</option>').join('')+'</select></label></div><div class="formactions"><div>'+(ui.editId?'<button type="button" class="btn danger small" data-planner="habit-delete" data-id="'+esc(ui.editId)+'">'+T('delete')+'</button>':'')+'</div><div class="buttonrow"><button type="button" class="btn ghost" data-action="close">'+T('cancel')+'</button><button type="submit" class="btn">'+mellowIcon('check',16)+' '+T('save')+'</button></div></div></form></section></div>';
+    return '<div class="modal-bg"><section class="modal habit-modal" role="dialog" aria-modal="true" aria-labelledby="habitModalTitle"><div class="modalheader"><h2 id="habitModalTitle">'+esc(F(ui.editId?'editHabit':'newHabit'))+'</h2><button type="button" class="iconbtn" data-action="close" aria-label="'+T('close')+'">'+mellowIcon('x',18)+'</button></div><form id="habitForm"><div class="formgrid"><div class="field full habit-ai-assist"><span>'+mellowIcon('sparkles',17)+' '+(db.settings.lang==='he'?'יצירה בעזרת AI':'Create with AI')+'</span><div class="habit-ai-row"><input id="habitAIIntent" maxlength="500" placeholder="'+(db.settings.lang==='he'?'למשל: לקרוא יותר או לשתות מים':'For example: read more or drink water')+'"><button type="button" class="btn secondary" data-planner="habit-ai">'+mellowIcon('sparkles',16)+' '+(db.settings.lang==='he'?'הצעה להרגל':'Suggest a habit')+'</button></div><small>'+(db.settings.lang==='he'?'ההצעה תופיע בשדות למטה ותישמר רק לאחר לחיצה על שמירה.':'The suggestion fills the fields below and is saved only when you press Save.')+'</small></div><label class="field full">'+esc(F('habitName'))+'<input id="habitName" required maxlength="100" value="'+esc(habitName(h))+'"></label><label class="field">Emoji<input id="habitEmoji" maxlength="16" value="'+esc(h.emoji)+'"></label><label class="field">'+esc(F('habitStart'))+'<input id="habitStart" type="date" value="'+esc(h.startDate)+'"></label><div class="field full"><span>'+esc(F('habitSchedule'))+'</span><div class="habit-day-options">'+weekdayLabels().map((label,i)=>'<label><input type="checkbox" name="habitDay" value="'+i+'" '+(h.days.includes(i)?'checked':'')+'><span>'+esc(label)+'</span></label>').join('')+'</div></div><label class="field full">'+esc(F('habitColor'))+'<select id="habitColor">'+colors.map(color=>'<option value="'+color+'" '+(h.color===color?'selected':'')+'>'+esc(F(color))+'</option>').join('')+'</select></label></div><div class="formactions"><div>'+(ui.editId?'<button type="button" class="btn danger small" data-planner="habit-delete" data-id="'+esc(ui.editId)+'">'+T('delete')+'</button>':'')+'</div><div class="buttonrow"><button type="button" class="btn ghost" data-action="close">'+T('cancel')+'</button><button type="submit" class="btn">'+mellowIcon('check',16)+' '+T('save')+'</button></div></div></form></section></div>';
   }
   const originalModal=renderModal;
   renderModal=function(){return ui.modal==='habit'?habitModal():originalModal()};
@@ -127,6 +150,7 @@
     if(action==='pane'){ui.mobilePanes[ui.tab]=control.dataset.pane;render()}
     if(action==='habit-new'){ui.editId=null;ui.modal='habit';render();document.querySelector('#habitName')?.focus()}
     if(action==='habit-edit'){ui.editId=control.dataset.id;ui.modal='habit';render();document.querySelector('#habitName')?.focus()}
+    if(action==='habit-ai')void suggestHabit(control)
     if(action==='habit-toggle'){
       const id=control.dataset.id,key=control.dataset.date||ui.date,list=db.habitLog[id]||(db.habitLog[id]=[]),index=list.indexOf(key);
       if(index>=0)list.splice(index,1);else list.push(key);
@@ -135,7 +159,6 @@
     if(action==='habit-delete'){
       const id=control.dataset.id;if(confirm(T('confirmDelete'))){db.habits=db.habits.filter(h=>h.id!==id);delete db.habitLog[id];ui.modal=null;ui.editId=null;save();toast(T('deleted'))}
     }
-    if(action==='open-habits'){ui.tab='habits';ui.modal=null;render();window.scrollTo({top:0,behavior:'instant'})}
   });
   document.addEventListener('submit',event=>{
     if(event.target.id!=='habitForm')return;

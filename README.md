@@ -44,7 +44,7 @@ Google authentication is session-only: reconnect after reload or token expiry. P
 
 ## AI journal and BYOK providers
 
-An **AI & Writing** tab supports date-specific end-of-day summaries from task names and completion states (not calendar event details or task notes), free-writing entries saved locally, and optional AI help organizing, reflecting on, or polishing the text. Generated responses are previews until the user explicitly saves them. Existing task-editor **Break down this task** suggestions use the same selected provider; offline suggestions remain available, including when the provider fails.
+AI help now lives directly inside task and habit creation instead of a separate **AI & Writing** page. Task breakdown and habit suggestions use the selected provider when configured, retain free offline suggestions, and only populate editable fields until the user explicitly saves.
 
 Open **Settings → AI provider**, select **Google Gemini**, **Groq**, or **OpenAI**, enter a model name (defaults are provided), and paste a personal API key. **Test connection** sends a generic test message. The key is kept in browser `sessionStorage` for the current tab/session, not in persistent app data or exported backups. Selected provider/model preferences and journal writing/AI results are saved with local planner data and included in JSON backups. Writing and day summaries are sent only when the user presses the corresponding AI button. API calls may incur charges and depend on the provider's model access, network, browser CORS policy, and quota. This implementation makes direct HTTPS calls to the provider from the browser, not through an authenticated server proxy. **That is not secure enough for shared/production credentials**; scripts, extensions, or users with device access can potentially extract the key. For a production deployment use an authenticated backend proxy and provider-side rate limits. No test with real provider credentials was performed as part of this change.
 
@@ -58,7 +58,7 @@ Every Today task checklist has a small chevron next to its Subtasks label. Selec
 
 ## Site-wide visual system (v45)
 
-Mellow has an original, Apple-inspired **grouped-list** interface designed to feel familiar alongside Reminders and Notes, without copying proprietary Apple components or assets. The site-wide `apple-ui.css` is loaded last and applies a single visual system throughout Today, Tasks, Routines, AI & Writing, Settings, Google Calendar, date search, editors and dialogs:
+Mellow has an original, Apple-inspired **grouped-list** interface designed to feel familiar alongside Reminders and Notes, without copying proprietary Apple components or assets. The site-wide `apple-ui.css` applies a single visual system throughout Today, Tasks, Habits, Settings, Google Calendar integration, date search, editors and dialogs:
 
 - Native Apple system font stacks where available, clearer headings and readable secondary text
 - Quiet white/inset grouped surfaces, subtle separators and very limited shadows
@@ -97,7 +97,7 @@ Month-jump and Today week navigation chevrons now reflect RTL semantics in Hebre
 ## Kawaii plushie design refresh (v51)
 
 - The original Mellow app now uses a pastel kawaii theme with lavender, strawberry-pink, cream, gentle mint, pill controls, satin-like surfaces and subtle decoration.
-- \`kawaii-ui.css\` loads **after** \`apple-ui.css\`, keeping the layout and accessibility fixes while changing the visual presentation throughout Today, Tasks, Routines, AI & Writing, Settings, calendar, date search and editors.
+- \`kawaii-ui.css\` loads **after** \`apple-ui.css\`, keeping the layout and accessibility fixes while changing the visual presentation throughout Today, Tasks, Habits, Settings, date search and editors.
 - Five transparent original **PNG** sticker assets are in \`assets/\`: \`kawaii-bunny.png\`, \`kawaii-bear.png\`, \`kawaii-bow.png\`, \`kawaii-flower.png\`, and \`kawaii-ribbon.png\`. Decorative stickers use CSS pseudo-elements with \`pointer-events:none\` and do not interfere with tapping, form input, or dragging.
 - Responsive mobile and Hebrew RTL layout is supported. Dark mode, reduced-motion, increased contrast and forced-colors accommodations remain available.
 - The five sticker files are cached for offline use by the PWA, versioned with the app shell (v51).
@@ -128,3 +128,12 @@ Decorative placements are slightly larger where space permits and remain small a
 - Mobile uses a six-item safe-area-aware bottom navigation plus three large Today-pane tabs. The 390px iPhone and 412px Android breakpoints preserve touch targets, RTL order, scrolling, and modal containment.
 - Existing version-1 local data remains compatible. Tasks, habits, routines, Google Calendar links, AI/BYOK settings, backups, drag-and-drop, and offline support continue to use the existing storage model.
 - The PWA shell and decorative assets are cached as `mellow-offline-v55`.
+
+### Date-led navigation and embedded creation tools (v56)
+
+- Today now places the Day sections / Timeline switch directly below the next-task hero. The teddy peeks over that hero beside a clickable weekday/date, with the cherry blossom branch above it.
+- Selecting the weekday or date opens the existing functional month spread. Calendar is no longer a top-level page; Google Calendar events and task syncing remain available inside Today, add-event, search, and Settings flows.
+- Tasks now uses the same decorated hero language as Today and no longer repeats a broken TODO title. Small steps and Routines are collapsible sections inside the task editor, and a saved routine can fill a new task's title, time, duration, emoji, and steps.
+- Habits no longer shows Month overview. Its clickable weekday/date opens the month spread, the cozy cat/books/flowers image has a softer 48px crop, and the new-habit form includes an inline AI/offline suggestion tool.
+- AI & Writing is no longer a separate navigation page. Task breakdown and habit generation live directly in their creation forms; provider/key configuration remains in Settings. The separate Habit data settings card was removed.
+- The PWA shell is cached as `mellow-offline-v56`; existing tasks, routines, habits, AI settings, Google links, and backups remain schema-compatible.

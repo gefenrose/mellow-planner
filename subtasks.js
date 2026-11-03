@@ -107,7 +107,7 @@
     const tail='</textarea></div>';
     const end=start<0?-1:html.indexOf(tail,start);
     if(start<0||end<0) return html; // Leave original editor available if its structure changes.
-    return html.slice(0,start)+'<section id="stepPanel" class="field full steps-editor">'+editorContent()+'</section>'+html.slice(end+tail.length);
+    return html.slice(0,start)+'<details class="field full task-accordion task-steps-accordion" open><summary>'+icon('tasks',19)+' <span>'+W('heading')+'</span>'+icon('chevronDown',17)+'</summary><section id="stepPanel" class="steps-editor">'+editorContent()+'</section></details>'+html.slice(end+tail.length);
   };
   function collectTitle() {
     const title=(document.querySelector('#taskTitle')?.value||'').trim();
@@ -185,6 +185,15 @@
     renderStepEditor();
     if(fallback)toast(W('aiFallback'));
   }
+  window.MellowSteps={
+    apply(list){
+      ensureSteps();
+      const rows=Array.isArray(list)?list:[];
+      ui.stepDraft=rows.map(stepCopy).filter(step=>step.title).slice(0,20);
+      ui.stepCandidates=[];ui.stepMode='';ui.stepBusy=false;
+      renderStepEditor();syncText();
+    }
+  };
   document.addEventListener('click',event=>{
     const el=event.target.closest('[data-step-action]');
     if(el){

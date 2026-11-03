@@ -4,7 +4,7 @@
   const icon=(name,size=17)=>mellowIcon(name,size);
   const tr={
     en:{task:'Task',event:'Google event',allDay:'All day',scheduled:'Planned',anytime:'Anytime',untimed:'Without a time',
-      choose:'What would you like to add?',chooseSub:'Create a task, save a reusable routine, or add a Google Calendar event.',
+      choose:'What would you like to add?',chooseSub:'Create a Mellow task or add a Google Calendar event.',
       makeTask:'Mellow task',makeTaskSub:'Checklist, reminders and focus',
       makeRoutine:'Routine',makeRoutineSub:'A reusable sequence for any day',
       makeEvent:'Calendar event',makeEventSub:'Appears in Google Calendar',
@@ -16,7 +16,7 @@
       add:'Add',none:'Your day has room to breathe',calInfo:'Google events appear here once connected',empty_other:'Anytime today works',empty_morning:'A little room for the morning',empty_afternoon:'Leave a little space',empty_evening:'End the day your way',
       flexible:'Anytime',inbox:'Inbox'},
     he:{task:'משימה',event:'אירוע Google',allDay:'כל היום',scheduled:'מתוכנן',anytime:'בכל שעה',untimed:'ללא שעה',
-      choose:'מה תרצי להוסיף?',chooseSub:'משימה, שגרה לשימוש חוזר או אירוע ביומן Google.',
+      choose:'מה תרצי להוסיף?',chooseSub:'משימה ב-Mellow או אירוע ביומן Google.',
       makeTask:'משימה ב-Mellow',makeTaskSub:'רשימות, צעדים וריכוז',
       makeRoutine:'שגרה',makeRoutineSub:'רצף צעדים שאפשר להוסיף לכל יום',
       makeEvent:'אירוע ביומן',makeEventSub:'נוסף ל-Google Calendar',
@@ -350,7 +350,7 @@
       '<button data-action="dayview" data-view="parts" class="'+(mode==='parts'?'selected':'')+'" aria-pressed="'+(mode==='parts')+'">'+icon('tasks',17)+' '+L('partsView')+'</button>'+
       '<button data-action="dayview" data-view="hours" class="'+(mode==='hours'?'selected':'')+'" aria-pressed="'+(mode==='hours')+'">'+icon('clock',17)+' '+L('hoursView')+'</button></div>';
     return '<div class="mellow-day-view merged-day-view"><header class="mellow-day-heading"><div class="overline">'+icon('sparkles',14)+' MELLOW / '+T('today')+'</div>'+
-      '<div class="mellow-title-line"><div><h1>'+esc(dt(ui.date,{weekday:'long'}))+'</h1><p>'+esc(dt(ui.date,{day:'numeric',month:'long',year:'numeric'}))+'</p></div>'+
+      '<div class="mellow-title-line"><button type="button" class="mellow-date-trigger" data-planner-nav="month" aria-label="'+esc((db.settings.lang==='he'?'פתיחת לוח חודשי, ':'Open monthly calendar, ')+dt(ui.date,{weekday:'long',day:'numeric',month:'long',year:'numeric'}))+'"><h1>'+esc(dt(ui.date,{weekday:'long'}))+'</h1><p>'+esc(dt(ui.date,{day:'numeric',month:'long',year:'numeric'}))+'</p></button>'+
       '<button class="btn secondary small" data-action="gotoday">'+T('today')+'</button></div></header>'+
       '<div class="day-nav-card"><div class="day-nav-top"><button class="iconbtn" data-action="day" data-step="-7" aria-label="'+(rtl?'השבוע הקודם':'Previous week')+'">'+icon(rtl?'chevronRight':'chevronLeft',20)+'</button>'+
       '<strong>'+esc(dt(ui.date,{month:'long',year:'numeric'}))+'</strong><button class="iconbtn" data-action="day" data-step="7" aria-label="'+(rtl?'השבוע הבא':'Next week')+'">'+icon(rtl?'chevronLeft':'chevronRight',20)+'</button></div>'+
@@ -365,8 +365,6 @@
       '<button type="button" class="iconbtn" data-unified-choice="cancel" aria-label="'+T('close')+'">'+icon('plus',20)+'</button></div>'+
       '<div class="choice-grid"><button class="choice-card choice-task" type="button" data-unified-choice="task"><span class="choice-symbol">'+icon('tasks',26)+'</span>'+
       '<span class="choice-text"><strong>'+L('makeTask')+'</strong><small>'+L('makeTaskSub')+'</small></span>'+icon('chevronRight',18)+'</button>'+
-      '<button class="choice-card choice-routine" type="button" data-unified-choice="routine"><span class="choice-symbol">'+icon('repeat',26)+'</span>'+
-      '<span class="choice-text"><strong>'+L('makeRoutine')+'</strong><small>'+L('makeRoutineSub')+'</small></span>'+icon('chevronRight',18)+'</button>'+
       '<button class="choice-card choice-calendar" type="button" data-unified-choice="event"><span class="choice-symbol">'+icon('calendar',26)+'</span>'+
       '<span class="choice-text"><strong>'+L('makeEvent')+'</strong><small>'+L('makeEventSub')+'</small></span>'+icon('chevronRight',18)+'</button></div></section></div>';
   }
@@ -388,8 +386,6 @@
       const date=document.querySelector('#taskDate');if(date)date.value=context.date;
       if(context.start!=null){const start=document.querySelector('#taskStart');if(start){start.value=fmt(context.start);const duration=document.querySelector('#taskMin'),end=document.querySelector('#taskEnd');const minutes=Math.min(Number(duration?.value)||25,1440-context.start);if(duration)duration.value=minutes;if(end)end.value=fmt(context.start+minutes)}}
       document.querySelector('#taskTitle')?.focus();
-    }else if(kind==='routine'){
-      ui.editId=null;ui.modal='routine';render();document.querySelector('#routineName')?.focus();
     }else if(kind==='event'){
       if(!window.MellowCalendar?.isConnected?.()){
         ui.modal=null;ui.tab='settings';render();window.scrollTo({top:0,behavior:'instant'});toast(L('needGoogle'));return;

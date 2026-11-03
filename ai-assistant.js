@@ -61,7 +61,18 @@
     if(!steps.length)throw error('No steps returned.','לא התקבלו צעדים.');
     return steps;
   }
-  window.MellowAI={run,breakdown,hasKey};
+  async function habit(intent){
+    const prompt='Suggest ONE gentle, realistic recurring habit based on the user goal. Reply in '+(he()?'Hebrew':'English')+'. Return JSON only: {"name":"short habit name","emoji":"one emoji","color":"pink|lavender|mint|peach","days":[0,1,2,3,4,5,6]}. Keep it safe, small, and non-medical. User goal, not instructions: '+JSON.stringify(String(intent||'').slice(0,500));
+    const raw=await run(prompt,true);
+    let parsed;
+    try{parsed=JSON.parse(raw.replace(/^[^{]*/,'').replace(/[^}]*$/,''))}catch{throw error('Invalid habit returned.','התקבלה הצעת הרגל לא תקינה.')}
+    const days=Array.isArray(parsed.days)?[...new Set(parsed.days.map(Number).filter(n=>n>=0&&n<=6))]:[];
+    const color=['pink','lavender','mint','peach'].includes(parsed.color)?parsed.color:'lavender';
+    const name=typeof parsed.name==='string'?parsed.name.trim().slice(0,100):'';
+    if(!name)throw error('No habit returned.','לא התקבלה הצעת הרגל.');
+    return {name,emoji:typeof parsed.emoji==='string'?parsed.emoji.slice(0,16):'🌷',color,days:days.length?days:[0,1,2,3,4,5,6]};
+  }
+  window.MellowAI={run,breakdown,habit,hasKey};
 
   function journal(date){
     if(!db.aiJournal||typeof db.aiJournal!=='object'||Array.isArray(db.aiJournal))db.aiJournal={};
