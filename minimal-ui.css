@@ -118,3 +118,5 @@ body .habit-settings-card strong{color:var(--ink)}
 body .task-page-title,body[dir=rtl] .task-page-title,body [dir=rtl] .task-page-title{padding:0 0 24px!important;min-height:0!important}
 body .tasks-list .task-emoji{background:var(--surface2)!important;border-radius:7px}
 body .planner-eyebrow{color:var(--muted)}
+
+body .planner-today-center .mellow-day-heading{margin:0 0 24px!important;min-height:0!important}
