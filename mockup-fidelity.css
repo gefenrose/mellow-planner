@@ -360,7 +360,7 @@ body{min-height:100dvh;background-attachment:fixed}
 
 @media(forced-colors:active){.planner-today-center .mellow-day-heading::after,.task-page-title::after,.main>.topbar::after,.task-empty-bunny{display:none!important}.mellow-date-static{border:1px solid CanvasText;box-shadow:none}}
 
-/* v58: attach the Today teddy to the next-task card and clear the date art. */
+/* v59: attach the Today teddy to the next-task card and clear the date art. */
 .planner-today-center .mellow-day-heading,[dir=rtl] .planner-today-center .mellow-day-heading{
   min-height:100px;margin:58px 10px 0;padding:24px 38px 18px;overflow:visible;
 }
@@ -372,7 +372,7 @@ body{min-height:100dvh;background-attachment:fixed}
 .mellow-date-static{padding:0;border-radius:0;background:transparent;box-shadow:none}
 .mellow-date-trigger,.mellow-date-trigger:hover,.mellow-date-trigger:focus-visible{background:transparent;box-shadow:none}
 .planner-today-center .next-task-countdown,[dir=rtl] .planner-today-center .next-task-countdown{
-  margin-top:72px;padding-left:55%;padding-right:28px;overflow:visible;
+  margin-top:72px;padding-left:51%;padding-right:28px;overflow:visible;
 }
 .planner-today-center .next-task-countdown::after{
   content:"";display:block!important;position:absolute;z-index:3;top:-120px;right:auto;left:43%;width:210px;height:190px;

@@ -25,7 +25,7 @@
 - Pass: the habit form's embedded AI/offline action converted “לשתות יותר מים” into a reviewable water habit without saving it automatically.
 - Pass: Settings no longer contains the Habit data card.
 - Pass: browser console contained no errors or warnings during desktop and mobile flows.
-- Pass: all 57 service-worker core files exist and the cache version is `mellow-offline-v58`.
+- Pass: all 57 service-worker core files exist and the cache version is `mellow-offline-v59`.
 
 ## Resolved findings
 
