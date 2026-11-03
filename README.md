@@ -158,3 +158,11 @@ Decorative placements are slightly larger where space permits and remain small a
 - The Today teddy sits at weekday level while peeking over the next-task card: right in English and left in Hebrew.
 - Horizontal artwork-and-copy compositions reverse with the interface direction, including the next-task and Tasks headers.
 - The PWA cache is `mellow-offline-v60`.
+
+### Notion-style database workspace (v66)
+
+- Reframed Mellow as a quiet Notion-inspired workspace: a flat white/gray canvas, thin dividers, document headings, database-like task rows, restrained blue accents, and compact utility panels.
+- Removed the proposed global Share/Search/Favorite toolbar. The interface keeps only contextual actions such as New task, New habit, month navigation, and row controls.
+- Desktop retains the functional three-part planner composition while Hebrew and English reverse the sidebar and content direction correctly. Mobile keeps a four-item safe-area bottom navigation and the full day plan at 390px-class widths.
+- Today, Tasks, Habits, Settings, task/event creation, collapsible Small steps and Routines, the month dialog, Google Calendar, AI helpers, drag-and-drop, local persistence, and version-1 backup compatibility remain intact.
+- Decorative plush/card treatments are no longer rendered in this mode; the small Mellow bunny mark remains as a restrained brand detail. The PWA cache is `mellow-offline-v66`.
