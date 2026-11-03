@@ -11,6 +11,8 @@ A self-contained, independent, mobile-first visual day planner. No subscription,
 ## Features
 
 - **Today**: visual, color-coded timeline; week picker; create, edit, schedule, complete, and delete tasks; unscheduled inbox; optional Google Calendar events beside your plan.
+- **Calendar**: a navigable month grid with Hebrew RTL-aware controls, task previews, and a selected-day agenda that combines local tasks with connected Google Calendar events.
+- **Habits**: create, edit, delete, schedule by weekday, and mark recurring habits each day. Habit definitions and completion history persist locally and are included in backups.
 - **Tasks**: search, priority sorting, drag to reorder, categories, task notes, and checkable/editable subtasks.
 - **Routines**: build sequences of timed steps, save them, and add them to any selected day's available slots. Repeat-day chips are informational, not automatic recurring scheduling.
 - **Focus**: start/pause/reset a timer with time presets and optional linked task, sound, vibration, and session history. Browser support and background execution vary.
@@ -108,3 +110,11 @@ The stickers are original software-generated illustrations, not photographs of m
 Replaced all five decorative PNGs in place with newly drawn, higher-resolution (224×224) transparent illustrations. The bunny and bear now use layered shading, fur-fiber texture, embroidered facial features, sewn seams and dimensional fabric bows; the standalone bow and ribbon show satin folds and reflected highlights; and the flower features detailed layered petals, botanical leaves and centers. These are original textured **illustrations**, not actual plush-toy photographs.
 
 Decorative placements are slightly larger where space permits and remain small at iPhone widths. No interactive control has a sticker overlay; no task, calendar, AI, storage or DnD logic was changed. Asset query versions and service worker cache were bumped to v52.
+
+### Three-column calendar and habits release (v53)
+
+- Today, Calendar, and Habits now share a responsive planner layout: compact month navigation, the active day view, and recurring rituals on desktop; mobile switches those panes with large tab controls.
+- The month calendar supports real date navigation and Hebrew RTL semantics. It previews local tasks in each date and shows local tasks plus loaded Google Calendar events in the selected-day agenda.
+- Habits support create, edit, delete, weekday recurrence, daily completion, seven-day progress, local persistence, import/export, and additive backwards-compatible `habits` / `habitLog` fields in the existing version-1 data schema.
+- Decorative artwork was replaced with original high-detail transparent PNG renderings: plush bunny and teddy, satin bow and ribbon, flowers, and a cozy books/cup/candle/cat-lamp still life. Functional Lucide SVG icons remain for accessible controls.
+- The app shell and offline cache were refreshed to v53. Existing tasks, routines, Google Calendar links, drag-and-drop, AI settings, and older version-1 backups remain supported.

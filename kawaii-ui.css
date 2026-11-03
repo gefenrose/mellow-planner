@@ -1,5 +1,5 @@
 /*
- * Mellow Kawaii — original pastel plushie design system (v51)
+ * Mellow Kawaii — original pastel plushie design system (v53)
  *
  * Loaded after apple-ui.css; preserves layout, calendar controls, DnD touch
  * actions, form containment, RTL direction, and readable system typography.
@@ -34,6 +34,7 @@
   --kawaii-bow:url("./assets/kawaii-bow.png");
   --kawaii-flower:url("./assets/kawaii-flower.png");
   --kawaii-ribbon:url("./assets/kawaii-ribbon.png");
+  --kawaii-cozy:url("./assets/kawaii-cozy.png");
 }
 body.dark{
   --bg:#211b2a;
