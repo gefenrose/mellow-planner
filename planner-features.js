@@ -92,8 +92,7 @@
     return mobileTabs(active)+'<div class="planner-three-column" data-active-pane="'+active+'"><aside class="planner-side planner-calendar-side '+(active==='calendar'?'mobile-active':'')+'" data-mobile-pane="calendar">'+calendarMonth(true)+'</aside><section class="planner-center '+centerClass+' '+(active===centerPane?'mobile-active':'')+'" data-mobile-pane="'+centerPane+'">'+center+'</section><aside class="planner-side planner-habit-side '+(active===rightPane?'mobile-active':'')+'" data-mobile-pane="'+rightPane+'">'+right+'</aside></div>';
   }
   function dashboardColumns(center){
-    const active=paneFor('day');
-    return mobileTabs(active)+'<div class="planner-dashboard" data-active-pane="'+active+'"><section class="planner-center planner-today-center '+(active==='day'?'mobile-active':'')+'" data-mobile-pane="day">'+center+'</section><aside class="planner-dashboard-side"><div class="dashboard-calendar-pane '+(active==='calendar'?'mobile-active':'')+'" data-mobile-pane="calendar">'+calendarMonth(true)+'</div><div class="dashboard-habits-pane '+(active==='habits'?'mobile-active':'')+'" data-mobile-pane="habits">'+taskSummary()+habitTiles()+cozyScene()+'</div></aside></div>';
+    return '<div class="planner-dashboard" data-active-pane="day"><section class="planner-center planner-today-center mobile-active" data-mobile-pane="day">'+center+'</section><aside class="planner-dashboard-side"><div class="dashboard-calendar-pane" data-mobile-pane="calendar">'+calendarMonth(true)+'</div><div class="dashboard-habits-pane" data-mobile-pane="habits">'+taskSummary()+habitTiles()+cozyScene()+'</div></aside></div>';
   }
 
   const originalToday=renderToday;

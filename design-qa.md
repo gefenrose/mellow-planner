@@ -25,9 +25,17 @@
 - Pass: the habit form's embedded AI/offline action converted “לשתות יותר מים” into a reviewable water habit without saving it automatically.
 - Pass: Settings no longer contains the Habit data card.
 - Pass: browser console contained no errors or warnings during desktop and mobile flows.
-- Pass: all 57 service-worker core files exist and the cache version is `mellow-offline-v59`.
+- Pass: all 57 service-worker core files exist and the cache version is `mellow-offline-v60`.
 
 ## Resolved findings
+
+### v60 language-aware artwork and mobile Today
+
+- Pass: Today at 390 × 844 contains no Day plan / Daily rituals tab switcher and the Day plan remains visible.
+- Pass: the Today teddy and tea still life swap sides between English LTR and Hebrew RTL without covering the weekday or next-task copy.
+- Pass: the Tasks header teddy and flower branch swap to the opposite side of the heading in both languages.
+- Pass: desktop Today at 1280 × 900 keeps the month calendar visible while the teddy rests on the next-task card at weekday level.
+- Pass: browser console contained no errors or warnings throughout the English and Hebrew desktop/mobile checks.
 
 - P1 resolved: decorative images initially mirrored with RTL and placed the teddy/tea opposite the source visual; switched those assets to physical positioning.
 - P2 resolved: the mobile calendar Today control measured 40px high, and compact task icon/check controls had narrow hit areas; raised the calendar control to 44px and expanded task hit areas without enlarging their visual glyphs.

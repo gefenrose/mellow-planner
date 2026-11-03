@@ -151,3 +151,10 @@ Decorative placements are slightly larger where space permits and remain small a
 - The weekday/date has no translucent chip; the cherry branch sits in its own space directly above it.
 - Next-task text starts farther to the right so the tea/books/candle artwork cannot cover it.
 - The PWA cache is `mellow-offline-v59`.
+
+### Language-aware artwork layout (v60)
+
+- The mobile Today view now opens directly to the Day plan without the Day plan / Daily rituals switcher.
+- The Today teddy sits at weekday level while peeking over the next-task card: right in English and left in Hebrew.
+- Horizontal artwork-and-copy compositions reverse with the interface direction, including the next-task and Tasks headers.
+- The PWA cache is `mellow-offline-v60`.

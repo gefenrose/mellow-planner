@@ -389,3 +389,39 @@ body{min-height:100dvh;background-attachment:fixed}
 }
 
 @media(forced-colors:active){.planner-today-center .next-task-countdown::after{display:none!important}}
+
+/* v60: one mobile Day plan and language-aware art/text placement. */
+html[dir=ltr] .planner-today-center .next-task-countdown{
+  padding-left:51%;padding-right:28px;
+}
+html[dir=rtl] .planner-today-center .next-task-countdown{
+  padding-left:28px;padding-right:51%;
+}
+html[dir=ltr] .planner-today-center .next-task-countdown::before{left:5px;right:auto}
+html[dir=rtl] .planner-today-center .next-task-countdown::before{left:auto;right:5px}
+html[dir=ltr] .planner-today-center .next-task-countdown::after{
+  top:-184px;left:auto;right:28px;width:220px;height:220px;transform:none;
+}
+html[dir=rtl] .planner-today-center .next-task-countdown::after{
+  top:-184px;right:auto;left:28px;width:220px;height:220px;transform:none;
+}
+
+html[dir=ltr] .task-page-title{padding:35px 250px 28px 38px}
+html[dir=rtl] .task-page-title{padding:35px 38px 28px 250px}
+html[dir=ltr] .task-page-title::before{left:auto;right:12px}
+html[dir=rtl] .task-page-title::before{left:12px;right:auto}
+html[dir=ltr] .task-page-title::after{left:auto;right:28px}
+html[dir=rtl] .task-page-title::after{left:28px;right:auto}
+
+@media(max-width:820px){
+  html[dir=ltr] .planner-today-center .next-task-countdown{padding-left:47%;padding-right:12px}
+  html[dir=rtl] .planner-today-center .next-task-countdown{padding-left:12px;padding-right:47%}
+  html[dir=ltr] .planner-today-center .next-task-countdown::after{top:-132px;left:auto;right:8px;width:145px;height:150px}
+  html[dir=rtl] .planner-today-center .next-task-countdown::after{top:-132px;right:auto;left:8px;width:145px;height:150px}
+  html[dir=ltr] .task-page-title{padding:27px 108px 22px 17px}
+  html[dir=rtl] .task-page-title{padding:27px 17px 22px 108px}
+  html[dir=ltr] .task-page-title::before{left:auto;right:0}
+  html[dir=rtl] .task-page-title::before{left:0;right:auto}
+  html[dir=ltr] .task-page-title::after{left:auto;right:2px}
+  html[dir=rtl] .task-page-title::after{left:2px;right:auto}
+}
