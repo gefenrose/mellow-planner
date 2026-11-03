@@ -137,3 +137,10 @@ Decorative placements are slightly larger where space permits and remain small a
 - Habits no longer shows Month overview. Its clickable weekday/date opens the month spread, the cozy cat/books/flowers image has a softer 48px crop, and the new-habit form includes an inline AI/offline suggestion tool.
 - AI & Writing is no longer a separate navigation page. Task breakdown and habit generation live directly in their creation forms; provider/key configuration remains in Settings. The separate Habit data settings card was removed.
 - The PWA shell is cached as `mellow-offline-v56`; existing tasks, routines, habits, AI settings, Google links, and backups remain schema-compatible.
+
+### Clearer headers and navigation art (v57)
+
+- Today uses a static weekday heading on desktop because the month spread is already visible there; mobile keeps the tappable weekday/date month picker, and the redundant Today button is gone.
+- The sidebar bunny is smaller and reserved below navigation, the logo lockup is tighter, and the extra bow sticker was removed.
+- A consistent teddy peeks over the page-header card on Today, Tasks, Habits and Settings. Task empty states now use the plush bunny instead of the leaf icon.
+- The PWA cache is `mellow-offline-v57`.

@@ -349,9 +349,10 @@
     const toggle='<div class="planner-view-toggle" role="group" aria-label="'+L('partsView')+'">'+
       '<button data-action="dayview" data-view="parts" class="'+(mode==='parts'?'selected':'')+'" aria-pressed="'+(mode==='parts')+'">'+icon('tasks',17)+' '+L('partsView')+'</button>'+
       '<button data-action="dayview" data-view="hours" class="'+(mode==='hours'?'selected':'')+'" aria-pressed="'+(mode==='hours')+'">'+icon('clock',17)+' '+L('hoursView')+'</button></div>';
+    const weekday=esc(dt(ui.date,{weekday:'long'})),dateLabel=esc(dt(ui.date,{day:'numeric',month:'long',year:'numeric'}));
     return '<div class="mellow-day-view merged-day-view"><header class="mellow-day-heading"><div class="overline">'+icon('sparkles',14)+' MELLOW / '+T('today')+'</div>'+
-      '<div class="mellow-title-line"><button type="button" class="mellow-date-trigger" data-planner-nav="month" aria-label="'+esc((db.settings.lang==='he'?'פתיחת לוח חודשי, ':'Open monthly calendar, ')+dt(ui.date,{weekday:'long',day:'numeric',month:'long',year:'numeric'}))+'"><h1>'+esc(dt(ui.date,{weekday:'long'}))+'</h1><p>'+esc(dt(ui.date,{day:'numeric',month:'long',year:'numeric'}))+'</p></button>'+
-      '<button class="btn secondary small" data-action="gotoday">'+T('today')+'</button></div></header>'+
+      '<div class="mellow-title-line"><div class="mellow-date-static"><h1>'+weekday+'</h1><p>'+dateLabel+'</p></div>'+
+      '<button type="button" class="mellow-date-trigger mellow-date-mobile" data-planner-nav="month" aria-label="'+esc((db.settings.lang==='he'?'פתיחת לוח חודשי, ':'Open monthly calendar, ')+dt(ui.date,{weekday:'long',day:'numeric',month:'long',year:'numeric'}))+'"><h1>'+weekday+'</h1><p>'+dateLabel+'</p></button></div></header>'+
       '<div class="day-nav-card"><div class="day-nav-top"><button class="iconbtn" data-action="day" data-step="-7" aria-label="'+(rtl?'השבוע הקודם':'Previous week')+'">'+icon(rtl?'chevronRight':'chevronLeft',20)+'</button>'+
       '<strong>'+esc(dt(ui.date,{month:'long',year:'numeric'}))+'</strong><button class="iconbtn" data-action="day" data-step="7" aria-label="'+(rtl?'השבוע הבא':'Next week')+'">'+icon(rtl?'chevronLeft':'chevronRight',20)+'</button></div>'+
       '<div class="week dayticker">'+weekDays()+'</div></div>'+
