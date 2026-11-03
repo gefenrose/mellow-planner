@@ -1,0 +1,109 @@
+/* Mellow: quiet, content-first surfaces. Loaded after layout/interaction styles. */
+body,body:not(.dark){
+ --bg:#fff;--surface:#fff;--surface2:#f5f5f4;--ink:#242424;--muted:#686868;--border:#e7e7e5;
+ --green:#292929;--purple:#292929;--lightgreen:#efefed;--lav:#efefed;--pink:#f6f5f4;
+ --blue:#2563a6;--sky:#eef4fa;--shadow:none;--card-shadow:none;--mock-shadow:none;
+ --apple-focus:#2876c7;--apple-separator:var(--border);--apple-hover:#f4f4f2;
+ --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;--head:var(--font);
+ background:var(--bg)!important;background-image:none!important;color:var(--ink);
+ font-family:var(--font);font-size:15px;line-height:1.5;
+}
+body.dark{--bg:#191919;--surface:#202020;--surface2:#292929;--ink:#eeeeec;--muted:#aaa;
+ --border:#383838;--green:#ededeb;--purple:#ededeb;--lightgreen:#303030;--lav:#303030;
+ --pink:#292929;--sky:#253341;--blue:#8ebce9;--apple-focus:#8ebce9;--apple-hover:#303030;
+ --shadow:none;--card-shadow:none;--mock-shadow:none;background:var(--bg)!important;color:var(--ink)}
+body :is(.sidebar,.brand-word,.topbar,.mellow-day-heading,.task-page-title,.day-nav-card,.next-task-countdown,.routine,.empty)::before,
+body :is(.sidebar,.brand-word,.topbar,.mellow-day-heading,.task-page-title,.day-nav-card,.next-task-countdown,.routine,.empty)::after{content:none!important;display:none!important}
+.dashboard-cozy-scene,.cozy-still-life,.task-empty-bunny,.task-routine-empty img{display:none!important}
+body .layout{max-width:1600px;padding:0;gap:0;grid-template-columns:220px minmax(0,1fr)}
+body .sidebar{top:0;height:100dvh;padding:32px 16px!important;border:0;border-inline-end:1px solid var(--border);border-radius:0;background:var(--surface2)!important;box-shadow:none;gap:30px}
+body .brand{justify-content:flex-start;gap:9px;padding-inline:10px;margin:0}
+body .brand-icon{width:27px;height:27px;flex:0 0 27px;background:none!important;border:0;box-shadow:none;color:var(--ink)}
+body .brand-icon svg{opacity:1;width:25px;height:25px}
+body .brand-word{font-family:var(--font);font-size:23px;letter-spacing:-.8px;font-weight:650;color:var(--ink)}
+body .navbtn{min-height:44px;padding:10px 12px;font-size:14px;font-weight:500;gap:12px;border-radius:6px;color:var(--muted)}
+body .navbtn .icon,body .navbtn .icon svg{width:19px;height:19px;color:inherit}
+body .navbtn.active{background:var(--border);color:var(--ink);box-shadow:none;border-color:transparent}
+body .navbtn:hover:not(.active){background:var(--border);color:var(--ink)}
+body .main,body .main:has(.planner-dashboard){padding:40px clamp(20px,3.4vw,56px) 64px;max-width:none}
+body .planner-dashboard{grid-template-columns:minmax(0,1fr) 300px;gap:36px}
+body .planner-dashboard-side,body .dashboard-calendar-pane,body .dashboard-habits-pane{gap:24px}
+body :is(.card,.sequence-card,.day-nav-card,.task-page-title,.routine,.task-accordion,.habit-page-date,.habit-ai-assist,.task-routine-option){background:var(--surface)!important;border:1px solid var(--border)!important;border-radius:10px!important;box-shadow:none!important;color:var(--ink)}
+body :is(.topbar,.task-page-title){margin-top:0;min-height:0;padding:0 0 24px;background:transparent!important;border:0!important;border-bottom:1px solid var(--border)!important;border-radius:0!important}
+body .planner-today-center .mellow-day-heading,body[dir=rtl] .planner-today-center .mellow-day-heading,
+body [dir=rtl] .planner-today-center .mellow-day-heading{margin:0 0 24px;padding:0!important;min-height:0}
+body :is(h1,.task-page-heading-copy h1,.mellow-title-line h1){font-size:32px;font-weight:650;letter-spacing:-1px;color:var(--ink)}
+body :is(h2,.dashboard-task-summary h2,.dashboard-habits h2){font-size:20px;font-weight:600;letter-spacing:-.3px;color:var(--ink)}
+body :is(.mellow-title-line p,.task-page-heading-copy p,.next-task-detail,.dashboard-task-summary p){font-size:14px;color:var(--muted)}
+body .mellow-date-static,body .mellow-date-trigger{padding:0;background:transparent;box-shadow:none;border-radius:0}
+body .planner-today-center .next-task-countdown,body [dir=rtl] .planner-today-center .next-task-countdown{
+ min-height:0;margin:0 0 20px;padding:20px!important;background:var(--surface2)!important;border:1px solid var(--border)!important;border-radius:10px!important;box-shadow:none!important;align-items:flex-start}
+body .next-task-label{font-size:12px;font-weight:500;color:var(--muted)}
+body .next-task-countdown strong{font-size:26px;font-weight:600;letter-spacing:-.6px;color:var(--ink)}
+body .planner-today-center .day-planner-controls{margin:0 0 24px;justify-content:flex-start}
+body .planner-view-toggle{background:var(--surface2);border:1px solid var(--border);padding:3px;gap:3px;border-radius:8px}
+body .planner-view-toggle button{background:transparent;color:var(--muted);border-radius:5px;min-height:38px;padding:7px 14px;font-weight:500}
+body .planner-view-toggle button.selected{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px #00000014}
+body .merged-planned-heading,body .merged-anytime-heading{margin:0 0 12px!important;border-bottom:1px solid var(--border);padding-block:10px}
+body .merged-planned-heading h3,body .merged-anytime-heading h3{font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--muted)}
+body .day-sequence{--time-column:65px;--sequence-gap:16px;padding:0}
+body .sequence-row{min-height:58px}
+body .sequence-time{background:transparent;border-radius:0;margin:0;padding:8px 0;font-size:13px;font-variant-numeric:tabular-nums;color:var(--muted)}
+body .sequence-card,body .sequence-row:nth-child(n) .sequence-card{background:var(--surface)!important;padding:6px 12px!important;border-radius:8px!important}
+body .sequence-card .daytask-body strong{font-size:15px;font-weight:500;color:var(--ink)}
+body .sequence-gap{min-height:52px}
+body .sequence-gap-content{justify-content:space-between;gap:8px}
+body .sequence-gap-content>span{background:transparent;padding:0;color:var(--muted);font-size:12px}
+body .sequence-gap-add{display:inline-flex!important;min-height:44px!important;background:transparent!important;color:var(--muted)!important}
+body .sequence-rail:after{border-color:var(--border)}
+body .sequence-add{width:100%;margin:16px 0;background:transparent!important;color:var(--muted)!important;border:1px dashed var(--border)!important;border-radius:8px!important;box-shadow:none}
+body .btn,body .floatadd{background:var(--ink);color:var(--bg);border-radius:7px;box-shadow:none;font-weight:500}
+body .btn.secondary,body .btn.ghost,body .iconbtn,body .page-title-add{background:var(--surface2);color:var(--ink);border-color:var(--border);box-shadow:none;border-radius:7px}
+body .btn.ghost{background:transparent}
+body .chip.selected{background:var(--lightgreen);color:var(--ink);border-color:var(--border)}
+body :is(.planner-month.compact,.dashboard-habits,.dashboard-task-summary){padding:20px;min-height:0}
+body .planner-month-head strong{font-size:16px!important;font-weight:600;color:var(--ink)}
+body .planner-weekdays span{font-size:11px;color:var(--muted)}
+body .planner-month.compact .planner-date{min-height:34px;border-radius:6px}
+body .planner-month.compact .planner-date-number{font-size:13px}
+body .planner-date.selected{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;box-shadow:none}
+body .planner-date.selected *{color:var(--bg)!important}
+body .dashboard-summary-check{width:40px;height:40px;background:var(--surface2);color:var(--ink);box-shadow:none}
+body .dashboard-task-summary{grid-template-columns:40px minmax(0,1fr);gap:12px}
+body .dashboard-progress{height:5px;background:var(--surface2)}
+body .dashboard-progress span{background:var(--ink)}
+body .dashboard-habit-tiles{grid-template-columns:repeat(auto-fit,minmax(62px,1fr));gap:8px}
+body .dashboard-habit-tile{background:var(--surface2);border:1px solid var(--border);border-radius:8px;box-shadow:none;min-height:68px}
+body .dashboard-habit-tile small{color:var(--muted)}
+body .dashboard-habit-tile.is-done{background:var(--lightgreen);box-shadow:inset 0 0 0 1px var(--ink)}
+body .dashboard-habit-empty{background:var(--surface2);color:var(--ink);border-radius:8px}
+body :is(.modal,.jump-month-modal,.jump-search-modal,.ai-journal-card){background:var(--surface);color:var(--ink);border:1px solid var(--border);border-radius:14px;box-shadow:0 18px 64px #0002}
+body :is(input,textarea,select,.native-picker-shell){background:var(--surface);color:var(--ink);border-color:var(--border);border-radius:7px}
+body :is(.task-accordion>summary,.step-preview,.habit-ai-assist,.task-priority-empty){background:var(--surface2);color:var(--ink);border-color:var(--border)}
+body .habit-page-date{padding:16px 20px;min-height:64px}
+body .habit-page-date>span{font-size:20px;font-weight:600}
+body .habit-ai-assist>span,body .dashboard-habits header>span{color:var(--ink)}
+body .planner-habits-art .habit-summary{border-radius:10px!important}
+body .task-page{padding-inline:0}
+body .task-routine-library>header h2{font-size:22px}
+body .task-routine-option{flex-wrap:wrap}
+body .bottomnav{background:var(--surface)!important;border-color:var(--border);box-shadow:none}
+body .bottomnav button.active,body .bottomnav button.active .icon{background:var(--surface2);color:var(--ink)}
+@media(max-width:1150px) and (min-width:821px){body .layout{grid-template-columns:180px minmax(0,1fr)}body .main,body .main:has(.planner-dashboard){padding:28px 24px}body .planner-dashboard{grid-template-columns:minmax(0,1fr) 260px;gap:20px}}
+@media(max-width:820px){
+ body .layout{display:block}body .sidebar{display:none}
+ body .main,body .main:has(.planner-dashboard){padding:20px 16px calc(110px + env(safe-area-inset-bottom))}
+ body .planner-dashboard{display:block}body .planner-mobile-tabs{background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:none;gap:3px;padding:3px}
+ body .planner-mobile-tabs button{border-radius:5px;font-size:12px;font-weight:500;color:var(--muted)}
+ body .planner-mobile-tabs button.active{background:var(--surface2);color:var(--ink)}
+ body .planner-today-center .mellow-day-heading{margin:16px 0 22px!important;padding:0!important;min-height:0}
+ body .mellow-title-line h1,body .task-page-heading-copy h1{font-size:28px}
+ body .next-task-countdown strong{font-size:23px}
+ body .day-sequence{--time-column:49px;--sequence-gap:8px}
+ body .sequence-card{padding-inline:8px!important}body .sequence-card .daytask-body strong{font-size:14px}
+ body .sequence-gap-content{flex-wrap:wrap}body .sequence-gap-add{padding-inline:5px;font-size:12px}
+ body .planner-month.compact .planner-date{min-height:44px}
+ body .task-page-title{margin-top:0!important;padding:12px 0 22px!important;min-height:0}
+ body .habit-page-date{flex-wrap:wrap}body .floatadd{border-radius:12px}
+}
+@media(prefers-reduced-motion:reduce){body *{scroll-behavior:auto!important}}
