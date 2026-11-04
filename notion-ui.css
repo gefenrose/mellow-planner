@@ -1,4 +1,4 @@
-/* v71 — Notion-inspired Mellow surface. Functionality remains owned by the existing app. */
+/* v72 — Notion-inspired Mellow surface. Functionality remains owned by the existing app. */
 :root{
   --notion-bg:#fff;
   --notion-sidebar:#f7f7f5;
@@ -254,7 +254,7 @@ img[src*="kawaii-bunny"],img[src*="kawaii-logo-bunny"],.task-empty-bunny{display
   .planner-today-center .next-task-countdown::before,.brand-icon{background:none!important}
 }
 
-/* v71 — one quiet, consistent interaction language. */
+/* v72 — one quiet, consistent interaction language. */
 :root{
   --mellow-control-radius:7px;
   --mellow-control-height:40px;
@@ -364,6 +364,7 @@ img[src*="kawaii-bunny"],img[src*="kawaii-logo-bunny"],.task-empty-bunny{display
 @media(max-width:520px){
   .habit-row{grid-template-columns:32px minmax(0,1fr) 26px 34px 34px;gap:6px;padding-inline:4px!important}
   .habit-row>.iconbtn{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important}
+  .habit-copy{overflow:hidden}.habit-copy small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .tasks-list .task.task-card{padding-inline:4px!important}
 }
 @media(prefers-reduced-motion:reduce){

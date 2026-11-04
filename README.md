@@ -179,8 +179,8 @@ Decorative placements are slightly larger where space permits and remain small a
 - Tasks and Habits now use the same shared responsive 1080px title row, placing their polished add action at the opposite edge from the page title in both RTL and LTR.
 - The PWA cache is `mellow-offline-v70`.
 
-### Streamlined interactive controls (v71)
+### Streamlined interactive controls (v72)
 
 - Tasks and habits now share the same row height, separators, completion control, icon scale, hover treatment, and keyboard focus language.
 - Secondary icon actions and priority controls use one quiet rounded-square system while primary creation actions remain clearly emphasized.
-- The PWA cache is `mellow-offline-v71`.
+- The PWA cache is `mellow-offline-v72`.

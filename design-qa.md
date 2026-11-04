@@ -13,7 +13,7 @@
 - Pass: both actions retain the same 44px height, single-line label, icon gap, visual treatment, and responsive alignment.
 - Pass: Tasks now uses the same shared topbar component as Habits, giving both pages one identical 1080px desktop header and the same physical page-edge placement.
 
-## v71 interaction language
+## v72 interaction language
 
 - Tasks and habits use the same 62px list-row rhythm, quiet separators, 26px circular completion controls, 34px emoji tiles, and compact secondary actions.
 - Primary, secondary, icon-only, hover, pressed, and keyboard-focus states use one consistent control system with at least 44px primary targets and compact secondary controls supported by row spacing.
