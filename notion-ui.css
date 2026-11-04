@@ -1,4 +1,4 @@
-/* v69 — Notion-inspired Mellow surface. Functionality remains owned by the existing app. */
+/* v70 — Notion-inspired Mellow surface. Functionality remains owned by the existing app. */
 :root{
   --notion-bg:#fff;
   --notion-sidebar:#f7f7f5;
@@ -165,6 +165,8 @@ html[dir=ltr] .planner-today-center .next-task-countdown,html[dir=rtl] .planner-
   position:relative;isolation:auto;width:min(100%,1080px);min-height:0;margin:0 auto 30px;padding:0!important;
   border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible;
 }
+.main>.topbar:has(+ .task-page){display:flex!important}
+.main:has(.task-page)>.topbar h1{display:block!important}
 .task-page-title::before,.task-page-title::after,.main>.topbar::before,.main>.topbar::after{display:none!important}
 .task-page-title{display:flex;align-items:flex-end;justify-content:space-between;gap:18px}
 .main>.topbar>div:first-child{width:100%;min-width:0}
@@ -184,6 +186,8 @@ html[dir=rtl] .task-page-title .page-title-add::after{content:"משימה חדש
 html[dir=ltr] .task-page-title .page-title-add::after{content:"New task"}
 html[dir=rtl] .main>.topbar .page-title-add::after{content:"הרגל חדש"}
 html[dir=ltr] .main>.topbar .page-title-add::after{content:"New habit"}
+html[dir=rtl] .main>.topbar .page-title-add[data-unified-add="tasks-page"]::after{content:"משימה חדשה"}
+html[dir=ltr] .main>.topbar .page-title-add[data-unified-add="tasks-page"]::after{content:"New task"}
 .main>.topbar .head-actions{display:none}
 .task-group-heading{padding:10px 4px;border-bottom:1px solid var(--notion-line)}
 .task-group-toggle{font-size:16px}.task-priority-heading{border-radius:0;background:transparent!important}

@@ -20,10 +20,11 @@
   const originalTasks=renderTasks;
   renderTasks=function(){
     const he=db.settings.lang==='he';
-    let html=originalTasks();
-    html=html.replace('class="page-title-add" data-action="newtask"','class="page-title-add" data-unified-add="tasks-page"');
-    html=html.replace('<h1>'+esc(T('todo'))+'</h1>','<div class="task-page-heading-copy"><span class="planner-eyebrow">MELLOW</span><h1>'+esc(T('tasks'))+'</h1><p>'+(he?'משימות, צעדים קטנים ושגרות במקום אחד.':'Tasks, small steps and routines in one place.')+'</p></div>');
-    return html;
+    const html=originalTasks(),pageStart=html.indexOf('<div class="task-page">'),filtersStart=html.indexOf('<details class="task-filter-menu">',pageStart);
+    if(pageStart<0||filtersStart<0)return html;
+    const description=he?'משימות, צעדים קטנים ושגרות במקום אחד.':'Tasks, small steps and routines in one place.';
+    const action='<button type="button" class="page-title-add" data-unified-add="tasks-page" aria-label="'+esc(T('newTask'))+'">'+mellowIcon('plus',18)+'</button>';
+    return sectionHead(T('tasks'),description,action)+'<div class="task-page">'+html.slice(filtersStart);
   };
 
   document.addEventListener('click',event=>{
