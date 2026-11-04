@@ -1,4 +1,4 @@
-/* v67 — Notion-inspired Mellow surface. Functionality remains owned by the existing app. */
+/* v69 — Notion-inspired Mellow surface. Functionality remains owned by the existing app. */
 :root{
   --notion-bg:#fff;
   --notion-sidebar:#f7f7f5;
@@ -160,12 +160,15 @@ html[dir=ltr] .planner-today-center .next-task-countdown,html[dir=rtl] .planner-
 
 /* Document headers for Tasks, Habits and Settings. */
 .task-page,.planner-habits-layout,.settingsgrid{width:min(100%,1080px);margin-inline:auto}
+.task-page{max-width:1080px}
 .task-page-title,.main>.topbar{
   position:relative;isolation:auto;width:min(100%,1080px);min-height:0;margin:0 auto 30px;padding:0!important;
   border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible;
 }
 .task-page-title::before,.task-page-title::after,.main>.topbar::before,.main>.topbar::after{display:none!important}
 .task-page-title{display:flex;align-items:flex-end;justify-content:space-between;gap:18px}
+.main>.topbar>div:first-child{width:100%;min-width:0}
+.main>.topbar .page-heading-title{display:flex;align-items:flex-end;justify-content:space-between;width:100%;gap:18px}
 .task-page-heading-copy{gap:6px}.planner-eyebrow,.main>.topbar .overline{color:var(--notion-muted);font-size:13px;font-weight:500;letter-spacing:0;text-transform:none}
 .task-page-heading-copy h1,.main>.topbar h1{margin:0;font-size:clamp(40px,5vw,58px);font-weight:800;line-height:1.05;letter-spacing:-.045em}
 .task-page-heading-copy p,.main>.topbar p{max-width:620px;margin:0;color:var(--notion-muted);font-size:15px}

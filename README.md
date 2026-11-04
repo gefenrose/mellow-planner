@@ -173,3 +173,8 @@ Decorative placements are slightly larger where space permits and remain small a
 - Rebuilt the New task and New habit header actions as polished, single-line 44px buttons with consistent icon spacing, hover, and keyboard focus states.
 - Moved the live Until your next task card into the shared Today layout so it remains visible in both Day sections and Timeline.
 - The PWA cache is `mellow-offline-v67`.
+
+### Matching add-action placement (v69)
+
+- Tasks and Habits now use the same responsive 1080px title row, placing their polished add action at the opposite edge from the page title in both RTL and LTR.
+- The PWA cache is `mellow-offline-v69`.

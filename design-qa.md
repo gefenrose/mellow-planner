@@ -7,6 +7,12 @@
 - Pass: Until your next task is rendered exactly once in both Day sections and Timeline; switching views preserves the live countdown card.
 - Pass: Hebrew desktop at 1440 × 1024 and mobile at 390 × 844 have no horizontal overflow, and the browser console contains no errors or warnings.
 
+## v69 add-action alignment
+
+- Pass: Tasks and Habits now use the same title/action layout. In RTL the add button sits at the far left opposite the right-aligned title; in LTR it sits at the far right opposite the left-aligned title.
+- Pass: both actions retain the same 44px height, single-line label, icon gap, visual treatment, and responsive alignment.
+- Pass: the old 880px Tasks width cap is removed, so Tasks and Habits use the same 1080px desktop header width and matching physical page-edge placement.
+
 - Selected source direction: `/Users/gefen/.codex/generated_images/01a19f95-46e5-7893-b14a-0ed7f29c4fc1/exec-7fb5dbd0-08ed-4120-9155-05fd6ac011f4.png`
 - Source constraint: the selected database-planner direction without a global Share/Search/Favorite toolbar.
 - Implementation checked at: `http://127.0.0.1:4175/`
@@ -32,7 +38,7 @@
 - Pass: Settings retains language, theme, Google Calendar, AI provider, backups, and notifications without the removed Habit data page/card.
 - Pass: English and Hebrew reverse the sidebar and content direction correctly while preserving the information hierarchy.
 - Pass: browser console contained no errors or warnings during the checked desktop and mobile flows.
-- Pass: all 59 service-worker core entries resolve and the cache version is `mellow-offline-v67`.
+- Pass: all 59 service-worker core entries resolve and the cache version is `mellow-offline-v69`.
 
 ## Comparison history and accepted differences
 
