@@ -441,3 +441,6 @@ body .page-title-actions{align-self:flex-start;flex-wrap:wrap;justify-content:fl
   body .main>.topbar p,body .task-page-heading-copy p,body .mellow-date-static p,body .mellow-date-trigger p{font-size:14px!important}
   body .main>.topbar .page-heading-title{flex-wrap:wrap;row-gap:12px}
 }
+
+/* The page title is the first row on every tab. */
+body .main>.topbar .overline,body .mellow-day-heading .overline,body .task-page-heading-copy>.planner-eyebrow{display:none!important}
