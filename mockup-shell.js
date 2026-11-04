@@ -23,8 +23,9 @@
     const html=originalTasks(),pageStart=html.indexOf('<div class="task-page">'),filtersStart=html.indexOf('<details class="task-filter-menu">',pageStart);
     if(pageStart<0||filtersStart<0)return html;
     const description=he?'משימות, צעדים קטנים ושגרות במקום אחד.':'Tasks, small steps and routines in one place.';
-    const action='<button type="button" class="page-title-add" data-unified-add="tasks-page" aria-label="'+esc(T('newTask'))+'">'+mellowIcon('plus',18)+'</button>';
-    return sectionHead(T('tasks'),description,action)+'<div class="task-page">'+html.slice(filtersStart);
+    const managing=!!ui.manageItems?.tasks,manageLabel=he?(managing?'סיום עריכה':'מצב עריכה'):(managing?'Done editing':'Edit mode');
+    const action='<div class="page-title-actions"><button type="button" class="page-manage-toggle '+(managing?'is-active':'')+'" data-manage-toggle="tasks" aria-pressed="'+managing+'" aria-label="'+esc(manageLabel)+'" title="'+esc(manageLabel)+'">'+mellowIcon(managing?'check':'pencil',17)+'</button><button type="button" class="page-title-add" data-unified-add="tasks-page" aria-label="'+esc(T('newTask'))+'">'+mellowIcon('plus',18)+'</button></div>';
+    return sectionHead(T('tasks'),description,action)+'<div class="task-page '+(managing?'is-managing':'')+'">'+html.slice(filtersStart);
   };
 
   document.addEventListener('click',event=>{

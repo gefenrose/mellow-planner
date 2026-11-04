@@ -194,3 +194,9 @@ Decorative placements are slightly larger where space permits and remain small a
 
 - The compact seven-day summary now uses a restrained 6px corner radius that matches the document-style interface.
 - The PWA cache is `mellow-offline-v74`.
+
+### Dedicated list editing mode (v75)
+
+- Tasks and Habits now have a small header edit button. Normal mode stays focused on completion; editing mode replaces completion controls with clear edit and delete actions.
+- Editing mode is temporary UI state and does not change the backwards-compatible local data schema.
+- The PWA cache is `mellow-offline-v75`.

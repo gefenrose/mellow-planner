@@ -1,4 +1,4 @@
-/* v74 — Notion-inspired Mellow surface. Functionality remains owned by the existing app. */
+/* v75 — Notion-inspired Mellow surface. Functionality remains owned by the existing app. */
 :root{
   --notion-bg:#fff;
   --notion-sidebar:#f7f7f5;
@@ -254,7 +254,7 @@ img[src*="kawaii-bunny"],img[src*="kawaii-logo-bunny"],.task-empty-bunny{display
   .planner-today-center .next-task-countdown::before,.brand-icon{background:none!important}
 }
 
-/* v74 — one quiet, consistent interaction language. */
+/* v75 — one quiet, consistent interaction language. */
 :root{
   --mellow-control-radius:7px;
   --mellow-control-height:40px;
@@ -292,6 +292,14 @@ img[src*="kawaii-bunny"],img[src*="kawaii-logo-bunny"],.task-empty-bunny{display
   background:var(--notion-hover)!important;color:var(--notion-text)!important;border-color:transparent!important;
 }
 .task-group-add,.task-priority-add,.task-suggestions-refresh,.task-suggestion-add{color:var(--notion-blue)!important}
+.page-title-actions{display:flex;align-items:center;gap:7px;flex:0 0 auto}
+.page-manage-toggle{
+  display:inline-grid;place-items:center;width:36px;height:36px;min-width:36px;padding:0;border:1px solid var(--notion-line);
+  border-radius:var(--mellow-control-radius);background:#fff;color:var(--notion-muted);box-shadow:none;cursor:pointer;
+}
+.page-manage-toggle:hover{background:var(--notion-hover);color:var(--notion-text)}
+.page-manage-toggle.is-active{border-color:transparent;background:var(--notion-blue-soft);color:var(--notion-blue)}
+.page-manage-toggle:focus-visible{outline:2px solid var(--notion-blue);outline-offset:2px}
 
 /* Tasks and habits are parallel interactive lists, not two different card systems. */
 .tasks-list .task.task-card,
@@ -339,10 +347,19 @@ img[src*="kawaii-bunny"],img[src*="kawaii-logo-bunny"],.task-empty-bunny{display
 .habit-score{min-width:44px;min-height:36px;padding:0 10px;border-radius:var(--mellow-control-radius);background:var(--notion-blue-soft);color:#0b6fc2}
 .habit-list{gap:0;margin:0 0 12px}
 .habit-row{
-  display:grid!important;grid-template-columns:34px minmax(0,1fr) 26px 36px 36px;align-items:center;gap:8px;
+  display:grid!important;grid-template-columns:34px minmax(0,1fr) 26px;align-items:center;gap:8px;
 }
 .habit-row .habit-emoji{grid-column:1;grid-row:1}.habit-row .habit-copy{grid-column:2;grid-row:1;min-width:0}
-.habit-row .habit-check{grid-column:3;grid-row:1}.habit-row>.iconbtn:first-of-type{grid-column:4;grid-row:1}.habit-row>.iconbtn:last-of-type{grid-column:5;grid-row:1}
+.habit-row .habit-check{grid-column:3;grid-row:1}
+.habit-row.is-managing{grid-template-columns:34px minmax(0,1fr) 36px 36px}
+.habit-row.is-managing .habit-check{display:none!important}
+.habit-row.is-managing>.iconbtn:first-of-type{grid-column:3;grid-row:1}.habit-row.is-managing>.iconbtn:last-of-type{grid-column:4;grid-row:1}
+.task-manage-actions{display:flex;align-items:center;justify-self:end;gap:2px;grid-column:3;grid-row:1}
+.task-card.is-managing .task-delete-action,.habit-row.is-managing .habit-delete-action{color:var(--notion-danger)!important}
+.main:has(.task-page) .tasks-list .task.task-card.is-managing{grid-template-columns:34px minmax(0,1fr) auto!important}
+.main:has(.task-page) .tasks-list .task.task-card.is-managing>.task-emoji{grid-column:1!important}
+.main:has(.task-page) .tasks-list .task.task-card.is-managing>.tasktext{grid-column:2!important}
+.task-page.is-managing .task-suggestions{display:none}
 .habit-copy strong{display:block;white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
 .habit-copy small{display:block}
 .habit-pink,.habit-lavender,.habit-mint,.habit-peach{border-inline-start:0!important}
@@ -375,7 +392,8 @@ img[src*="kawaii-bunny"],img[src*="kawaii-logo-bunny"],.task-empty-bunny{display
 .task-priority-empty{min-height:44px;border-radius:var(--mellow-control-radius);background:transparent}
 
 @media(max-width:520px){
-  .habit-row{grid-template-columns:32px minmax(0,1fr) 26px 34px 34px;gap:6px;padding-inline:4px!important}
+  .habit-row{grid-template-columns:32px minmax(0,1fr) 26px;gap:6px;padding-inline:4px!important}
+  .habit-row.is-managing{grid-template-columns:32px minmax(0,1fr) 34px 34px}
   .habit-row>.iconbtn{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important}
   .habit-copy{overflow:hidden}.habit-copy small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .tasks-list .task.task-card{padding-inline:4px!important}

@@ -28,6 +28,11 @@
 
 - The compact seven-day summary uses a 6px radius, overriding the older high-specificity rounded-card treatment.
 
+## v75 dedicated editing mode
+
+- Tasks and Habits expose the same 36px pencil toggle beside the primary add action, with `aria-pressed` and a check icon while editing.
+- Normal mode shows completion controls; editing mode shows per-row edit and delete actions without changing persisted user data.
+
 - Selected source direction: `/Users/gefen/.codex/generated_images/01a19f95-46e5-7893-b14a-0ed7f29c4fc1/exec-7fb5dbd0-08ed-4120-9155-05fd6ac011f4.png`
 - Source constraint: the selected database-planner direction without a global Share/Search/Favorite toolbar.
 - Implementation checked at: `http://127.0.0.1:4175/`

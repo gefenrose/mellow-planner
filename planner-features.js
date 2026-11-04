@@ -58,7 +58,7 @@
   }
   function habitRow(h,key,manage=false){
     const isDone=marked(h,key),label=habitName(h),schedule=h.days.length===7?F('everyDay'):h.days.map(day=>weekdayLabels()[day]).join(' · ');
-    return '<article class="habit-row habit-'+h.color+' '+(isDone?'is-done':'')+'"><button type="button" class="habit-check" data-planner="habit-toggle" data-id="'+esc(h.id)+'" data-date="'+key+'" aria-label="'+esc((isDone?(db.settings.lang==='he'?'ביטול סימון ':'Unmark '):(db.settings.lang==='he'?'סימון ':'Mark '))+label)+'" aria-pressed="'+isDone+'">'+(isDone?mellowIcon('check',18):'')+'</button><span class="habit-emoji" aria-hidden="true">'+esc(h.emoji)+'</span><div class="habit-copy"><strong>'+esc(label)+(h.demo?' <span class="demo">'+T('sample')+'</span>':'')+'</strong><small>'+esc(schedule)+'</small></div>'+(manage?'<button type="button" class="iconbtn" data-planner="habit-edit" data-id="'+esc(h.id)+'" aria-label="'+T('edit')+'">'+mellowIcon('pencil',16)+'</button><button type="button" class="iconbtn" data-planner="habit-delete" data-id="'+esc(h.id)+'" aria-label="'+T('delete')+'">'+mellowIcon('trash',16)+'</button>':'')+'</article>';
+    return '<article class="habit-row habit-'+h.color+' '+(isDone?'is-done ':'')+(manage?'is-managing':'')+'"><button type="button" class="habit-check" data-planner="habit-toggle" data-id="'+esc(h.id)+'" data-date="'+key+'" aria-label="'+esc((isDone?(db.settings.lang==='he'?'ביטול סימון ':'Unmark '):(db.settings.lang==='he'?'סימון ':'Mark '))+label)+'" aria-pressed="'+isDone+'">'+(isDone?mellowIcon('check',18):'')+'</button><span class="habit-emoji" aria-hidden="true">'+esc(h.emoji)+'</span><div class="habit-copy"><strong>'+esc(label)+(h.demo?' <span class="demo">'+T('sample')+'</span>':'')+'</strong><small>'+esc(schedule)+'</small></div>'+(manage?'<button type="button" class="iconbtn" data-planner="habit-edit" data-id="'+esc(h.id)+'" aria-label="'+T('edit')+': '+esc(label)+'">'+mellowIcon('pencil',16)+'</button><button type="button" class="iconbtn habit-delete-action" data-planner="habit-delete" data-id="'+esc(h.id)+'" aria-label="'+T('delete')+': '+esc(label)+'">'+mellowIcon('trash',16)+'</button>':'')+'</article>';
   }
   function habitsForDay(key,manage=false){
     const habits=manage?db.habits:dueHabits(key),done=habits.filter(h=>marked(h,key)).length;
@@ -100,9 +100,11 @@
   renderCalendar=function(){return sectionHead(F('calendar'),F('calendarHint'),'<button type="button" class="page-title-add" data-unified-add="calendar-head" aria-label="'+esc(T('newTask'))+'">'+mellowIcon('plus',18)+'</button>')+threeColumns(dayDetails(),'planner-calendar-center','calendar')};
   renderHabits=function(){
     const dateLabel=esc(dt(ui.date,{day:'numeric',month:'long',year:'numeric'})),weekday=esc(dt(ui.date,{weekday:'long'}));
-    return sectionHead(F('habits'),'', '<button type="button" class="page-title-add" data-planner="habit-new" aria-label="'+esc(F('newHabit'))+'">'+mellowIcon('plus',18)+'</button>')+
+    const managing=!!ui.manageItems?.habits,manageLabel=db.settings.lang==='he'?(managing?'סיום עריכה':'מצב עריכה'):(managing?'Done editing':'Edit mode');
+    const actions='<div class="page-title-actions"><button type="button" class="page-manage-toggle '+(managing?'is-active':'')+'" data-manage-toggle="habits" aria-pressed="'+managing+'" aria-label="'+esc(manageLabel)+'" title="'+esc(manageLabel)+'">'+mellowIcon(managing?'check':'pencil',17)+'</button><button type="button" class="page-title-add" data-planner="habit-new" aria-label="'+esc(F('newHabit'))+'">'+mellowIcon('plus',18)+'</button></div>';
+    return sectionHead(F('habits'),'',actions)+
       '<button type="button" class="habit-page-date" data-planner-nav="month" aria-label="'+esc((db.settings.lang==='he'?'פתיחת לוח חודשי, ':'Open monthly calendar, ')+dt(ui.date,{weekday:'long',day:'numeric',month:'long',year:'numeric'}))+'"><span>'+weekday+'</span><strong>'+dateLabel+'</strong>'+mellowIcon('chevronDown',18)+'</button>'+
-      '<div class="planner-habits-layout"><section class="planner-habits-center">'+habitsForDay(ui.date,true)+'</section><aside class="planner-habits-art">'+recentSummary()+'</aside></div>';
+      '<div class="planner-habits-layout"><section class="planner-habits-center">'+habitsForDay(ui.date,managing)+'</section><aside class="planner-habits-art">'+recentSummary()+'</aside></div>';
   };
 
   function offlineHabit(intent){
@@ -141,6 +143,12 @@
     if(dateButton)ui.calendarMonth=dateButton.dataset.date.slice(0,7);
   },true);
   document.addEventListener('click',event=>{
+    const manageToggle=event.target.closest?.('[data-manage-toggle]');
+    if(manageToggle){
+      const mode=manageToggle.dataset.manageToggle;
+      if(['tasks','habits'].includes(mode)){ui.manageItems??={tasks:false,habits:false};ui.manageItems[mode]=!ui.manageItems[mode];render()}
+      return;
+    }
     const control=event.target.closest?.('[data-planner]');
     if(!control)return;
     const action=control.dataset.planner;
