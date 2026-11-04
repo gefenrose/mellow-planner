@@ -181,6 +181,6 @@ Decorative placements are slightly larger where space permits and remain small a
 
 ### Streamlined interactive controls (v72)
 
-- Tasks and habits now share the same row height, separators, completion control, icon scale, hover treatment, and keyboard focus language.
+- Tasks and habits now share the same minimum row rhythm, separators, completion control, icon scale, hover treatment, and keyboard focus language while allowing long labels to remain readable.
 - Secondary icon actions and priority controls use one quiet rounded-square system while primary creation actions remain clearly emphasized.
 - The PWA cache is `mellow-offline-v72`.

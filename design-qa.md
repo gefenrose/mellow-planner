@@ -15,7 +15,7 @@
 
 ## v72 interaction language
 
-- Tasks and habits use the same 62px list-row rhythm, quiet separators, 26px circular completion controls, 34px emoji tiles, and compact secondary actions.
+- Tasks and habits use the same 62px minimum list-row rhythm, quiet separators, 26px circular completion controls, 34px emoji tiles, and compact secondary actions; long labels may expand a row instead of being clipped.
 - Primary, secondary, icon-only, hover, pressed, and keyboard-focus states use one consistent control system with at least 44px primary targets and compact secondary controls supported by row spacing.
 - Priority controls preserve their meaning through small color markers instead of unrelated full-width pastel pills.
 
