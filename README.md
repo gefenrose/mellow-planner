@@ -184,3 +184,8 @@ Decorative placements are slightly larger where space permits and remain small a
 - Tasks and habits now share the same minimum row rhythm, separators, completion control, icon scale, hover treatment, and keyboard focus language while allowing long labels to remain readable.
 - Secondary icon actions and priority controls use one quiet rounded-square system while primary creation actions remain clearly emphasized.
 - The PWA cache is `mellow-offline-v72`.
+
+### Compact seven-day habit summary (v73)
+
+- The Last 7 days panel is now a compact secondary summary with a small count and seven slim day markers, leaving more room for today's habits.
+- The PWA cache is `mellow-offline-v73`.

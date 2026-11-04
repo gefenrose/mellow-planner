@@ -1,4 +1,4 @@
-/* v72 — Notion-inspired Mellow surface. Functionality remains owned by the existing app. */
+/* v73 — Notion-inspired Mellow surface. Functionality remains owned by the existing app. */
 :root{
   --notion-bg:#fff;
   --notion-sidebar:#f7f7f5;
@@ -254,7 +254,7 @@ img[src*="kawaii-bunny"],img[src*="kawaii-logo-bunny"],.task-empty-bunny{display
   .planner-today-center .next-task-countdown::before,.brand-icon{background:none!important}
 }
 
-/* v72 — one quiet, consistent interaction language. */
+/* v73 — one quiet, consistent interaction language. */
 :root{
   --mellow-control-radius:7px;
   --mellow-control-height:40px;
@@ -348,6 +348,18 @@ img[src*="kawaii-bunny"],img[src*="kawaii-logo-bunny"],.task-empty-bunny{display
 .habit-pink,.habit-lavender,.habit-mint,.habit-peach{border-inline-start:0!important}
 .habits-day-card>button[data-planner="habit-new"]{display:none!important}
 
+/* Keep the seven-day history visibly secondary to today's habits. */
+.habit-summary{
+  display:grid!important;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"label count" "caption count" "dots dots";
+  align-items:center;gap:2px 12px;min-height:0;padding:13px 14px!important;border-radius:8px!important;text-align:start!important;
+}
+.habit-summary>.planner-eyebrow{grid-area:label;margin:0;color:var(--notion-muted);font-size:12px;line-height:1.25}
+.habit-summary>strong{grid-area:count;align-self:center;margin:0!important;color:var(--notion-text)!important;font:700 28px/1 var(--head)!important}
+.habit-summary>span:not(.planner-eyebrow){grid-area:caption;color:var(--notion-muted);font-size:11px;line-height:1.2}
+.habit-summary>.habit-week-dots{grid-area:dots;display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:8px 0 0}
+.habit-summary>.habit-week-dots span{height:8px;aspect-ratio:auto;border-radius:3px;background:var(--notion-sidebar);border:1px solid var(--notion-line)}
+.habit-summary>.habit-week-dots span.filled{background:var(--notion-blue);border-color:var(--notion-blue)}
+
 .task-priority-row{margin-bottom:4px}
 .task-priority-pill{
   min-width:0;min-height:36px;padding:6px 8px;border:1px solid transparent!important;border-radius:var(--mellow-control-radius)!important;
@@ -366,6 +378,7 @@ img[src*="kawaii-bunny"],img[src*="kawaii-logo-bunny"],.task-empty-bunny{display
   .habit-row>.iconbtn{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important}
   .habit-copy{overflow:hidden}.habit-copy small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .tasks-list .task.task-card{padding-inline:4px!important}
+  .planner-habits-art{margin-top:12px}.habit-summary{padding:12px 13px!important}
 }
 @media(prefers-reduced-motion:reduce){
   :where(button,.btn,.iconbtn,.navbtn,.chip,.page-title-add,.task-group-add,.task-priority-add,.task-priority-pill,.task-suggestions-refresh,.task-suggestion-add,.habit-check){transition:none!important}
