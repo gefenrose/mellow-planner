@@ -1,4 +1,4 @@
-/* v70 — Notion-inspired Mellow surface. Functionality remains owned by the existing app. */
+/* v71 — Notion-inspired Mellow surface. Functionality remains owned by the existing app. */
 :root{
   --notion-bg:#fff;
   --notion-sidebar:#f7f7f5;
@@ -252,4 +252,120 @@ img[src*="kawaii-bunny"],img[src*="kawaii-logo-bunny"],.task-empty-bunny{display
 }
 @media(forced-colors:active){
   .planner-today-center .next-task-countdown::before,.brand-icon{background:none!important}
+}
+
+/* v71 — one quiet, consistent interaction language. */
+:root{
+  --mellow-control-radius:7px;
+  --mellow-control-height:40px;
+  --mellow-row-height:62px;
+  --mellow-pressed:#ededeb;
+}
+
+:where(button,.btn,.iconbtn,.navbtn,.chip,.page-title-add,.task-group-add,.task-priority-add,.task-priority-pill,.task-suggestions-refresh,.task-suggestion-add,.habit-check){
+  -webkit-tap-highlight-color:transparent;
+  transition:background-color .14s ease,border-color .14s ease,color .14s ease,box-shadow .14s ease,transform .08s ease;
+}
+:where(button,.btn,.iconbtn,.navbtn,.chip,.page-title-add,.task-group-add,.task-priority-add,.task-priority-pill,.task-suggestions-refresh,.task-suggestion-add,.habit-check):focus-visible{
+  outline:2px solid var(--notion-blue)!important;
+  outline-offset:2px;
+}
+:where(.btn,.iconbtn,.page-title-add,.task-group-add,.task-priority-add,.task-priority-pill,.task-suggestions-refresh,.task-suggestion-add,.habit-check):active{
+  transform:translateY(1px);
+}
+
+.btn{
+  min-height:var(--mellow-control-height)!important;
+  padding-inline:13px!important;
+  border-radius:var(--mellow-control-radius)!important;
+  font-size:14px;font-weight:650;
+}
+.btn.small{min-height:36px!important;padding-inline:11px!important;font-size:13px}
+.iconbtn,
+.task-group-add,.task-priority-add,.task-suggestions-refresh,.task-suggestion-add,.task-reorder-grip{
+  display:inline-grid!important;place-items:center;width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;
+  padding:0!important;border:1px solid transparent!important;border-radius:var(--mellow-control-radius)!important;
+  background:transparent!important;color:var(--notion-muted)!important;box-shadow:none!important;
+}
+.iconbtn:hover,
+.task-group-add:hover,.task-priority-add:hover,.task-suggestions-refresh:hover,.task-suggestion-add:hover,.task-reorder-grip:hover{
+  background:var(--notion-hover)!important;color:var(--notion-text)!important;border-color:transparent!important;
+}
+.task-group-add,.task-priority-add,.task-suggestions-refresh,.task-suggestion-add{color:var(--notion-blue)!important}
+
+/* Tasks and habits are parallel interactive lists, not two different card systems. */
+.tasks-list .task.task-card,
+.habit-row{
+  min-height:var(--mellow-row-height)!important;margin:0!important;padding:8px 8px!important;
+  border:0!important;border-bottom:1px solid var(--notion-line)!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;
+}
+.tasks-list .task.task-card:hover,
+.habit-row:hover{background:var(--notion-sidebar)!important}
+.tasks-list .task.task-card:last-child,
+.habit-row:last-child{border-bottom:0!important}
+
+.tasks-list .task.task-card .task-emoji,
+.habit-emoji{
+  display:grid!important;place-items:center;width:34px!important;height:34px!important;min-width:34px!important;
+  border-radius:8px!important;background:var(--notion-sidebar)!important;font-size:19px!important;line-height:1!important;
+}
+.tasks-list .task-title-button,
+.habit-copy strong{
+  color:var(--notion-text)!important;font-size:15px!important;font-weight:650!important;line-height:1.3!important;
+}
+.tasks-list .task.task-card .tasktext small,
+.habit-copy small{margin-top:2px!important;color:var(--notion-muted)!important;font-size:12px!important;line-height:1.35!important}
+
+.tasks-list .task.task-card .task-complete,
+.habit-check{
+  position:relative;display:grid!important;place-items:center;width:26px!important;height:26px!important;min-width:26px!important;min-height:26px!important;
+  padding:0!important;border:1.5px solid #9b9a97!important;border-radius:50%!important;background:#fff!important;color:#fff!important;box-shadow:none!important;
+}
+.tasks-list .task.task-card .task-complete::before,
+.habit-check::before{content:"";position:absolute;inset:-9px;border-radius:50%}
+.tasks-list .task.task-card .task-complete:hover,
+.habit-check:hover{border-color:var(--notion-blue)!important;background:var(--notion-blue-soft)!important}
+.tasks-list .task.task-card .task-complete.checked,
+.habit-row.is-done .habit-check{
+  border-color:var(--notion-blue)!important;background:var(--notion-blue)!important;color:#fff!important;
+}
+.habit-row.is-done{background:transparent!important}
+.habit-row.is-done:hover{background:var(--notion-sidebar)!important}
+
+.habits-day-card{padding:0!important;border:0!important;background:transparent!important}
+.habit-panel-head{padding:4px 0 0}.habit-progress{height:4px;margin:12px 0 8px;background:var(--notion-sidebar)}
+.habit-progress span{background:var(--notion-blue)}
+.habit-score{min-width:44px;min-height:36px;padding:0 10px;border-radius:var(--mellow-control-radius);background:var(--notion-blue-soft);color:#0b6fc2}
+.habit-list{gap:0;margin:0 0 12px}
+.habit-row{
+  display:grid!important;grid-template-columns:34px minmax(0,1fr) 26px 36px 36px;align-items:center;gap:8px;
+}
+.habit-row .habit-emoji{grid-column:1;grid-row:1}.habit-row .habit-copy{grid-column:2;grid-row:1;min-width:0}
+.habit-row .habit-check{grid-column:3;grid-row:1}.habit-row>.iconbtn:first-of-type{grid-column:4;grid-row:1}.habit-row>.iconbtn:last-of-type{grid-column:5;grid-row:1}
+.habit-copy strong{display:block;white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
+.habit-copy small{display:block}
+.habit-pink,.habit-lavender,.habit-mint,.habit-peach{border-inline-start:0!important}
+.habits-day-card>button[data-planner="habit-new"]{display:none!important}
+
+.task-priority-row{margin-bottom:4px}
+.task-priority-pill{
+  min-width:0;min-height:36px;padding:6px 8px;border:1px solid transparent!important;border-radius:var(--mellow-control-radius)!important;
+  background:transparent!important;color:var(--notion-text)!important;font-size:14px;font-weight:650;letter-spacing:0;text-transform:none;
+}
+.task-priority-pill:hover{background:var(--notion-hover)!important}
+.task-priority-pill.high,.task-priority-pill.med,.task-priority-pill.low{background:transparent!important}
+.task-priority-marker{display:grid;place-items:center;width:20px;height:20px;border-radius:5px}
+.task-priority-pill.high .task-priority-marker{background:#fbedef;color:#a43d57}
+.task-priority-pill.med .task-priority-marker{background:#fbf0e4;color:#9a642e}
+.task-priority-pill.low .task-priority-marker{background:#eaf0fb;color:#4c6fa8}
+.task-priority-empty{min-height:44px;border-radius:var(--mellow-control-radius);background:transparent}
+
+@media(max-width:520px){
+  .habit-row{grid-template-columns:32px minmax(0,1fr) 26px 34px 34px;gap:6px;padding-inline:4px!important}
+  .habit-row>.iconbtn{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important}
+  .tasks-list .task.task-card{padding-inline:4px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  :where(button,.btn,.iconbtn,.navbtn,.chip,.page-title-add,.task-group-add,.task-priority-add,.task-priority-pill,.task-suggestions-refresh,.task-suggestion-add,.habit-check){transition:none!important}
 }

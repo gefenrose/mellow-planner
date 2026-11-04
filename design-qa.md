@@ -13,6 +13,12 @@
 - Pass: both actions retain the same 44px height, single-line label, icon gap, visual treatment, and responsive alignment.
 - Pass: Tasks now uses the same shared topbar component as Habits, giving both pages one identical 1080px desktop header and the same physical page-edge placement.
 
+## v71 interaction language
+
+- Tasks and habits use the same 62px list-row rhythm, quiet separators, 26px circular completion controls, 34px emoji tiles, and compact secondary actions.
+- Primary, secondary, icon-only, hover, pressed, and keyboard-focus states use one consistent control system with at least 44px primary targets and compact secondary controls supported by row spacing.
+- Priority controls preserve their meaning through small color markers instead of unrelated full-width pastel pills.
+
 - Selected source direction: `/Users/gefen/.codex/generated_images/01a19f95-46e5-7893-b14a-0ed7f29c4fc1/exec-7fb5dbd0-08ed-4120-9155-05fd6ac011f4.png`
 - Source constraint: the selected database-planner direction without a global Share/Search/Favorite toolbar.
 - Implementation checked at: `http://127.0.0.1:4175/`
