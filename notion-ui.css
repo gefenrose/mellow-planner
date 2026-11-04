@@ -1,4 +1,4 @@
-/* v62 — Notion-inspired Mellow surface. Functionality remains owned by the existing app. */
+/* v67 — Notion-inspired Mellow surface. Functionality remains owned by the existing app. */
 :root{
   --notion-bg:#fff;
   --notion-sidebar:#f7f7f5;
@@ -35,8 +35,8 @@ body::before,body::after{display:none!important}
   border-radius:0!important;background:var(--notion-sidebar)!important;box-shadow:none!important;overflow:auto;gap:18px;
 }
 .sidebar::before,.sidebar::after,.brand-word::after{display:none!important}
-.brand{justify-content:flex-start;gap:8px;margin:0 8px 18px;padding:0;direction:ltr}
-.brand-icon{width:30px;height:30px;flex:0 0 30px;background:var(--mock-logo) center/contain no-repeat!important}
+.brand{justify-content:flex-start;gap:0;margin:0 8px 18px;padding:0;direction:ltr}
+.brand-icon{display:none!important}
 .brand-word{font-family:Georgia,"Times New Roman",serif;font-size:25px;font-style:italic;font-weight:700;letter-spacing:-1px;color:var(--notion-text)}
 .navlist{gap:2px}
 .navbtn{
@@ -100,12 +100,10 @@ body::before,body::after{display:none!important}
   width:100%;min-height:66px;margin:0 0 28px;padding:14px 70px 14px 18px;border:1px solid #a8a8a5!important;
   border-radius:7px!important;background:#fff!important;box-shadow:none!important;overflow:visible;
 }
-html[dir=ltr] .planner-today-center .next-task-countdown{min-height:66px!important;padding:14px 70px 14px 18px!important}
-html[dir=rtl] .planner-today-center .next-task-countdown{min-height:66px!important;padding:14px 18px 14px 70px!important}
+html[dir=ltr] .planner-today-center .next-task-countdown,html[dir=rtl] .planner-today-center .next-task-countdown{min-height:66px!important;padding:14px 18px!important}
 .planner-today-center .next-task-countdown::after{display:none!important}
 .planner-today-center .next-task-countdown::before{
-  content:""!important;display:block!important;position:absolute;top:-31px;inset-inline-end:15px;width:54px;height:54px;
-  background:var(--mock-logo) center/contain no-repeat!important;pointer-events:none;
+  content:none!important;display:none!important;background:none!important;
 }
 .next-task-label{font-size:14px;color:#37352f;font-weight:700;white-space:nowrap}
 .planner-today-center .next-task-countdown strong{font-size:20px;line-height:1.25;font-weight:750;letter-spacing:-.015em}
@@ -171,7 +169,14 @@ html[dir=rtl] .planner-today-center .next-task-countdown{min-height:66px!importa
 .task-page-heading-copy{gap:6px}.planner-eyebrow,.main>.topbar .overline{color:var(--notion-muted);font-size:13px;font-weight:500;letter-spacing:0;text-transform:none}
 .task-page-heading-copy h1,.main>.topbar h1{margin:0;font-size:clamp(40px,5vw,58px);font-weight:800;line-height:1.05;letter-spacing:-.045em}
 .task-page-heading-copy p,.main>.topbar p{max-width:620px;margin:0;color:var(--notion-muted);font-size:15px}
-.task-page-title .page-title-add,.main>.topbar .page-title-add{width:auto;height:44px;min-width:44px;min-height:44px;padding:0 13px;gap:7px;border:0;border-radius:6px;background:var(--notion-blue);color:#fff}
+.task-page-title .page-title-add,.main>.topbar .page-title-add{
+  display:inline-flex!important;align-items:center;justify-content:center;grid-auto-flow:column;width:auto!important;height:44px;min-width:44px;min-height:44px;
+  padding:0 14px;gap:7px;border:1px solid #1677c9!important;border-radius:7px;background:var(--notion-blue)!important;color:#fff!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.12)!important;font-size:14px;font-weight:650;line-height:1;white-space:nowrap;
+}
+.task-page-title .page-title-add:hover,.main>.topbar .page-title-add:hover{background:#1677c9!important;filter:none;transform:none}
+.task-page-title .page-title-add:focus-visible,.main>.topbar .page-title-add:focus-visible{outline:3px solid rgba(35,131,226,.24);outline-offset:2px}
+.task-page-title .page-title-add .m-icon,.main>.topbar .page-title-add .m-icon{width:17px;height:17px;flex:0 0 17px}
 html[dir=rtl] .task-page-title .page-title-add::after{content:"משימה חדשה"}
 html[dir=ltr] .task-page-title .page-title-add::after{content:"New task"}
 html[dir=rtl] .main>.topbar .page-title-add::after{content:"הרגל חדש"}
@@ -192,6 +197,7 @@ html[dir=ltr] .main>.topbar .page-title-add::after{content:"New habit"}
 .planner-habits-layout{grid-template-columns:minmax(0,1.5fr) minmax(280px,.7fr);gap:24px}
 .habits-day-card,.habit-summary{border-radius:8px!important;box-shadow:none!important}.habit-row{border-radius:0;border-bottom:1px solid var(--notion-line);background:#fff}
 .planner-habits-art .cozy-still-life{display:none}.habit-summary{text-align:start}.habit-week-dots span{border-radius:4px}.habit-week-dots span.filled{background:var(--notion-blue);border-color:var(--notion-blue)}
+img[src*="kawaii-bunny"],img[src*="kawaii-logo-bunny"],.task-empty-bunny{display:none!important}
 
 .settingsgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid var(--notion-line);border-inline-start:1px solid var(--notion-line)}
 .settingsgrid .card{margin:0;padding:22px;border:0!important;border-inline-end:1px solid var(--notion-line)!important;border-bottom:1px solid var(--notion-line)!important;border-radius:0!important;background:#fff!important;box-shadow:none!important}
@@ -218,9 +224,7 @@ html[dir=ltr] .main>.topbar .page-title-add::after{content:"New habit"}
   .planner-today-center .next-task-countdown,[dir=rtl] .planner-today-center .next-task-countdown{
     grid-template-columns:1fr;gap:4px;min-height:0;margin:0 0 22px;border-radius:7px!important;
   }
-  html[dir=ltr] .planner-today-center .next-task-countdown{padding:16px 64px 16px 14px!important}
-  html[dir=rtl] .planner-today-center .next-task-countdown{padding:16px 14px 16px 64px!important}
-  .planner-today-center .next-task-countdown::before{top:-23px;width:44px;height:44px}
+  html[dir=ltr] .planner-today-center .next-task-countdown,html[dir=rtl] .planner-today-center .next-task-countdown{padding:16px 14px!important}
   .next-task-label{font-size:12px}.planner-today-center .next-task-countdown strong{font-size:21px}.next-task-detail{font-size:12px;white-space:normal}
   .planner-view-toggle{width:100%;justify-content:space-around}.planner-view-toggle button{min-height:46px}
   .day-sequence{--time-column:62px;--sequence-gap:7px}.sequence-row{min-height:62px}.sequence-time{font-size:13px;padding-inline:5px}.sequence-card{padding-inline:3px!important}

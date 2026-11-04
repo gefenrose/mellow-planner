@@ -329,7 +329,6 @@
       '<div class="daytask-list card" data-drop-part="other">'+(flexible.length?flexible.map(t=>taskVisual(t)).join(''):'')+
       '<button class="part-empty" data-unified-add="part" data-part="other"><span>'+L('empty_other')+'</span><span class="part-empty-add">'+icon('plus',16)+'</span></button></div>'+
       '<div class="sectionbar merged-planned-heading"><h3>'+icon('clock',16)+' '+L('scheduled')+' ('+visible.length+')</h3></div>'+
-      nextTaskMarkup()+
       '<ol class="day-sequence" data-sequence-root="true" data-first-minute="'+first*60+'" data-last-minute="'+last*60+'">'+sequence+'</ol>'+
       '<button class="btn ghost sequence-add" data-unified-add="hour" data-start="'+Math.min(last*60-15,Math.max(first*60,busyEnd??first*60))+'">'+icon('plus',16)+' '+L('noTasks')+'</button>'+
       (outside.length?'<section class="day-sections outside-hours"><div class="outside-hours-head"><h3>'+icon('clock',16)+' '+(window.MellowDayHours?.label?.('outside')||'Outside chosen hours')+' ('+outside.length+')</h3><p>'+(window.MellowDayHours?.label?.('outsideHint')||'These items are still scheduled.')+'</p></div><div class="part-section"><div class="part-list">'+outside.sort(sorted).map(itemVisual).join('')+'</div></div></section>':'')+'</div>';
@@ -357,6 +356,7 @@
       '<strong>'+esc(dt(ui.date,{month:'long',year:'numeric'}))+'</strong><button class="iconbtn" data-action="day" data-step="7" aria-label="'+(rtl?'השבוע הבא':'Next week')+'">'+icon(rtl?'chevronLeft':'chevronRight',20)+'</button></div>'+
       '<div class="week dayticker">'+weekDays()+'</div></div>'+
       '<div class="day-planner-controls">'+toggle+'</div>'+
+      nextTaskMarkup()+
       (mode==='hours'?hourly(items):'<div class="day-sections">'+PARTS.map(part=>section(part,items)).join('')+'</div>')+
       '</div>';
   };

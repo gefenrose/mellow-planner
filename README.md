@@ -165,4 +165,11 @@ Decorative placements are slightly larger where space permits and remain small a
 - Removed the proposed global Share/Search/Favorite toolbar. The interface keeps only contextual actions such as New task, New habit, month navigation, and row controls.
 - Desktop retains the functional three-part planner composition while Hebrew and English reverse the sidebar and content direction correctly. Mobile keeps a four-item safe-area bottom navigation and the full day plan at 390px-class widths.
 - Today, Tasks, Habits, Settings, task/event creation, collapsible Small steps and Routines, the month dialog, Google Calendar, AI helpers, drag-and-drop, local persistence, and version-1 backup compatibility remain intact.
-- Decorative plush/card treatments are no longer rendered in this mode; the small Mellow bunny mark remains as a restrained brand detail. The PWA cache is `mellow-offline-v66`.
+- Decorative plush/card treatments were removed in this mode; the small bunny mark was still present in v66 and is removed by the v67 follow-up below. The PWA cache was `mellow-offline-v66`.
+
+### Rabbit-free header and persistent next-task card (v67)
+
+- Removed visible rabbit artwork from the website while retaining the Mellow wordmark and accessible functional icons.
+- Rebuilt the New task and New habit header actions as polished, single-line 44px buttons with consistent icon spacing, hover, and keyboard focus states.
+- Moved the live Until your next task card into the shared Today layout so it remains visible in both Day sections and Timeline.
+- The PWA cache is `mellow-offline-v67`.
