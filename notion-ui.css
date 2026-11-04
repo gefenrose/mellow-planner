@@ -402,3 +402,42 @@ img[src*="kawaii-bunny"],img[src*="kawaii-logo-bunny"],.task-empty-bunny{display
 @media(prefers-reduced-motion:reduce){
   :where(button,.btn,.iconbtn,.navbtn,.chip,.page-title-add,.task-group-add,.task-priority-add,.task-priority-pill,.task-suggestions-refresh,.task-suggestion-add,.habit-check){transition:none!important}
 }
+
+/* Shared page-heading rhythm: Today, Tasks, Habits and Settings. */
+body .main,body .main:has(.planner-dashboard),body .main:has(.task-page),body .main:has(.planner-habits-layout){
+  padding-block-start:28px!important;
+}
+body .main>.topbar,body .task-page-title,body .planner-today-center .mellow-day-heading{
+  margin-block:0 28px!important;padding:0!important;min-height:0!important;
+  border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+  text-align:start;
+}
+body .main>.topbar{align-items:flex-start}
+body .main>.topbar .overline,body .mellow-day-heading .overline,body .task-page-heading-copy>.planner-eyebrow{
+  display:block!important;margin:0 0 12px!important;padding:0!important;
+  font:500 12px/18px var(--font);letter-spacing:.02em;text-transform:none;color:var(--notion-muted);
+}
+body .mellow-day-heading .overline svg{display:none}
+body .main>.topbar .page-heading-title,body .mellow-title-line{
+  display:flex;align-items:flex-start;gap:16px;margin:0;padding:0;min-width:0;
+}
+body .main>.topbar h1,body .task-page-heading-copy h1,
+body .mellow-date-static h1,body .mellow-date-trigger h1{
+  margin:0!important;padding:0!important;
+  font-family:var(--head);font-size:40px!important;font-weight:750!important;
+  line-height:1.15!important;letter-spacing:-.035em;color:var(--notion-text);
+}
+body .main>.topbar p,body .task-page-heading-copy p,
+body .mellow-date-static p,body .mellow-date-trigger p{
+  display:block!important;margin:10px 0 0!important;padding:0;
+  font-size:15px!important;line-height:1.5!important;font-weight:400;color:var(--notion-muted);
+}
+body .mellow-date-static,body .mellow-date-trigger{gap:0;padding:0!important}
+body .page-title-actions{align-self:flex-start;flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:820px){
+  body .main,body .main:has(.planner-dashboard),body .main:has(.task-page),body .main:has(.planner-habits-layout){padding-block-start:24px!important}
+  body .main>.topbar,body .task-page-title,body .planner-today-center .mellow-day-heading{margin-block:0 24px!important}
+  body .main>.topbar h1,body .task-page-heading-copy h1,body .mellow-date-static h1,body .mellow-date-trigger h1{font-size:32px!important}
+  body .main>.topbar p,body .task-page-heading-copy p,body .mellow-date-static p,body .mellow-date-trigger p{font-size:14px!important}
+  body .main>.topbar .page-heading-title{flex-wrap:wrap;row-gap:12px}
+}
