@@ -189,3 +189,8 @@ Decorative placements are slightly larger where space permits and remain small a
 
 - The Last 7 days panel is now a compact secondary summary with a small count and seven slim day markers, leaving more room for today's habits.
 - The PWA cache is `mellow-offline-v73`.
+
+### Sharper habit-history corners (v74)
+
+- The compact seven-day summary now uses a restrained 6px corner radius that matches the document-style interface.
+- The PWA cache is `mellow-offline-v74`.

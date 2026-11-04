@@ -24,6 +24,10 @@
 - The seven-day summary is reduced to a compact three-part grid: label, completion count, and seven 8px history markers.
 - It remains readable in English and Hebrew RTL without competing visually with today's habit list.
 
+## v74 habit-history corners
+
+- The compact seven-day summary uses a 6px radius, overriding the older high-specificity rounded-card treatment.
+
 - Selected source direction: `/Users/gefen/.codex/generated_images/01a19f95-46e5-7893-b14a-0ed7f29c4fc1/exec-7fb5dbd0-08ed-4120-9155-05fd6ac011f4.png`
 - Source constraint: the selected database-planner direction without a global Share/Search/Favorite toolbar.
 - Implementation checked at: `http://127.0.0.1:4175/`

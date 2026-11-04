@@ -1,4 +1,4 @@
-/* v73 — Notion-inspired Mellow surface. Functionality remains owned by the existing app. */
+/* v74 — Notion-inspired Mellow surface. Functionality remains owned by the existing app. */
 :root{
   --notion-bg:#fff;
   --notion-sidebar:#f7f7f5;
@@ -254,7 +254,7 @@ img[src*="kawaii-bunny"],img[src*="kawaii-logo-bunny"],.task-empty-bunny{display
   .planner-today-center .next-task-countdown::before,.brand-icon{background:none!important}
 }
 
-/* v73 — one quiet, consistent interaction language. */
+/* v74 — one quiet, consistent interaction language. */
 :root{
   --mellow-control-radius:7px;
   --mellow-control-height:40px;
@@ -353,6 +353,7 @@ img[src*="kawaii-bunny"],img[src*="kawaii-logo-bunny"],.task-empty-bunny{display
   display:grid!important;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"label count" "caption count" "dots dots";
   align-items:center;gap:2px 12px;min-height:0;padding:13px 14px!important;border-radius:8px!important;text-align:start!important;
 }
+.planner-habits-art .habit-summary{border-radius:6px!important}
 .habit-summary>.planner-eyebrow{grid-area:label;margin:0;color:var(--notion-muted);font-size:12px;line-height:1.25}
 .habit-summary>strong{grid-area:count;align-self:center;margin:0!important;color:var(--notion-text)!important;font:700 28px/1 var(--head)!important}
 .habit-summary>span:not(.planner-eyebrow){grid-area:caption;color:var(--notion-muted);font-size:11px;line-height:1.2}
